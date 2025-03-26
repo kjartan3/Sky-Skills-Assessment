@@ -1,15 +1,14 @@
-import { Sequelize } from "sequelize";
+import { Sequelize } from 'sequelize';
 
-
-
-const path = require('path');
-const Sequelize = require('sequelize');
-
-
-const db = new Sequelize({
-    dialect: 'sqlite',
-    storage: path.join(__dirname, 'db.sqlite'),
-    logging: false
+// Initialize Sequelize with SQLite
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: './database.sqlite', // This creates a file called database.sqlite in your project directory
 });
 
-module.exports = db;
+// Test the connection
+sequelize.authenticate()
+  .then(() => console.log('Database connected successfully!'))
+  .catch((err) => console.log('Error connecting to the database: ', err));
+
+export default sequelize;
