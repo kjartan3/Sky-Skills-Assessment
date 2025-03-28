@@ -17,4 +17,4 @@ const Behaviour = sequelize.define('Behaviour', {
   },
 });
 
-export default { Behaviour, Skill };
+export default Behaviour;

@@ -1,6 +1,6 @@
 import sequelize from '../config/db.js';
 import { DataTypes } from 'sequelize';
-import Behaviour from './behaviour.js'; // Import Behaviour model
+import Behaviour from './behaviours.js'; // Import Behaviour model
 
 const Statement = sequelize.define('Statement', {
   text: {
@@ -17,5 +17,5 @@ const Statement = sequelize.define('Statement', {
   },
 });
 
-export default { Statement, Behaviour };
+export default Statement;
 
