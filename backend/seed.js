@@ -1,22 +1,22 @@
-import sequelize from './config/db.js'; // Import sequelize configuration
-import Skill from './models/skills.js'; // Import the Skill model
-import Statement from './models/statements.js'; // Import the Statement model
+import sequelize from './config/db.js';
+import Skill from './models/skills.js'; 
+import Behaviour from './models/behaviours.js';
+import Statement from './models/statements.js';
 
 const seedDatabase = async () => {
   try {
     // Sync the models with the database (create tables if they don't exist)
     await sequelize.sync({ force: true }); // Resets the database
     
-    // Create skills in the database
+    // Create Skills in the database
     const skills = await Skill.bulkCreate([
-      { name: 'Problem-Solving' },
+      { name: 'Creative' },
       { name: 'Communication' },
       { name: 'Adaptability' },
-      { name: 'Collaboration' },
-      { name: 'Leadership' },
+      { name: 'Do the right thing' },
     ]);
 
-    // Create questions for each skill
+    // Create Statements for each Skill
     const statements = [
       { text: 'I can break down complex problems into manageable parts.', skillId: skills[0].id },
       { text: 'I communicate my ideas clearly in a team.', skillId: skills[1].id },
@@ -25,7 +25,7 @@ const seedDatabase = async () => {
       { text: 'I take initiative when leading a project.', skillId: skills[4].id },
     ];
 
-    // Insert questions into the database
+    // Insert Statements into the database
     await Statement.bulkCreate(statements);
 
     console.log('Database seeded successfully!');

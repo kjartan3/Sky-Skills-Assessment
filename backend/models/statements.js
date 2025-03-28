@@ -1,19 +1,21 @@
 import sequelize from '../config/db.js';
 import { DataTypes } from 'sequelize';
-import Skill from './skills.js'; // Import Skill model after it's defined
+import Behaviour from './behaviour.js'; // Import Behaviour model
 
 const Statement = sequelize.define('Statement', {
   text: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  skillId: {
+  behaviourId: {
     type: DataTypes.INTEGER,
+    allowNull: false,
     references: {
-      model: 'Skills', // Refers to the Skills table
-      key: 'id', // Refers to the primary key of the Skills table
+      model: 'Behaviours', // Refers to the Behaviours table
+      key: 'id', // Primary key in Behaviours table
     },
   },
 });
 
-export default Statement;
+export default { Statement, Behaviour };
+

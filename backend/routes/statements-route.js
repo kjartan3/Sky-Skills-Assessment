@@ -1,27 +1,30 @@
 import express from "express";
-import Statement from '../models/statements.js';
+import Statement from "../models/statements.js";
+import Behaviour from "../models/behaviour.js";
 
 const router = express.Router();
 
-router.get('/', async(req, res) => {
+// Get all statements
+router.get("/", async (req, res) => {
     try {
         const statements = await Statement.findAll();
         res.json(statements);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-})
+});
 
-router.get('/:skillName', async(req, res) => {
-    const {skillName} = req.params;
+// Get statements by behaviour name
+router.get("/:behaviourName", async (req, res) => {
+    const { behaviourName } = req.params;
     try {
-        const skill = await Skill.findOne({ where: {name: skillName} });
-        if (!skill) { 
-            return res.status(404).json({ message: 'Skill not found' });
+        const behaviour = await Behaviour.findOne({ where: { name: behaviourName } });
+        if (!behaviour) {
+            return res.status(404).json({ message: "Behaviour not found" });
         }
-        const {statements} = await Statement.findAll({ where: {skillId: skill.id} });
+        const statements = await Statement.findAll({ where: { behaviourId: behaviour.id } });
         if (statements.length === 0) {
-            return res.status(404).json({ message: 'Statements not found' });
+            return res.status(404).json({ message: "Statements not found for this behaviour" });
         }
         res.json(statements);
     } catch (error) {
