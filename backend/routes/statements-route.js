@@ -7,7 +7,17 @@ const router = express.Router();
 // Get all statements
 router.get("/", async (req, res) => {
     try {
-        const statements = await Statement.findAll();
+        const statements = await Statement.findAll({
+            include: [
+                {
+                    
+                    model: Behaviour,
+                    attributes: ["name"],
+                    
+                },
+            ],
+
+        });
         res.json(statements);
     } catch (error) {
         res.status(500).json({ message: error.message });
