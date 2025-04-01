@@ -1,127 +1,113 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./StatementList.css";
 
-const StatementList = ({ onResponseChange }) => {
-    const [statements, setStatements] = useState([]);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [responses, setResponses] = useState({});
-    const statementsPerPage = 4;
+const StatementList = () => {
+  const navigate = useNavigate();
+  const [statements, setStatements] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [loading, setLoading] = useState(true);
 
-    const responseValues = {
-        "strongly-disagree": 1,
-        "disagree": 2,
-        "neutral": 3,
-        "agree": 4,
-        "strongly-agree": 5,
+  const statementsPerPage = 4;
+
+  // Fetch statements
+  useEffect(() => {
+    const fetchStatements = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/statements");
+        const data = await response.json();
+        setStatements(data);
+        sessionStorage.setItem("statements", JSON.stringify(data)); // Save to sessionStorage
+      } catch (error) {
+        console.error("Error fetching statements:", error);
+      }
     };
 
-    // Save responses to localStorage and update state
-    const saveResponse = (statementId, response) => {
-        const updatedResponses = { ...responses, [statementId]: response };
-        setResponses(updatedResponses);
-        localStorage.setItem("responses", JSON.stringify(updatedResponses)); // Save to localStorage
+    fetchStatements();
+    setLoading(false);
+  }, []);
+
+  // Get current page statements
+  const currentStatements = statements.slice(currentPage * statementsPerPage, (currentPage + 1) * statementsPerPage);
+
+  const handleAnswerChange = (statementId, value) => {
+    const updatedAnswers = {
+      ...answers,
+      [statementId]: value,
     };
+    setAnswers(updatedAnswers);
+    sessionStorage.setItem("answers", JSON.stringify(updatedAnswers)); // Save updated answers to sessionStorage
+  };
 
-    // Fetch statements from the backend
-    useEffect(() => {
-        const fetchStatements = async () => {
-            try {
-                const response = await fetch("http://localhost:5000/statements");
-                const data = await response.json();
-                setStatements(data);
-            } catch (error) {
-                console.error("Error fetching statements:", error);
-            }
-        };
+  const handleNext = () => {
+    if (currentPage < Math.ceil(statements.length / statementsPerPage) - 1) {
+      setCurrentPage(currentPage + 1);
+    } else {
+      navigate("/results"); // Navigate to results page after the last statement
+    }
+  };
 
-        fetchStatements();
-        const storedResponses = JSON.parse(localStorage.getItem("responses")) || {};
-        setResponses(storedResponses); // Load stored responses
-    }, []);
+  const handlePrevious = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
-    // Function to calculate average score for a behavior
-    const calculateAverageScore = (behaviourId) => {
-        const behaviourStatements = statements.filter(statement => statement.Behaviour.id === behaviourId);
+  const calculateAverageScore = () => {
+    const totalScore = Object.values(answers).reduce((acc, score) => acc + score, 0);
+    return totalScore / Object.values(answers).length;
+  };
 
-        if (behaviourStatements.length !== 4) {
-            return 0;
-        }
+  if (loading) {
+    return <div>Loading statements...</div>;
+  }
 
-        const behaviourResponses = behaviourStatements.map(statement => responses[statement.id]);
+  if (statements.length === 0) {
+    return <div>No statements available. Please try again later.</div>;
+  }
 
-        const validResponses = behaviourResponses.filter(response => response !== undefined);
-
-        if (validResponses.length === 4) {
-            const totalScore = validResponses.reduce((acc, response) => acc + responseValues[response], 0);
-            return totalScore / validResponses.length;
-        }
-
-        return 0;
-    };
-
-    // Group statements by behavior for pagination
-    const startIndex = currentPage * statementsPerPage;
-    const currentStatements = statements.slice(startIndex, startIndex + statementsPerPage);
-
-    return (
-        <div>
-            <h2>Assessment Statements</h2>
-            {currentStatements.length > 0 ? (
-                <>
-                    <h3>Behaviour: {currentStatements[0].Behaviour.name}</h3>
-                    {currentStatements.map((statement) => (
-                        <div key={statement.id}>
-                            <p>{statement.text}</p>
-                            {["strongly-agree", "agree", "neutral", "disagree", "strongly-disagree"].map((response) => (
-                                <label key={response}>
-                                    <input
-                                        type="radio"
-                                        name={`question-${statement.id}`}
-                                        value={response}
-                                        checked={responses[statement.id] === response}
-                                        onChange={() => {
-                                            saveResponse(statement.id, response);
-                                            onResponseChange(statement.id, response); // Ensure onResponseChange is called
-                                        }}
-                                    />
-                                    {response.replace("-", " ").toUpperCase()}
-                                </label>
-                            ))}
-                        </div>
-                    ))}
-                </>
-            ) : (
-                <p>Loading questions...</p>
-            )}
-
-            {/* Display the average score */}
-            <div>
-                {currentStatements.length > 0 && (
-                    <p>
-                        Average score for {currentStatements[0].Behaviour.name}:{" "}
-                        {calculateAverageScore(currentStatements[0].Behaviour.id).toFixed(2)}
-                    </p>
-                )}
-            </div>
-
-            {/* Navigation */}
-            <div>
-                <button
-                    disabled={currentPage === 0}
-                    onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                    Previous
-                </button>
-                <button
-                    disabled={currentPage >= Math.ceil(statements.length / statementsPerPage) - 1}
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                >
-                    Next
-                </button>
-            </div>
+  return (
+    <div className="container">
+      <h1>Assessment Statements</h1>
+      {currentStatements.map((statement) => (
+        <div key={statement.id}>
+          <h2>Behavior: {statement.Behaviour.name}</h2> {/* Display behavior name */}
+          <p><strong>Statement:</strong> {statement.text}</p>
+          <div className="radio-container">
+            {[1, 2, 3, 4, 5].map((value) => (
+              <label key={value}>
+                <input
+                  type="radio"
+                  name={`statement-${statement.id}`}
+                  value={value}
+                  checked={answers[statement.id] === value}
+                  onChange={() => handleAnswerChange(statement.id, value)}
+                />
+                {value === 1 ? "Strongly Disagree" : 
+                 value === 2 ? "Disagree" :
+                 value === 3 ? "Neutral" :
+                 value === 4 ? "Agree" : "Strongly Agree"}
+              </label>
+            ))}
+          </div>
         </div>
-    );
+      ))}
+      <div>
+        <button onClick={handlePrevious} disabled={currentPage === 0}>
+          Previous
+        </button>
+        <button onClick={handleNext} disabled={Object.keys(answers).length < (currentPage + 1) * statementsPerPage}>
+          {currentPage < Math.ceil(statements.length / statementsPerPage) - 1 ? "Next" : "Submit"}
+        </button>
+      </div>
+      <div>
+        {Object.keys(answers).length > 0 && (
+          <p>Average Score: {calculateAverageScore().toFixed(2)}</p>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default StatementList;
-
-
