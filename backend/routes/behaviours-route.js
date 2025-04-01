@@ -1,5 +1,5 @@
 import express from "express";
-import Behaviour from "../models/behaviour.js";
+import Behaviour from "../models/behaviours.js";
 import Skill from "../models/skills.js";
 
 const router = express.Router();

@@ -1,6 +1,6 @@
 import express from "express";
 import Statement from "../models/statements.js";
-import Behaviour from "../models/behaviour.js";
+import Behaviour from "../models/behaviours.js";
 
 const router = express.Router();
 
