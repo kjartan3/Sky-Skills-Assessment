@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 const StatementList = ({ onResponseChange }) => {
     const [statements, setStatements] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const statementsPerPage = 4;
 
     useEffect(() => {
         // Fetch statements from the backend
@@ -18,24 +20,34 @@ const StatementList = ({ onResponseChange }) => {
         fetchStatements();
     }, []);
 
+    const startIndex = currentPage * statementsPerPage;
+    const currentStatements = statements.slice(startIndex, startIndex + statementsPerPage);
+
     return (
         <div>
-            <h2>Assessment Statments</h2>
-            {statements.length > 0 ? (
-                statements.map((statement) => (
+            <h2>Assessment Statements</h2>
+            {currentStatements.length > 0 ? (
+                currentStatements.map((statement) => (
                     <div key={statement.id}>
                         <p>{statement.text}</p>
                         <input
                             type="radio"
                             name={`question-${statement.id}`}
                             value="agree"
+                            onChange={() => onResponseChange(statement.id, "strongly-agree")}
+                        />{" "}
+                        Strongly Agree
+                        <input
+                            type="radio"
+                            name={`question-${statement.id}`}
+                            value="neutral"
                             onChange={() => onResponseChange(statement.id, "agree")}
                         />{" "}
                         Agree
                         <input
                             type="radio"
                             name={`question-${statement.id}`}
-                            value="neutral"
+                            value="disagree"
                             onChange={() => onResponseChange(statement.id, "neutral")}
                         />{" "}
                         Neutral
@@ -46,11 +58,32 @@ const StatementList = ({ onResponseChange }) => {
                             onChange={() => onResponseChange(statement.id, "disagree")}
                         />{" "}
                         Disagree
+                        <input
+                            type="radio"
+                            name={`question-${statement.id}`}
+                            value="disagree"
+                            onChange={() => onResponseChange(statement.id, "strongly-disagree")}
+                        />{" "}
+                        Strongly Disagree
                     </div>
                 ))
             ) : (
                 <p>Loading questions...</p>
             )}
+            <div>
+                <button
+                    disabled={currentPage === 0}
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                >
+                    Previous
+                </button>
+                <button
+                    disabled={currentPage >= Math.ceil(statements.length / statementsPerPage) - 1}
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                    Next
+                </button>
+            </div>
         </div>
     );
 };
