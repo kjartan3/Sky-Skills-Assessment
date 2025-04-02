@@ -56,7 +56,7 @@ const StatementList = () => {
     if (currentPage < Math.ceil(statements.length / statementsPerPage) - 1) {
       setCurrentPage(currentPage + 1);
     } else {
-      navigate("/results"); // Navigate to results page after the last statement
+      navigate("/summary"); // Navigate to results page after the last statement
     }
   };
 
