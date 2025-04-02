@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
                 {
                     
                     model: Behaviour,
-                    attributes: ["name"],
+                    attributes: ["id", "name"],
                     
                 },
             ],

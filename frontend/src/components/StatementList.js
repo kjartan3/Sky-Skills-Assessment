@@ -31,6 +31,18 @@ const StatementList = () => {
   // Get current page statements
   const currentStatements = statements.slice(currentPage * statementsPerPage, (currentPage + 1) * statementsPerPage);
 
+  // Check if all statements on the current page belong to the same behavior
+  const getCurrentBehaviourName = () => {
+    const behaviourNames = new Set(currentStatements.map((s) => s.Behaviour.name));
+
+    if (behaviourNames.size === 1) {
+      return [...behaviourNames][0]; // Return the only behavior name
+    }
+    return null;
+  };
+
+  const currentBehaviourName = getCurrentBehaviourName();
+
   const handleAnswerChange = (statementId, value) => {
     const updatedAnswers = {
       ...answers,
@@ -54,10 +66,22 @@ const StatementList = () => {
     }
   };
 
-  const calculateAverageScore = () => {
-    const totalScore = Object.values(answers).reduce((acc, score) => acc + score, 0);
-    return totalScore / Object.values(answers).length;
+  // Calculate average score for the current page if all statements have the same behavior
+  const calculateAverageScoreForCurrentPage = () => {
+    if (!currentBehaviourName) return null; // Only calculate if all questions have the same behavior
+
+    const relevantStatements = currentStatements.filter((s) => s.Behaviour.name === currentBehaviourName);
+    const relevantAnswers = relevantStatements
+      .map((s) => answers[s.id])
+      .filter((a) => a !== undefined); // Get only answered questions
+
+    if (relevantAnswers.length === 0) return null; // Avoid division by zero
+
+    const totalScore = relevantAnswers.reduce((sum, score) => sum + score, 0);
+    return (totalScore / relevantAnswers.length).toFixed(2);
   };
+
+  const averageScore = calculateAverageScoreForCurrentPage();
 
   if (loading) {
     return <div>Loading statements...</div>;
@@ -69,44 +93,54 @@ const StatementList = () => {
 
   return (
     <div className="container">
-      <h1>Assessment Statements</h1>
-      {currentStatements.map((statement) => (
-        <div key={statement.id}>
-          <h2>Behavior: {statement.Behaviour.name}</h2> {/* Display behavior name */}
-          <p><strong>Statement:</strong> {statement.text}</p>
-          <div className="radio-container">
-            {[1, 2, 3, 4, 5].map((value) => (
-              <label key={value}>
-                <input
-                  type="radio"
-                  name={`statement-${statement.id}`}
-                  value={value}
-                  checked={answers[statement.id] === value}
-                  onChange={() => handleAnswerChange(statement.id, value)}
-                />
-                {value === 1 ? "Strongly Disagree" : 
-                 value === 2 ? "Disagree" :
-                 value === 3 ? "Neutral" :
-                 value === 4 ? "Agree" : "Strongly Agree"}
-              </label>
-            ))}
-          </div>
+    <h1>Assessment Statements</h1>
+  
+    {currentBehaviourName && <h2>Behavior: {currentBehaviourName}</h2>}
+  
+    {currentStatements.map((statement) => (
+  <div key={statement.id}>
+    <p><strong>Statement:</strong> {statement.text}</p>
+    <div className="radio-container">
+      {[1, 2, 3, 4, 5].map((value) => (
+        <div key={value}>
+          {/* Give each input a unique id to ensure proper association with the label */}
+          <input
+            type="radio"
+            id={`statement-${statement.id}-value-${value}`} // Unique ID for each radio button
+            name={`statement-${statement.id}`}
+            value={value}
+            checked={answers[statement.id] === value}
+            onChange={() => handleAnswerChange(statement.id, value)}
+          />
+          <label htmlFor={`statement-${statement.id}-value-${value}`}>
+            {value === 1 ? "Strongly Disagree" : 
+             value === 2 ? "Disagree" :
+             value === 3 ? "Neutral" :
+             value === 4 ? "Agree" : "Strongly Agree"}
+          </label>
         </div>
       ))}
-      <div>
-        <button onClick={handlePrevious} disabled={currentPage === 0}>
-          Previous
-        </button>
-        <button onClick={handleNext} disabled={Object.keys(answers).length < (currentPage + 1) * statementsPerPage}>
-          {currentPage < Math.ceil(statements.length / statementsPerPage) - 1 ? "Next" : "Submit"}
-        </button>
-      </div>
-      <div>
-        {Object.keys(answers).length > 0 && (
-          <p>Average Score: {calculateAverageScore().toFixed(2)}</p>
-        )}
-      </div>
     </div>
+  </div>
+))}
+
+  
+    <div>
+      <button onClick={handlePrevious} disabled={currentPage === 0}>Previous</button>
+      <button onClick={handleNext} disabled={Object.keys(answers).length < (currentPage + 1) * statementsPerPage}>
+        {currentPage < Math.ceil(statements.length / statementsPerPage) - 1 ? "Next" : "Submit"}
+      </button>
+    </div>
+  
+    {averageScore && (
+      <div className="average-score">
+        <h2>Average Score for {currentBehaviourName}</h2>
+        <p>{averageScore}</p>
+      </div>
+    )}
+  </div>
+  
+      
   );
 };
 
