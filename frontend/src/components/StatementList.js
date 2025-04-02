@@ -83,6 +83,10 @@ const StatementList = () => {
 
   const averageScore = calculateAverageScoreForCurrentPage();
 
+  const totalStatements = statements.length;
+  const answeredStatements = Object.keys(answers).length;
+  const progressPercentage = totalStatements > 0 ? (answeredStatements / totalStatements) * 100 : 0;
+
   if (loading) {
     return <div>Loading statements...</div>;
   }
@@ -94,6 +98,13 @@ const StatementList = () => {
   return (
     <div className="container">
     <h1>Assessment Statements</h1>
+
+     {/* Progress Bar */}
+     <div className="progress-bar-container">
+        <div className="progress-bar" style={{ width: `${progressPercentage}%` }}>
+          {Math.round(progressPercentage)}%
+        </div>
+      </div>
   
     {currentBehaviourName && <h2>Behavior: {currentBehaviourName}</h2>}
   
