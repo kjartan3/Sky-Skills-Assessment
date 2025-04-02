@@ -11,8 +11,11 @@ const Navbar = () => {
 
     return (
         <nav className="navbar">
-            <Link to="/" className="logo">Sky Skills</Link>
             
+            <Link to="/" className="logo"><img src="/icons/sky-learn-logo.jpeg" className="logo-img" alt="Assessment" />
+            <h4 className="logo-title">Sky Skills Assessment</h4>
+            </Link>
+    
             <div className="dropdown">
                 <button className="dropdown-btn" onClick={toggleDropdown}>
                     Menu ▼

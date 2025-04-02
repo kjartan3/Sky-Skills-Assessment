@@ -2,16 +2,31 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #007bff;
+    background: #ffffff;
     padding: 15px 30px;
     color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-decoration: none;
-    color: white;
+    text-decoration: none !important;
+    position: relative;
+    top: 10px;
+}
+
+.logo-img {
+    width: 180px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.logo-title {
+    font-family: arial;
+    font-style: italic;
+    margin-top: 0.2rem; /* Minimal spacing between logo and title */
+    font-size: 1.0rem; /* Adjust font size if needed */
+    color: rgb(0, 0, 0); /* Color of the title */
+    text-align: left; /* Center align the title */
 }
 
 .dropdown {

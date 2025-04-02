@@ -13,19 +13,24 @@
 }
 
 .box {
-    background: #f8f9fa;
-    padding: 15px;
-    width: 180px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers everything inside the box */
+  text-align: center;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  width: 250px; /* Adjust size as needed */
+  background-color: #f9f9f9;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
 }
 
 .box img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-    margin: 10px 0;
+  width: 80px; /* Adjust icon size */
+  height: auto;
+  border-radius: 5px;
+  margin: 15px 0;
 }
 
 .btn {
