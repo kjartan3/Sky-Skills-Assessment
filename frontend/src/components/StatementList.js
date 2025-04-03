@@ -110,7 +110,8 @@ const StatementList = () => {
   
     {currentStatements.map((statement) => (
   <div key={statement.id}>
-    <p><strong>Statement:</strong> {statement.text}</p>
+    <br></br>
+    <p className="statement-style"><strong></strong> {statement.text}</p>
     <div className="radio-container">
       {[1, 2, 3, 4, 5].map((value) => (
         <div key={value}>
@@ -134,7 +135,7 @@ const StatementList = () => {
     </div>
   </div>
 ))}
-
+    <br></br>
   
     <div>
       <button onClick={handlePrevious} disabled={currentPage === 0}>Previous</button>
@@ -142,7 +143,7 @@ const StatementList = () => {
         {currentPage < Math.ceil(statements.length / statementsPerPage) - 1 ? "Next" : "Submit"}
       </button>
     </div>
-  
+    <br></br>
     {averageScore && (
       <div className="average-score">
         <h2>Average Score for {currentBehaviourName}</h2>

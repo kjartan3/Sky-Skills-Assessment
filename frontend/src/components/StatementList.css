@@ -1,7 +1,7 @@
 /* General container styling */
 .container {
-    width: 60%;
-    margin: 40px auto;
+    width: 80%;
+    margin: 60px auto;
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 10px;
@@ -22,15 +22,26 @@
     font-size: 16px;
     color: #555;
     margin: 10px 0;
+    
+  }
+
+  .statement-style {
+    font-size: 16px;
+    color: #555;
+    margin: 10px 0;
+    text-align: left !important;
+    flex: 1; /* Allows the text to take available space */
+    margin: 0; 
   }
   
-  /* Radio button container */
-  .radio-container {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
+ /* Radio button container */
+.radio-container {
+  display: flex;
+  justify-content: flex-end; /* Align the radio buttons to the right */
+  gap: 10px;
+  margin-top: 10px;
+  margin-left: 20px; /* Optional: Add margin-left for spacing */
+}
   
   /* Style the label as a button */
   .radio-container label {
@@ -42,7 +53,8 @@
     font-size: 14px;
     transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
     border: 2px solid transparent;
-  }
+    text-align: center; /* Ensure text inside the button is centered */
+}
   
   /* Hover effect */
   .radio-container label:hover {
