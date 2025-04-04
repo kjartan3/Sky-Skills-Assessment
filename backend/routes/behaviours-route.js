@@ -1,5 +1,5 @@
 import express from "express";
-import { Behaviour, Skill } from "../models/index.js";
+import {Behaviour} from "../models/index.js";
 
 const router = express.Router();
 
@@ -26,22 +26,5 @@ router.get("/:behaviourId", async (req, res) => {
     }
 })
 
-// Get behaviours by skill name
-// router.get("/:skillName", async (req, res) => {
-//     const { skillName } = req.params;
-//     try {
-//         const skill = await Skill.findOne({ where: { name: skillName } });
-//         if (!skill) {
-//             return res.status(404).json({ message: "Skill not found" });
-//         }
-//         const behaviours = await Behaviour.findAll({ where: { skillId: skill.id } });
-//         if (behaviours.length === 0) {
-//             return res.status(404).json({ message: "Behaviours not found for this skill" });
-//         }
-//         res.json(behaviours);
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// });
 
 export default router;

@@ -4,7 +4,7 @@ import statementRoutes from './routes/statements-route.js';
 import sequelize from './config/db.js';
 import express from 'express';
 import cors from 'cors';
-import { Behaviour, Skill, Statement } from "../models/index.js";
+
 
 const app = express();
 app.use(express.json());

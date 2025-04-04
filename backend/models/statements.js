@@ -1,6 +1,6 @@
 import sequelize from '../config/db.js';
 import { DataTypes } from 'sequelize';
-import Behaviour from './behaviours.js'; // Import Behaviour model
+
 
 const Statement = sequelize.define('Statement', {
   text: {

@@ -1,6 +1,6 @@
 import sequelize from '../config/db.js';
 import { DataTypes } from 'sequelize';
-import Skill from './skills.js'; // Import Skill model after it's defined
+
 
 const Behaviour = sequelize.define('Behaviour', {
   name: {
