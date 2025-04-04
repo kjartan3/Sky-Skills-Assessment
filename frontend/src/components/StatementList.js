@@ -94,56 +94,54 @@ const StatementList = () => {
   if (statements.length === 0) {
     return <div>No statements available. Please try again later.</div>;
   }
-
+  
   return (
     <div className="container">
     {/* <h1>Assessment Statements</h1> */}
 
-     {/* Progress Bar */}
-     <div className="progress-bar-container">
+    {/* Progress Bar */}
+    <div className="progress-bar-container">
         <div className="progress-bar" style={{ width: `${progressPercentage}%` }}>
           {Math.round(progressPercentage)}%
         </div>
-      </div>
-  
+    </div>
+    
     {currentBehaviourName && <h2 className="behaviour-title">{currentBehaviourName}</h2>}
   
     {currentStatements.map((statement) => (
-  <div key={statement.id}>
-    <br></br>
-    <p className="statement-style"><strong></strong> {statement.text}</p>
-    <div className="radio-container">
-      {[1, 2, 3, 4, 5].map((value) => (
-        <div key={value}>
-          {/* Give each input a unique id to ensure proper association with the label */}
-          <input
-            type="radio"
-            id={`statement-${statement.id}-value-${value}`} // Unique ID for each radio button
-            name={`statement-${statement.id}`}
-            value={value}
-            checked={answers[statement.id] === value}
-            onChange={() => handleAnswerChange(statement.id, value)}
-          />
-          <label htmlFor={`statement-${statement.id}-value-${value}`}>
-            {value === 1 ? "Strongly Disagree" : 
-             value === 2 ? "Disagree" :
-             value === 3 ? "Neutral" :
-             value === 4 ? "Agree" : "Strongly Agree"}
-          </label>
-        </div>
-      ))}
+    <div key={statement.id} className="statement-container">
+      <p className="statement-style">{statement.text}</p>
+      <div className="radio-container">
+        {[1, 2, 3, 4, 5].map((value) => (
+          <div key={value}>
+            <input
+              type="radio"
+              id={`statement-${statement.id}-value-${value}`} 
+              name={`statement-${statement.id}`}
+              value={value}
+              checked={answers[statement.id] === value}
+              onChange={() => handleAnswerChange(statement.id, value)}
+            />
+            <label htmlFor={`statement-${statement.id}-value-${value}`}>
+              {value === 1 ? "Strongly Disagree" : 
+               value === 2 ? "Disagree" :
+               value === 3 ? "Neutral" :
+               value === 4 ? "Agree" : "Strongly Agree"}
+            </label>
+          </div>
+        ))}
+      </div>
     </div>
-  </div>
-))}
-    <br></br><br></br>
-  
-    <div>
+    ))}
+    
+    
+    <div className="button-container">
       <button onClick={handlePrevious} disabled={currentPage === 0}>Previous</button>
       <button onClick={handleNext} disabled={Object.keys(answers).length < (currentPage + 1) * statementsPerPage}>
         {currentPage < Math.ceil(statements.length / statementsPerPage) - 1 ? "Next" : "Submit"}
       </button>
     </div>
-    <br></br>
+    
     {averageScore && (
       <div className="average-score">
         {/* <h2>Average Score for {currentBehaviourName}</h2>

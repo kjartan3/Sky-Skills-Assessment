@@ -26,27 +26,34 @@
   }
 
   .behaviour-title {
-    padding-top: 30px;
+    padding-top: 50px;
+    padding-bottom: 60px;
   }
 
-  .statement-style {
-    font-size: 16px;
-    color: #555;
-    margin: 10px 0;
-    text-align: left !important;
-    flex: 1; /* Allows the text to take available space */
-    margin-top: 10px; 
-    padding-top: 10px;
+  .statement-container {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Ensures spacing between text and buttons */
+    gap: 20px; /* Space between text and buttons */
+    margin-bottom: 40px;
+    padding: 0 60px;
+    
   }
   
- /* Radio button container */
-.radio-container {
-  display: flex;
-  justify-content: flex-end; /* Align the radio buttons to the right */
-  gap: 10px;
-  margin-top: 20px;
-  margin-left: 20px; /* Optional: Add margin-left for spacing */
-}
+  /* Allow statement text to take up space */
+  .statement-style {
+    flex: 1; /* Makes the text take available space */
+    font-size: 16px;
+    color: #555;
+    margin: 0; /* Remove default margin */
+    text-align: left;
+  }
+  
+  /* Ensure radio buttons are aligned in a row */
+  .radio-container {
+    display: flex;
+    gap: 10px; /* Spacing between radio buttons */
+  }
   
   /* Style the label as a button */
   .radio-container label {
@@ -80,13 +87,17 @@
     cursor: default; /* Remove pointer to indicate it's selected */
   }
   
+  .button-container {
+    padding: 40px;
+  }
+
   /* Navigation buttons */
   button {
     background-color: #007bff;
     color: white;
     border: none;
     padding: 10px 15px;
-    margin: 10px;
+    margin: 15px;
     font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
@@ -112,12 +123,13 @@
     color: #333;
   }
   .progress-bar-container {
-    width: 100%;
+    width: 93%;
     height: 20px;
     background-color: #e0e0e0;
     border-radius: 10px;
     margin-bottom: 20px;
     overflow: hidden;
+    margin: 0 auto 20px auto;
   }
   
   .progress-bar {
