@@ -4,9 +4,7 @@ import statementRoutes from './routes/statements-route.js';
 import sequelize from './config/db.js';
 import express from 'express';
 import cors from 'cors';
-import Skill from './models/skills.js';
-import Behaviour from './models/behaviours.js';
-import Statement from './models/statements.js';
+import { Behaviour, Skill, Statement } from "../models/index.js";
 
 const app = express();
 app.use(express.json());
@@ -17,11 +15,7 @@ app.use('/skills', skillRoutes);
 app.use('/behaviours', behaviourRoutes); // Routes for behaviours and their corresponding statements
 app.use('/statements', statementRoutes);
 
-Skill.hasMany(Behaviour, { foreignKey: 'skillId' });
-Behaviour.belongsTo(Skill, { foreignKey: 'skillId' });
 
-Behaviour.hasMany(Statement, { foreignKey: 'behaviourId' });
-Statement.belongsTo(Behaviour, { foreignKey: 'behaviourId' });
 
 // Sync the database and handle errors
 const startServer = async () => {

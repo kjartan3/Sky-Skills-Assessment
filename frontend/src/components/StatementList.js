@@ -41,6 +41,12 @@ const StatementList = () => {
     return null;
   };
 
+  const getCurrentSkillName = () => {
+    const skillNames = new Set(currentStatements.map((s) => s.Behaviour.Skill.name));
+    return [...skillNames][0]; // Assuming all statements on the current page have the same skill
+  };
+
+  const currentSkillName = getCurrentSkillName();
   const currentBehaviourName = getCurrentBehaviourName();
 
   const handleAnswerChange = (statementId, value) => {
@@ -97,62 +103,74 @@ const StatementList = () => {
 
   return (
     <div className="container">
-    {/* <h1>Assessment Statements</h1> */}
-
-     {/* Progress Bar */}
-     <div className="progress-bar-container">
+      {/* Progress Bar */}
+      <div className="progress-bar-container">
         <div className="progress-bar" style={{ width: `${progressPercentage}%` }}>
           {Math.round(progressPercentage)}%
         </div>
       </div>
-  
-    {currentBehaviourName && <h2 className="behaviour-title">{currentBehaviourName}</h2>}
-  
-    {currentStatements.map((statement) => (
-  <div key={statement.id}>
-    <br></br>
-    <p className="statement-style"><strong></strong> {statement.text}</p>
-    <div className="radio-container">
-      {[1, 2, 3, 4, 5].map((value) => (
-        <div key={value}>
-          {/* Give each input a unique id to ensure proper association with the label */}
-          <input
-            type="radio"
-            id={`statement-${statement.id}-value-${value}`} // Unique ID for each radio button
-            name={`statement-${statement.id}`}
-            value={value}
-            checked={answers[statement.id] === value}
-            onChange={() => handleAnswerChange(statement.id, value)}
-          />
-          <label htmlFor={`statement-${statement.id}-value-${value}`}>
-            {value === 1 ? "Strongly Disagree" : 
-             value === 2 ? "Disagree" :
-             value === 3 ? "Neutral" :
-             value === 4 ? "Agree" : "Strongly Agree"}
-          </label>
+
+      {/* Display Skill Name above Behaviour */}
+      {currentSkillName && <h2 className="skill-title">{currentSkillName}</h2>}
+      {currentBehaviourName && <h2 className="behaviour-title">{currentBehaviourName}</h2>}
+
+      {currentStatements.map((statement) => (
+        <div key={statement.id}>
+          <br />
+          <p className="statement-style">
+            <strong></strong> {statement.text}
+          </p>
+          <div className="radio-container">
+            {[1, 2, 3, 4, 5].map((value) => (
+              <div key={value}>
+                {/* Give each input a unique id to ensure proper association with the label */}
+                <input
+                  type="radio"
+                  id={`statement-${statement.id}-value-${value}`} // Unique ID for each radio button
+                  name={`statement-${statement.id}`}
+                  value={value}
+                  checked={answers[statement.id] === value}
+                  onChange={() => handleAnswerChange(statement.id, value)}
+                />
+                <label htmlFor={`statement-${statement.id}-value-${value}`}>
+                  {value === 1
+                    ? "Strongly Disagree"
+                    : value === 2
+                    ? "Disagree"
+                    : value === 3
+                    ? "Neutral"
+                    : value === 4
+                    ? "Agree"
+                    : "Strongly Agree"}
+                </label>
+              </div>
+            ))}
+          </div>
         </div>
       ))}
-    </div>
-  </div>
-))}
-    <br></br><br></br>
-  
-    <div>
-      <button onClick={handlePrevious} disabled={currentPage === 0}>Previous</button>
-      <button onClick={handleNext} disabled={Object.keys(answers).length < (currentPage + 1) * statementsPerPage}>
-        {currentPage < Math.ceil(statements.length / statementsPerPage) - 1 ? "Next" : "Submit"}
-      </button>
-    </div>
-    <br></br>
-    {averageScore && (
-      <div className="average-score">
-        {/* <h2>Average Score for {currentBehaviourName}</h2>
-        <p>{averageScore}</p> */}
+      <br />
+      <br />
+
+      <div>
+        <button onClick={handlePrevious} disabled={currentPage === 0}>
+          Previous
+        </button>
+        <button
+          onClick={handleNext}
+          disabled={Object.keys(answers).length < (currentPage + 1) * statementsPerPage}
+        >
+          {currentPage < Math.ceil(statements.length / statementsPerPage) - 1
+            ? "Next"
+            : "Submit"}
+        </button>
       </div>
-    )}
-  </div>
-  
-      
+      <br />
+      {averageScore && (
+        <div className="average-score">
+          
+        </div>
+      )}
+    </div>
   );
 };
 

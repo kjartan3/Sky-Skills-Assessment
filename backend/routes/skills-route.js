@@ -1,5 +1,5 @@
 import express from "express";
-import Skill from '../models/skills.js';
+import Skill from '../models/index.js';
 
 
 const router = express.Router();

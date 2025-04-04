@@ -3,6 +3,7 @@ import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Responsi
 
 const Summary = () => {
   const [behaviourScores, setBehaviourScores] = useState([]);
+  const [skillsWithBehaviours, setSkillsWithBehaviours] = useState([]);
 
   useEffect(() => {
     // Retrieve saved statements and answers from sessionStorage
@@ -11,30 +12,54 @@ const Summary = () => {
 
     if (savedStatements.length === 0 || Object.keys(savedAnswers).length === 0) return;
 
-    // Group scores by behavior
-    const behaviourMap = {};
+    // Group scores by skill and behavior
+    const skillMap = {};
 
     savedStatements.forEach((statement) => {
+      const skillName = statement.Behaviour.Skill.name;
       const behaviourName = statement.Behaviour.name;
       const score = savedAnswers[statement.id];
 
       if (score !== undefined) {
-        if (!behaviourMap[behaviourName]) {
-          behaviourMap[behaviourName] = { total: 0, count: 0 };
+        if (!skillMap[skillName]) {
+          skillMap[skillName] = {};
         }
 
-        behaviourMap[behaviourName].total += score;
-        behaviourMap[behaviourName].count += 1;
+        if (!skillMap[skillName][behaviourName]) {
+          skillMap[skillName][behaviourName] = { total: 0, count: 0 };
+        }
+
+        skillMap[skillName][behaviourName].total += score;
+        skillMap[skillName][behaviourName].count += 1;
       }
     });
 
-    // Convert behaviourMap to an array of { name, averageScore }
-    const scoresArray = Object.entries(behaviourMap).map(([name, { total, count }]) => ({
-      name,
-      averageScore: (total / count).toFixed(2), // Calculate average score
-    }));
+    // Convert skillMap to an array of { name, averageScore, behaviours }
+    const skills = Object.entries(skillMap).map(([skillName, behaviours]) => {
+      const behaviourScores = Object.entries(behaviours).map(([behaviourName, { total, count }]) => ({
+        behaviourName,
+        averageScore: (total / count).toFixed(2), // Calculate average score for behavior
+      }));
 
-    setBehaviourScores(scoresArray);
+      return {
+        skillName,
+        behaviourScores,
+      };
+    });
+
+    setSkillsWithBehaviours(skills);
+
+    // Calculate average score for each skill (we could reuse the same skillMap)
+    const behaviourScoresArray = Object.entries(skillMap).map(([name, behaviours]) => {
+      const total = Object.values(behaviours).reduce((sum, { total: score }) => sum + score, 0);
+      const count = Object.values(behaviours).reduce((sum, { count }) => sum + count, 0);
+      return {
+        name,
+        averageScore: (total / count).toFixed(2), // Calculate average score for skill
+      };
+    });
+
+    setBehaviourScores(behaviourScoresArray);
   }, []);
 
   return (
@@ -52,6 +77,27 @@ const Summary = () => {
           </ResponsiveContainer>
         ) : (
           <p>No data available. Please complete the assessment.</p>
+        )}
+      </div>
+
+      {/* Breakdown of each skill and its behaviours */}
+      <div className="skills-breakdown">
+        {skillsWithBehaviours.length > 0 && (
+          <div>
+            {skillsWithBehaviours.map((skill) => (
+              <div key={skill.skillName}>
+                <h3>{skill.skillName}</h3>
+                <ul>
+                  {skill.behaviourScores.map((behaviour) => (
+                    <li key={behaviour.behaviourName}>
+                      <strong>{behaviour.behaviourName}: </strong>
+                      {behaviour.averageScore}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>
