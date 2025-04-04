@@ -97,7 +97,7 @@ const StatementList = () => {
 
   return (
     <div className="container">
-    <h1>Assessment Statements</h1>
+    {/* <h1>Assessment Statements</h1> */}
 
      {/* Progress Bar */}
      <div className="progress-bar-container">
@@ -106,7 +106,7 @@ const StatementList = () => {
         </div>
       </div>
   
-    {currentBehaviourName && <h2>Behavior: {currentBehaviourName}</h2>}
+    {currentBehaviourName && <h2 className="behaviour-title">{currentBehaviourName}</h2>}
   
     {currentStatements.map((statement) => (
   <div key={statement.id}>
@@ -135,7 +135,7 @@ const StatementList = () => {
     </div>
   </div>
 ))}
-    <br></br>
+    <br></br><br></br>
   
     <div>
       <button onClick={handlePrevious} disabled={currentPage === 0}>Previous</button>
@@ -146,8 +146,8 @@ const StatementList = () => {
     <br></br>
     {averageScore && (
       <div className="average-score">
-        <h2>Average Score for {currentBehaviourName}</h2>
-        <p>{averageScore}</p>
+        {/* <h2>Average Score for {currentBehaviourName}</h2>
+        <p>{averageScore}</p> */}
       </div>
     )}
   </div>
