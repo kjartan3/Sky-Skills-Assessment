@@ -9,3 +9,5 @@ const Skill = sequelize.define('Skill', {
 });
 
 export default Skill;
+
+

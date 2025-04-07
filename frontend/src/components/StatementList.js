@@ -145,7 +145,7 @@ const StatementList = () => {
       
       
 
-      <div>
+      <div className="button-container">
         <button onClick={handlePrevious} disabled={currentPage === 0}>
           Previous
         </button>
