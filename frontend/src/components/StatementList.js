@@ -121,7 +121,7 @@ const StatementList = () => {
             <strong></strong> {statement.text}
           </p>
           <div className="radio-container">
-        {[1, 2, 3, 4, 5].map((value) => (
+        {[1, 2, 3, 4].map((value) => (
           <div key={value}>
             <input
               type="radio"
@@ -132,10 +132,9 @@ const StatementList = () => {
               onChange={() => handleAnswerChange(statement.id, value)}
             />
             <label htmlFor={`statement-${statement.id}-value-${value}`}>
-              {value === 1 ? "Strongly Disagree" :
-               value === 2 ? "Disagree" :
-               value === 3 ? "Neutral" :
-               value === 4 ? "Agree" : "Strongly Agree"}
+              {value === 1 ? "Not at all" :
+               value === 2 ? "Some of the time" :
+               value === 3 ? "Most of the time" : "All the time"}
             </label>
           </div>
         ))}

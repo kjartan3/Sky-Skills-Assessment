@@ -25,9 +25,15 @@
     
   }
 
+  .skill-title {
+    font-size: 35px;
+    padding-top: 30px;
+  }
+
   .behaviour-title {
-    padding-top: 50px;
-    padding-bottom: 60px;
+    font-size: 22px;
+    padding-top: 8px;
+    padding-bottom: 75px;
   }
 
   .statement-container {
@@ -88,7 +94,7 @@
   }
   
   .button-container {
-    padding: 40px;
+    padding: 50px;
   }
 
   /* Navigation buttons */
