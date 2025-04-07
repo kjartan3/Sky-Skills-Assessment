@@ -1,14 +1,25 @@
 import { Sequelize } from 'sequelize';
 
-// Initialize Sequelize with SQLite
+
+
+
+const isTestEnvironment = process.env.NODE_ENV === 'test'; // Check if we're in test environment
+
 const sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: './database.sqlite', // This creates a file called database.sqlite in your project directory
+  storage: isTestEnvironment ? './test-database.sqlite' : './database.sqlite', // Use separate databases for test and production
 });
 
 // Test the connection
-sequelize.authenticate()
-  .then(() => console.log('Database connected successfully!'))
-  .catch((err) => console.log('Error connecting to the database: ', err));
+const testConnection = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Database connected successfully!');
+  } catch (err) {
+    console.error('Error connecting to the database: ', err);
+  }
+};
+
+testConnection();
 
 export default sequelize;
