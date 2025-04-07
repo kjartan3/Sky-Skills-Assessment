@@ -1,5 +1,5 @@
 import express from "express";
-import {Statement, Skill, Behaviour} from "../models/index.js"
+import { Statement, Skill, Behaviour } from "../models/index.js"
 const router = express.Router();
 
 // Get all statements
