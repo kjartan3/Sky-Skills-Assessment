@@ -7,6 +7,7 @@ import {
   PolarRadiusAxis,
   ResponsiveContainer,
 } from "recharts";
+import "./Summary.css"
  
 const Summary = () => {
   const [behaviourScores, setBehaviourScores] = useState([]);
@@ -76,7 +77,7 @@ const Summary = () => {
  
   return (
     <div className="summary-container">
-      <h1>Assessment Summary</h1>
+      <h1 className="summary-title">Assessment Summary</h1>
  
       <div className="chart-container">
         {behaviourScores.length > 0 ? (
@@ -107,30 +108,27 @@ const Summary = () => {
         )}
       </div>
  
-      {/* Skills breakdown with level */}
       <div className="skills-breakdown">
-        {skillsWithBehaviours.length > 0 && (
-          <div>
-            {skillsWithBehaviours.map((skill) => (
-              <div key={skill.skillName}>
-                <h3>
-                  {skill.skillName} —{" "}
-                  <span>
+        {skillsWithBehaviours.length > 0 && 
+            skillsWithBehaviours.map((skill) => (
+              <div key={skill.skillName} className="skill-card">
+                <h3 className="skill-name">
+                  {skill.skillName} <br></br>
+                  <span className="skill-level">
                     {getLevel(skill.averageScore)}
                   </span>
                 </h3>
-                <ul>
+                <ul className="behaviours-list">
                   {skill.behaviourScores.map((behaviour) => (
-                    <li key={behaviour.behaviourName}>
+                    <li key={behaviour.behaviourName} className="behaviour-item">
                       <strong>{behaviour.behaviourName}: </strong>
                       {behaviour.averageScore}
                     </li>
                   ))}
                 </ul>
               </div>
-            ))}
-          </div>
-        )}
+            ))
+        }
       </div>
     </div>
   );
