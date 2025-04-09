@@ -81,28 +81,28 @@ const Summary = () => {
  
       <div className="chart-container">
         {behaviourScores.length > 0 ? (
-          <ResponsiveContainer width="100%" height={400}>
-            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={behaviourScores}>
-              <PolarGrid />
-              <PolarAngleAxis 
-                  dataKey="name"
-                  tickFormatter={(name) => {
-                    const skill = skillsWithBehaviours.find((s) => s.skillName === name);
-                    if (!skill) return name;
-                    const level = getLevel(skill.averageScore);
-                    return `${name}\n(${level})`;
-                  }}
-              />
-              <PolarRadiusAxis domain={[1, 5]} tick={false}/>
-              <Radar
-                name="Score"
-                dataKey="averageScore"
-                stroke="#007bff"
-                fill="#007bff"
-                fillOpacity={0.6}
-              />
-            </RadarChart>
-          </ResponsiveContainer>
+         <ResponsiveContainer width="100%" height={400}>
+         <RadarChart cx="50%" cy="50%" outerRadius="80%" data={behaviourScores} >
+           <PolarGrid />
+           <PolarAngleAxis
+               dataKey="name"
+               tickFormatter={(name) => {
+                 const skill = skillsWithBehaviours.find((s) => s.skillName === name);
+                 if (!skill) return name;
+                 const level = getLevel(skill.averageScore);
+                 return `${name}\n(${level})`;
+               }}
+           />
+           <PolarRadiusAxis domain={[1, 4]} tick={false} tickCount={4}/>
+           <Radar
+             name="Score"
+             dataKey="averageScore"
+             stroke="#007bff"
+             fill="#007bff"
+             fillOpacity={0.6}
+           />
+         </RadarChart>
+       </ResponsiveContainer>
         ) : (
           <p>No data available. Please complete the assessment.</p>
         )}
@@ -122,7 +122,7 @@ const Summary = () => {
                   {skill.behaviourScores.map((behaviour) => (
                     <li key={behaviour.behaviourName} className="behaviour-item">
                       <strong>{behaviour.behaviourName}: </strong>
-                      {behaviour.averageScore}
+                      {getLevel(behaviour.averageScore)}
                     </li>
                   ))}
                 </ul>

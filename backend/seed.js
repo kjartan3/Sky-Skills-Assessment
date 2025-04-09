@@ -13,7 +13,7 @@ const seedDatabase = async () => {
         { name: 'Welcoming' },
         { name: 'Creative' },
         { name: 'Simplifying' },
-        { name: 'Do the right thing' },
+        { name: 'Doing the right thing' },
     ]);
 
     // Create Behaviours in the database
