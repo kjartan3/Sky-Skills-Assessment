@@ -3,6 +3,7 @@ import Home from './pages/Home'
 import Assessment from './pages/Assessment'
 import Summary from './pages/Summary'
 import Navbar from './components/Navbar';
+import Skills from './pages/Skills';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/assessment" element={<Assessment />} />
         <Route path="/summary" element={<Summary />} />
+        <Route path="/skills" element={<Skills />} />
 
       </Routes>
     </Router>
