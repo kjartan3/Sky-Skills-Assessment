@@ -123,19 +123,27 @@ const seedDatabase = async () => {
     });
 
     // Create an assessment for the user
-    const assessment = await Assessment.create({
-      userId: user.id,
-    });
+    const assessments = await Assessment.bulkCreate([
+      { userId: user.id },
+      { userId: user.id }, // second assessment for the same user
+    ]);
 
     // Get all the statements to generate responses
     const allStatements = await Statement.findAll();
 
     // Create responses with random scores (1–5) for each statement
-    const responses = allStatements.map((statement) => ({
-      assessmentId: assessment.id,
-      statementId: statement.id,
-      score: Math.floor(Math.random() * 4) + 1,
-    }));
+    const responses = allStatements.flatMap((statement) => [
+      {
+        assessmentId: assessments[0].id,
+        statementId: statement.id,
+        score: Math.floor(Math.random() * 4) + 1,
+      },
+      {
+        assessmentId: assessments[1].id,
+        statementId: statement.id,
+        score: Math.floor(Math.random() * 4) + 1,
+      },
+    ]);
 
     // Insert Responses into the database
     await Response.bulkCreate(responses);

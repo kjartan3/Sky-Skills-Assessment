@@ -1,6 +1,6 @@
 // routes/assessments-route.js
 import express from 'express';
-import { Assessment, Response } from '../models/index.js';
+import { Assessment, Response, Statement } from '../models/index.js';
 
 const router = express.Router();
 
@@ -25,13 +25,24 @@ router.get('/:userId', async (req, res) => {
 
   try {
     const assessments = await Assessment.findAll({
-      where: { userId: userId } // or just { userId }
+      where: { userId },
+      include: [
+        {
+          model: Response,
+          include: [
+            {
+              model: Statement, // Optional: include Statement text
+              attributes: ['text', 'behaviourId']
+            }
+          ],
+          attributes: ['statementId', 'score']
+        }
+      ]
     });
 
     res.json(assessments);
-
   } catch (err) {
-    console.error(err); // Add this to debug errors in terminal
+    console.error(err);
     res.status(500).json({ error: 'Error finding assessments' });
   }
 });
