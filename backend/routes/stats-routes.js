@@ -6,8 +6,8 @@ import { Sequelize } from 'sequelize';
 
 const router = express.Router();
 
-// GET /stats/assessment/:assessmentId
-router.get('/assessment/:assessmentId', async (req, res) => {
+// GET /stats/:assessmentId
+router.get('/:assessmentId', async (req, res) => {
   const { assessmentId } = req.params;
 
   try {

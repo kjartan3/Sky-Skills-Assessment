@@ -1,0 +1,105 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f1f1f1;
+    color: #333;
+  }
+  
+  /* Page container */
+  .assessment-summary-container {
+    width: 80%;
+    margin: 60px auto;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .assessment-summary-container h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+  }
+  
+  /* Individual assessment card */
+  .assessment {
+    margin-bottom: 60px;
+    padding: 25px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  
+  /* Assessment title */
+  .assessment h4 {
+    font-size: 24px;
+    color: #007bff;
+    margin-bottom: 10px;
+  }
+  
+  /* Chart container */
+  .chart-container {
+    width: 100%;
+    height: 400px;
+    margin: 20px 0;
+  }
+  
+  /* Skills breakdown grid */
+  .skills-breakdown {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    text-align: left;
+    padding: 0 20px;
+  }
+  
+  @media (max-width: 1024px) {
+    .skills-breakdown {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .skills-breakdown {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Individual skill card */
+  .skill-card {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .skill-name {
+    font-size: 20px;
+    color: #000000;
+  }
+  
+  .skill-level {
+    font-size: 14px;
+    color: #007bff;
+    font-weight: 600;
+  }
+  
+  /* Behaviours inside skill card */
+  .behaviours-list {
+    list-style-type: none;
+    padding-left: 0;
+    padding-top: 10px;
+  }
+  
+  .behaviour-item {
+    font-size: 15px;
+    color: #444;
+    margin-bottom: 8px;
+  }
+  
+  .behaviour-item strong {
+    color: #000000;
+  }
+  

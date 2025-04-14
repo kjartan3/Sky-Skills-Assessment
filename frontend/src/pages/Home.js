@@ -16,7 +16,7 @@ const Home = () => {
                 <div className="box">
                     <h2>Summary</h2>
                     <img src="/icons/analytics.png" alt="Summary" />
-                    <Link to="/summary" className="btn">View</Link>
+                    <Link to="/assessmentsummary" className="btn">View</Link>
                 </div>
 
                 <div className="box">
