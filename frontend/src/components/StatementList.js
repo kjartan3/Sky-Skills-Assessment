@@ -15,8 +15,10 @@ const StatementList = () => {
   useEffect(() => {
     const fetchStatements = async () => {
       try {
-        const response = await fetch("http://localhost:5000/statements");
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/statements`);
+        console.log(response)
         const data = await response.json();
+        console.log(data)
         setStatements(data);
         sessionStorage.setItem("statements", JSON.stringify(data)); // Save to sessionStorage
       } catch (error) {
