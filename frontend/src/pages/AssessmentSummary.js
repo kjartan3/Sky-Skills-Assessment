@@ -110,6 +110,8 @@ const AssessmentSummary = () => {
                 <PolarRadiusAxis domain={[1, 4]} tick={false} />
                 {assessments.map((a, index) => {
                   const color = COLORS[index % COLORS.length];
+                  const isSelected = selectedAssessmentId === a.id;
+                                
                   return (
                     <Radar
                       key={a.id}
@@ -117,7 +119,7 @@ const AssessmentSummary = () => {
                       dataKey={a.id}
                       stroke={color}
                       fill={color}
-                      fillOpacity={hoveredId === null || hoveredId === a.id ? 0.8 : 0.2}
+                      fillOpacity={isSelected ? 0.8 : 0.05} // highlight selected, fade others
                     />
                   );
                 })}
