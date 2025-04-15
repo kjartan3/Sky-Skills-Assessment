@@ -102,4 +102,46 @@ body {
   .behaviour-item strong {
     color: #000000;
   }
+
+  .chart-with-list {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.side-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-width: 180px;
+}
+
+.assessment-list-item {
+  transition: all 0.2s ease;
+}
   
+.chart-with-list {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.side-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 200px;
+}
+
+.assessment-list-item {
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.behaviour-breakdown {
+  margin-top: 10px;
+  padding-left: 10px;
+  font-size: 14px;
+  color: #444;
+}

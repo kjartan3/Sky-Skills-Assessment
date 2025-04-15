@@ -10,9 +10,14 @@ import {
 } from 'recharts';
 import './AssessmentSummary.css';
 
+const COLORS = ['#007bff', '#28a745', '#ffc107', '#17a2b8', '#dc3545', '#6f42c1', '#fd7e14'];
+
 const AssessmentSummary = () => {
   const [assessments, setAssessments] = useState([]);
   const [stats, setStats] = useState({});
+  const [hoveredId, setHoveredId] = useState(null);
+  const [expandedSkillId, setExpandedSkillId] = useState(null);
+
 
   const getLevel = (score) => {
     if (score >= 3.75) return "Advanced";
@@ -46,103 +51,144 @@ const AssessmentSummary = () => {
     fetchAssessments();
   }, []);
 
+  const allSkills = Array.from(
+    new Set(
+      assessments.flatMap((a) =>
+        stats[a.id]?.skillAverages?.map((s) => s.skillName) || []
+      )
+    )
+  );
+
+  // Create shared data points for all skills
+  const chartData = allSkills.map((skillName) => {
+    const point = { skillName };
+    assessments.forEach((a) => {
+      const avg = stats[a.id]?.skillAverages?.find(s => s.skillName === skillName);
+      point[a.id] = avg?.averageScore ?? 1;
+    });
+    return point;
+  });
+
   return (
     <div className="assessment-summary-container">
       <h2 className="summary-title">Assessment Summary</h2>
-  
+
       {assessments.length === 0 ? (
         <p>No assessments found.</p>
       ) : (
-        assessments.map((a) => {
-          const skillAverages = stats[a.id]?.skillAverages || [];
-          const behaviourAverages = stats[a.id]?.behaviourAverages || [];
-  
-          return (
-            <div key={a.id} className="assessment">
-              <h3 className="assessment-title">Assessment #{a.id}</h3>
-              <p style={{ marginTop: "-10px", color: "#777", fontSize: "14px" }}>
-                Taken on {new Date(a.createdAt).toLocaleDateString()}
-              </p>
-  
-              <div className="chart-container">
-                {skillAverages.length > 0 ? (
-                  <ResponsiveContainer width="100%" height={400}>
-                    <RadarChart
-                      cx="50%"
-                      cy="50%"
-                      outerRadius="80%"
-                      data={skillAverages}
-                    >
-                      <PolarGrid />
-                      <PolarAngleAxis
-                        dataKey="skillName"
-                        tickFormatter={(name) => {
-                          const score = skillAverages.find(s => s.skillName === name)?.averageScore;
-                          return `${name} (${getLevel(score)})`;
-                        }}
-                      />
-                      <PolarRadiusAxis domain={[1, 4]} tick={false} />
-                      <Radar
-                        name="Score"
-                        dataKey="averageScore"
-                        stroke="#007bff"
-                        fill="#007bff"
-                        fillOpacity={0.6}
-                      />
-                    </RadarChart>
-                  </ResponsiveContainer>
-                ) : (
-                  <p>No skill average data available.</p>
-                )}
+        <div className="chart-with-list">
+          <div className="side-list">
+            {assessments.map((a, index) => (
+              <div
+                key={a.id}
+                className="assessment-list-item"
+                onMouseEnter={() => setHoveredId(a.id)}
+                onMouseLeave={() => setHoveredId(null)}
+                style={{
+                  color: COLORS[index % COLORS.length],
+                  fontWeight: hoveredId === a.id ? 'bold' : 'normal',
+                  cursor: 'pointer',
+                }}
+              >
+                Assessment #{a.id}
+                <br />
+                <small>{new Date(a.createdAt).toLocaleDateString()}</small>
               </div>
-  
-              <div className="skills-breakdown">
-                {skillAverages.map((s) => (
-                  <div key={s.skillId} className="skill-card">
-                    <h3 className="skill-name">
-                      {s.skillName}
-                      <br />
-                      <span className="skill-level">
-                        {getLevel(s.averageScore)}
-                      </span>
-                    </h3>
-                  </div>
-                ))}
-              </div>
-  
-              <div className="skills-breakdown">
-                {behaviourAverages.map((b) => (
-                  <div key={b.behaviourId} className="skill-card">
-                    <h3 className="skill-name">
-                      {b.behaviourName}
-                      <br />
-                      <span className="skill-level">
-                        {getLevel(b.averageScore)}
-                      </span>
-                    </h3>
-                  </div>
-                ))}
-              </div>
-  
-              <details className="skill-card">
-                <summary><strong>View All Responses</strong></summary>
-                <ul className="behaviours-list">
-                  {a.Responses.map((r) => (
-                    <li key={r.id} className="behaviour-item">
-                      <em>{r.Statement.text}</em> — <strong>Score:</strong> {r.score}
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            </div>
-          );
-        })
+            ))}
+          </div>
+
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={400}>
+              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="skillName" />
+                <PolarRadiusAxis domain={[1, 4]} tick={false} />
+                {assessments.map((a, index) => {
+                  const color = COLORS[index % COLORS.length];
+                  return (
+                    <Radar
+                      key={a.id}
+                      name={`Assessment ${a.id}`}
+                      dataKey={a.id}
+                      stroke={color}
+                      fill={color}
+                      fillOpacity={hoveredId === null || hoveredId === a.id ? 0.8 : 0.2}
+                    />
+                  );
+                })}
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       )}
+
+      {/* Show cards for each individual assessment */}
+      {assessments.map((a) => {
+      const skillAverages = stats[a.id]?.skillAverages || [];
+      const behaviourAverages = stats[a.id]?.behaviourAverages || [];
+
+      return (
+        <div key={a.id} className="assessment">
+          <h3 className="assessment-title">Assessment #{a.id}</h3>
+          <p style={{ marginTop: "-10px", color: "#777", fontSize: "14px" }}>
+            Taken on {new Date(a.createdAt).toLocaleDateString()}
+          </p>
+      
+          <div className="skills-breakdown">
+            {skillAverages.map((s) => {
+              const skillKey = `${a.id}-${s.skillId}`;
+              const isExpanded = expandedSkillId === skillKey;
+              console.log("This: ", behaviourAverages)
+            
+              // Filter behaviours based on skillId
+              const behavioursForSkill = behaviourAverages.filter(
+                (b) => b.skillId === s.skillId
+              );
+            
+              return (
+                <div
+                  key={s.skillId}
+                  className="skill-card"
+                  onClick={() =>
+                    setExpandedSkillId(isExpanded ? null : skillKey)
+                  }
+                  style={{ cursor: "pointer" }}
+                >
+                  <h3 className="skill-name">
+                    {s.skillName}
+                    <br />
+                    <span className="skill-level">
+                      {getLevel(s.averageScore)} ({s.averageScore.toFixed(2)})
+                    </span>
+                  </h3>
+                
+                  {isExpanded && (
+                    <div className="behaviour-breakdown">
+                      {behavioursForSkill.length > 0 ? (
+                        behavioursForSkill.map((b) => (
+                          <div key={b.behaviourId} className="behaviour-item">
+                            <strong>{b.behaviourName}</strong> —{" "}
+                            {getLevel(b.averageScore)} ({b.averageScore.toFixed(2)})
+                          </div>
+                        ))
+                      ) : (
+                        <div className="behaviour-item">
+                          No behaviours linked to this skill.
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    })}
+
     </div>
   );
-  
-
- 
 };
 
 export default AssessmentSummary;
+

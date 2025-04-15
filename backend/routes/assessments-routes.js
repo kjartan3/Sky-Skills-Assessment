@@ -37,6 +37,9 @@ router.get('/:userId', async (req, res) => {
           ],
           attributes: ['statementId', 'score']
         }
+      ],
+      order: [
+        ["createdAt", "DESC"],
       ]
     });
 
