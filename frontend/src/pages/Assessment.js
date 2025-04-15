@@ -6,7 +6,8 @@ const Assessment = () => {
 
     return (
         <div>
-            {/* Pass responses and handleResponseChange as props */}
+            
+            
             <StatementList 
                 
             />

@@ -17,7 +17,7 @@ const AssessmentSummary = () => {
   const [stats, setStats] = useState({});
   const [hoveredId, setHoveredId] = useState(null);
   const [expandedSkillId, setExpandedSkillId] = useState(null);
-
+  const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
 
   const getLevel = (score) => {
     if (score >= 3.75) return "Advanced";
@@ -43,6 +43,11 @@ const AssessmentSummary = () => {
         });
 
         setStats(statsByAssessmentId);
+
+        // Automatically select the first assessment
+        if (res.data.length > 0) {
+          setSelectedAssessmentId(res.data[0].id);
+        }
       } catch (err) {
         console.error('Error fetching assessments or stats:', err);
       }
@@ -59,7 +64,6 @@ const AssessmentSummary = () => {
     )
   );
 
-  // Create shared data points for all skills
   const chartData = allSkills.map((skillName) => {
     const point = { skillName };
     assessments.forEach((a) => {
@@ -82,6 +86,7 @@ const AssessmentSummary = () => {
               <div
                 key={a.id}
                 className="assessment-list-item"
+                onClick={() => setSelectedAssessmentId(a.id)}
                 onMouseEnter={() => setHoveredId(a.id)}
                 onMouseLeave={() => setHoveredId(null)}
                 style={{
@@ -122,37 +127,32 @@ const AssessmentSummary = () => {
         </div>
       )}
 
-      {/* Show cards for each individual assessment */}
-      {assessments.map((a) => {
-      const skillAverages = stats[a.id]?.skillAverages || [];
-      const behaviourAverages = stats[a.id]?.behaviourAverages || [];
-
-      return (
-        <div key={a.id} className="assessment">
-          <h3 className="assessment-title">Assessment #{a.id}</h3>
+      {/* Selected assessment skill + behaviour breakdown */}
+      {selectedAssessmentId && (
+        <div className="assessment">
+          <h3 className="assessment-title">Assessment #{selectedAssessmentId}</h3>
           <p style={{ marginTop: "-10px", color: "#777", fontSize: "14px" }}>
-            Taken on {new Date(a.createdAt).toLocaleDateString()}
+            Taken on {new Date(
+              assessments.find((a) => a.id === selectedAssessmentId)?.createdAt
+            ).toLocaleDateString()}
           </p>
-      
+
           <div className="skills-breakdown">
-            {skillAverages.map((s) => {
-              const skillKey = `${a.id}-${s.skillId}`;
+            {stats[selectedAssessmentId]?.skillAverages?.map((s) => {
+              const skillKey = `${selectedAssessmentId}-${s.skillId}`;
               const isExpanded = expandedSkillId === skillKey;
-              console.log("This: ", behaviourAverages)
-            
-              // Filter behaviours based on skillId
-              const behavioursForSkill = behaviourAverages.filter(
-                (b) => b.skillId === s.skillId
-              );
-            
+
+              const behavioursForSkill =
+                stats[selectedAssessmentId]?.behaviourAverages?.filter(
+                  (b) => b.skillId === s.skillId
+                ) || [];
+
               return (
                 <div
                   key={s.skillId}
                   className="skill-card"
-                  onClick={() =>
-                    setExpandedSkillId(isExpanded ? null : skillKey)
-                  }
-                  style={{ cursor: "pointer" }}
+                  onClick={() => setExpandedSkillId(isExpanded ? null : skillKey)}
+                  style={{ cursor: 'pointer' }}
                 >
                   <h3 className="skill-name">
                     {s.skillName}
@@ -161,14 +161,15 @@ const AssessmentSummary = () => {
                       {getLevel(s.averageScore)} ({s.averageScore.toFixed(2)})
                     </span>
                   </h3>
-                
+
                   {isExpanded && (
                     <div className="behaviour-breakdown">
                       {behavioursForSkill.length > 0 ? (
                         behavioursForSkill.map((b) => (
                           <div key={b.behaviourId} className="behaviour-item">
                             <strong>{b.behaviourName}</strong> —{" "}
-                            {getLevel(b.averageScore)} ({b.averageScore.toFixed(2)})
+                            {getLevel(b.averageScore)} (
+                            {b.averageScore.toFixed(2)})
                           </div>
                         ))
                       ) : (
@@ -183,12 +184,9 @@ const AssessmentSummary = () => {
             })}
           </div>
         </div>
-      );
-    })}
-
+      )}
     </div>
   );
 };
 
 export default AssessmentSummary;
-
