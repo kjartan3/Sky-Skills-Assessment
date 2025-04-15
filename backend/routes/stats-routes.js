@@ -53,11 +53,17 @@ router.get('/:assessmentId', async (req, res) => {
     });
 
     // Calculate averages
-    const behaviourAverages = Object.values(behaviourScores).map(b => ({
-      behaviourId: b.behaviourId,
-      behaviourName: b.behaviourName,
-      averageScore: b.scores.reduce((a, b) => a + b, 0) / b.scores.length,
-    }));
+    const behaviourAverages = Object.values(behaviourScores).map(b => {
+        const relatedResponse = responses.find(r => r.Statement.Behaviour.id === b.behaviourId);
+        const skillId = relatedResponse?.Statement.Behaviour.Skill.id;
+      
+        return {
+          behaviourId: b.behaviourId,
+          behaviourName: b.behaviourName,
+          averageScore: b.scores.reduce((a, b) => a + b, 0) / b.scores.length,
+          skillId, // ✅ Include skillId here
+        };
+      });
 
     const skillAverages = Object.values(skillScores).map(s => ({
       skillId: s.skillId,
