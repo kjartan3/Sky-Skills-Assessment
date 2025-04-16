@@ -1,6 +1,10 @@
 import skillRoutes from './routes/skills-route.js';
 import behaviourRoutes from './routes/behaviours-route.js';
 import statementRoutes from './routes/statements-route.js';
+import userRoutes from './routes/users-routes.js';
+import assessmentRoutes from './routes/assessments-routes.js';
+import statsRoutes from './routes/stats-routes.js';
+
 import sequelize from './config/db.js';
 import express from 'express';
 import cors from 'cors';
@@ -12,8 +16,11 @@ app.use(cors());
 
 // Add routes for skills and statements
 app.use('/skills', skillRoutes);
-app.use('/behaviours', behaviourRoutes); // Routes for behaviours and their corresponding statements
+app.use('/behaviours', behaviourRoutes); 
 app.use('/statements', statementRoutes);
+app.use('/users', userRoutes);
+app.use('/assessments', assessmentRoutes);
+app.use('/stats', statsRoutes);
 
 
 

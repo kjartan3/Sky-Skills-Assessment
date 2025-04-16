@@ -17,6 +17,7 @@ const StatementList = () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/statements`);
         console.log(response)
+        console.log("Api", process.env.REACT_APP_API_URL);
         const data = await response.json();
         console.log(data)
         setStatements(data);
@@ -64,7 +65,7 @@ const StatementList = () => {
     if (currentPage < Math.ceil(statements.length / statementsPerPage) - 1) {
       setCurrentPage(currentPage + 1);
     } else {
-      navigate("/summary"); // Navigate to results page after the last statement
+      handleSubmit(); // Submit when the last page is reached
     }
   };
 
@@ -74,26 +75,43 @@ const StatementList = () => {
     }
   };
 
-  // Calculate average score for the current page if all statements have the same behavior
-  const calculateAverageScoreForCurrentPage = () => {
-    if (!currentBehaviourName) return null; // Only calculate if all questions have the same behavior
-
-    const relevantStatements = currentStatements.filter((s) => s.Behaviour.name === currentBehaviourName);
-    const relevantAnswers = relevantStatements
-      .map((s) => answers[s.id])
-      .filter((a) => a !== undefined); // Get only answered questions
-
-    if (relevantAnswers.length === 0) return null; // Avoid division by zero
-
-    const totalScore = relevantAnswers.reduce((sum, score) => sum + score, 0);
-    return (totalScore / relevantAnswers.length).toFixed(2);
-  };
-
-  const averageScore = calculateAverageScoreForCurrentPage();
+  
+  
 
   const totalStatements = statements.length;
   const answeredStatements = Object.keys(answers).length;
   const progressPercentage = totalStatements > 0 ? (answeredStatements / totalStatements) * 100 : 0;
+
+  // Handle form submission
+  const handleSubmit = async () => {
+    try {
+      // 1. Format responses for submission
+      const responsePayload = Object.entries(answers).map(([statementId, score]) => ({
+        statementId: parseInt(statementId),
+        score,
+      }));
+
+      // 2. Create a new assessment with responses
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/assessments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: 1, responses: responsePayload }), // Static userId for now
+      });
+
+      
+      if (res.status === 201) {
+        // 3. Navigate to the summary page
+        navigate("/assessmentsummary");
+      } else {
+        throw new Error("Failed to create assessment.");
+      }
+    } catch (err) {
+      console.error("Error submitting assessment:", err);
+      alert("Something went wrong submitting your answers.");
+    }
+  };
 
   if (loading) {
     return <div>Loading statements...</div>;
@@ -102,7 +120,7 @@ const StatementList = () => {
   if (statements.length === 0) {
     return <div>No statements available. Please try again later.</div>;
   }
-  
+
   return (
     <div className="container">
       {/* Progress Bar */}
@@ -123,28 +141,26 @@ const StatementList = () => {
             <strong></strong> {statement.text}
           </p>
           <div className="radio-container">
-        {[1, 2, 3, 4].map((value) => (
-          <div key={value}>
-            <input
-              type="radio"
-              id={`statement-${statement.id}-value-${value}`}
-              name={`statement-${statement.id}`}
-              value={value}
-              checked={answers[statement.id] === value}
-              onChange={() => handleAnswerChange(statement.id, value)}
-            />
-            <label htmlFor={`statement-${statement.id}-value-${value}`}>
-              {value === 1 ? "Not at all" :
-               value === 2 ? "Some of the time" :
-               value === 3 ? "Most of the time" : "All the time"}
-            </label>
+            {[1, 2, 3, 4].map((value) => (
+              <div key={value}>
+                <input
+                  type="radio"
+                  id={`statement-${statement.id}-value-${value}`}
+                  name={`statement-${statement.id}`}
+                  value={value}
+                  checked={answers[statement.id] === value}
+                  onChange={() => handleAnswerChange(statement.id, value)}
+                />
+                <label htmlFor={`statement-${statement.id}-value-${value}`}>
+                  {value === 1 ? "Not at all" :
+                   value === 2 ? "Some of the time" :
+                   value === 3 ? "Most of the time" : "All the time"}
+                </label>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </div>
-    ))}
-      
-      
+        </div>
+      ))}
 
       <div className="button-container">
         <button onClick={handlePrevious} disabled={currentPage === 0}>
@@ -158,17 +174,12 @@ const StatementList = () => {
             ? "Next"
             : "Submit"}
         </button>
-        
       </div>
-      <br />
-      {averageScore && (
-        <div className="average-score">
-          
-        </div>
-      )}
+
+      
+      
     </div>
   );
 };
 
 export default StatementList;
-

@@ -2,6 +2,9 @@ import sequelize from './config/db.js';
 import Skill from './models/skills.js'; 
 import Behaviour from './models/behaviours.js';
 import Statement from './models/statements.js';
+import User from './models/User.js';
+import Response from './models/response.js';
+import Assessment from './models/assessment.js';
 
 const seedDatabase = async () => {
   try {
@@ -109,6 +112,42 @@ const seedDatabase = async () => {
 
     // Insert Statements into the database
     await Statement.bulkCreate(statements);
+
+    // Add this after inserting Statements
+
+    // Create a test user
+    const user = await User.create({
+      name: 'Jane Doe',
+      email: 'jane.doe@example.com',
+      userId: 1,
+    });
+
+    // Create an assessment for the user
+    const assessments = await Assessment.bulkCreate([
+      { userId: user.id },
+      { userId: user.id }, // second assessment for the same user
+    ]);
+
+    // Get all the statements to generate responses
+    const allStatements = await Statement.findAll();
+
+    // Create responses with random scores (1–5) for each statement
+    const responses = allStatements.flatMap((statement) => [
+      {
+        assessmentId: assessments[0].id,
+        statementId: statement.id,
+        score: Math.floor(Math.random() * 4) + 1,
+      },
+      {
+        assessmentId: assessments[1].id,
+        statementId: statement.id,
+        score: Math.floor(Math.random() * 4) + 1,
+      },
+    ]);
+
+    // Insert Responses into the database
+    await Response.bulkCreate(responses);
+
 
     console.log('Database seeded successfully!');
   } catch (error) {
