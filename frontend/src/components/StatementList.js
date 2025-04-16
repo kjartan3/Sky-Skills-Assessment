@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./StatementList.css";
+import ProgressBar from "./ProgressBar";
+import StatementGroup from "./StatementGroup";
+import NavigationButtons from "./NavigationButtons";
 
 const StatementList = () => {
   const navigate = useNavigate();
@@ -21,11 +24,12 @@ const StatementList = () => {
         sessionStorage.setItem("statements", JSON.stringify(data)); // Save to sessionStorage
       } catch (error) {
         console.error("Error fetching statements:", error);
+      } finally {
+        setLoading(false)
       }
     };
 
     fetchStatements();
-    setLoading(false);
   }, []);
 
   // Get current page statements
@@ -33,34 +37,27 @@ const StatementList = () => {
 
   // Check if all statements on the current page belong to the same behavior
   const getCurrentBehaviourName = () => {
-    const behaviourNames = new Set(currentStatements.map((s) => s.Behaviour.name));
-
-    if (behaviourNames.size === 1) {
-      return [...behaviourNames][0]; // Return the only behavior name
-    }
-    return null;
+    const names = new Set(currentStatements.map((s) => s.Behaviour.name));
+    return names.size === 1 ? [...names][0] : null;
+   
   };
 
   const getCurrentSkillName = () => {
-    const skillNames = new Set(currentStatements.map((s) => s.Behaviour.Skill.name));
-    return [...skillNames][0]; // Assuming all statements on the current page have the same skill
+    const names = new Set(currentStatements.map((s) => s.Behaviour.Skill.name));
+    return [...names][0]; // Assuming all statements on the current page have the same skill
   };
 
-  const currentSkillName = getCurrentSkillName();
-  const currentBehaviourName = getCurrentBehaviourName();
+
 
   const handleAnswerChange = (statementId, value) => {
-    const updatedAnswers = {
-      ...answers,
-      [statementId]: value,
-    };
+    const updatedAnswers = {...answers, [statementId]: value};
     setAnswers(updatedAnswers);
     sessionStorage.setItem("answers", JSON.stringify(updatedAnswers)); // Save updated answers to sessionStorage
   };
 
   const handleNext = () => {
     if (currentPage < Math.ceil(statements.length / statementsPerPage) - 1) {
-      setCurrentPage(currentPage + 1);
+      setCurrentPage((prev) => prev + 1);
     } else {
       handleSubmit(); // Submit when the last page is reached
     }
@@ -68,16 +65,10 @@ const StatementList = () => {
 
   const handlePrevious = () => {
     if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
+      setCurrentPage((prev) => prev - 1);
     }
   };
 
-  
-  
-
-  const totalStatements = statements.length;
-  const answeredStatements = Object.keys(answers).length;
-  const progressPercentage = totalStatements > 0 ? (answeredStatements / totalStatements) * 100 : 0;
 
   // Handle form submission
   const handleSubmit = async () => {
@@ -110,6 +101,9 @@ const StatementList = () => {
     }
   };
 
+ 
+  const progressPercentage = statements.length > 0 ? (Object.keys(answers).length / statements.length) * 100 : 0;
+
   if (loading) {
     return <div>Loading statements...</div>;
   }
@@ -120,59 +114,25 @@ const StatementList = () => {
 
   return (
     <div className="container">
-      {/* Progress Bar */}
-      <div className="progress-bar-container">
-        <div className="progress-bar" style={{ width: `${progressPercentage}%` }}>
-          {Math.round(progressPercentage)}%
-        </div>
-      </div>
-
-      {/* Display Skill Name above Behaviour */}
-      {currentSkillName && <h2 className="skill-title">{currentSkillName}</h2>}
-      {currentBehaviourName && <h2 className="behaviour-title">{currentBehaviourName}</h2>}
-
-      {currentStatements.map((statement) => (
-        <div key={statement.id} className="statement-container">
-          <br />
-          <p className="statement-style">
-            <strong></strong> {statement.text}
-          </p>
-          <div className="radio-container">
-            {[1, 2, 3, 4].map((value) => (
-              <div key={value}>
-                <input
-                  type="radio"
-                  id={`statement-${statement.id}-value-${value}`}
-                  name={`statement-${statement.id}`}
-                  value={value}
-                  checked={answers[statement.id] === value}
-                  onChange={() => handleAnswerChange(statement.id, value)}
-                />
-                <label htmlFor={`statement-${statement.id}-value-${value}`}>
-                  {value === 1 ? "Not at all" :
-                   value === 2 ? "Some of the time" :
-                   value === 3 ? "Most of the time" : "All the time"}
-                </label>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
-
-      <div className="button-container">
-        <button onClick={handlePrevious} disabled={currentPage === 0}>
-          Previous
-        </button>
-        <button
-          onClick={handleNext}
-          disabled={Object.keys(answers).length < (currentPage + 1) * statementsPerPage}
-        >
-          {currentPage < Math.ceil(statements.length / statementsPerPage) - 1
-            ? "Next"
-            : "Submit"}
-        </button>
-      </div>
-
+      < ProgressBar progress={progressPercentage}/>
+      
+      <StatementGroup 
+        skillName={getCurrentSkillName()}
+        behaviourName={getCurrentBehaviourName()}
+        statements={currentStatements}
+        answers={answers}
+        onAnswerChange={handleAnswerChange}
+      />
+      
+      <NavigationButtons 
+        onPrevious={handlePrevious}
+        onNext={handleNext}
+        isFirstPage={currentPage===0}
+        isLastPage={currentPage === Math.ceil(statements.length / statementsPerPage) - 1}
+        canProceed={
+          Object.keys(answers).length >= (currentPage + 1) * statementsPerPage
+        }
+      />
       
       
     </div>
