@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import AssessmentList from '../components/AssessmentList';
-import SkillsBreakdown from '../components/SkillsBreakdown';
-import RadarChartContainer from '../components/RadarChartContainer';
+import AssessmentList from '../components/Summary/AssessmentList';
+import SkillsBreakdown from '../components/Summary/SkillsBreakdown';
+import RadarChartContainer from '../components/Summary/RadarChartContainer';
 import './AssessmentSummary.css';
 
 const COLORS = ['#007bff', '#28a745', '#ffc107', '#17a2b8', '#dc3545', '#6f42c1', '#fd7e14'];
