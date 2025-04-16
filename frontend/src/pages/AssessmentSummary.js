@@ -56,9 +56,9 @@ const AssessmentSummary = () => {
         <div className="chart-with-list">
           <AssessmentList
             assessments={assessments}
-            setSelectedAssessmentId={setSelectedAssessmentId}
             hoveredId={hoveredId}
             setHoveredId={setHoveredId}
+            setSelectedAssessmentId={setSelectedAssessmentId}
             COLORS={COLORS}
           />
 
@@ -74,9 +74,9 @@ const AssessmentSummary = () => {
       {/* Selected assessment skill + behaviour breakdown */}
       {selectedAssessmentId && (
         <SkillsBreakdown
-          selectedAssessmentId={selectedAssessmentId}
-          assessments={assessments.find((a) => a.id === selectedAssessmentId)}
-          stats={selectedAssessmentId}
+          assessmentId={selectedAssessmentId}
+          assessment={assessments.find((a) => a.id === selectedAssessmentId)}
+          stats={stats[selectedAssessmentId]}
           expandedSkillId={expandedSkillId}
           setExpandedSkillId={setExpandedSkillId}
         />

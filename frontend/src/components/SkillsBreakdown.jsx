@@ -1,24 +1,26 @@
 import React from "react";
 
+
 const getLevel = (score) => {
     if (score >= 3.75) return "Advanced";
     if (score >= 2.5) return "Intermediate";
     return "Beginner";
 };
 
-const SkillsBreakdown = ({ selectedAssessmentId, assessments, stats, expandedSkillId, setExpandedSkillId }) => {
+const SkillsBreakdown = ({ assessmentId, assessment, stats, expandedSkillId, setExpandedSkillId }) => {
     return (
         <div className="assessment">
-          <h3 className="assessment-title">Assessment #{selectedAssessmentId}</h3>
+          <h3 className="assessment-title">Assessment #{assessmentId}</h3>
           <p style={{ marginTop: "-10px", color: "#777", fontSize: "14px" }}>
             Taken on {new Date(
-              assessments.createdAt
+              assessment.createdAt
             ).toLocaleDateString()}
           </p>
 
           <div className="skills-breakdown">
             {stats?.skillAverages?.map((s) => {
-              const skillKey = `${selectedAssessmentId}-${s.skillId}`;
+                console.log("stats", stats)
+              const skillKey = `${assessmentId}-${s.skillId}`;
               const isExpanded = expandedSkillId === skillKey;
 
               const behavioursForSkill =
