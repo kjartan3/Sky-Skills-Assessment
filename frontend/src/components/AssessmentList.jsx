@@ -1,4 +1,7 @@
-const AssessmentList = ({assessments, selectedId, hoveredId, setHoveredId, setSelectedId, COLORS}) => {
+import React from 'react';
+
+
+const AssessmentList = ({assessments, setSelectedAssessmentId, hoveredId, setHoveredId, COLORS}) => {
     <div className="side-list">
             {assessments.map((a, index) => (
               <div
@@ -20,3 +23,5 @@ const AssessmentList = ({assessments, selectedId, hoveredId, setHoveredId, setSe
             ))}
           </div>
 }
+
+export default AssessmentList;
