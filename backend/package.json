@@ -27,7 +27,9 @@
     "supertest": "^7.1.0"
   },
   "jest": {
-    "setupFilesAfterEnv": ["<rootDir>/__tests__/setup.js"],
+    "setupFilesAfterEnv": [
+      "<rootDir>/__tests__/setup.js"
+    ],
     "transform": {
       "^.+\\.js$": "babel-jest"
     },
