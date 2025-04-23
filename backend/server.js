@@ -4,15 +4,19 @@ import statementRoutes from './routes/statements-route.js';
 import userRoutes from './routes/users-routes.js';
 import assessmentRoutes from './routes/assessments-routes.js';
 import statsRoutes from './routes/stats-routes.js';
+import authRoutes from './routes/auth-routes.js';
 
 import sequelize from './config/db.js';
 import express from 'express';
 import cors from 'cors';
+import { body } from 'express-validator';
 
+const bodyParser = require('body-parser');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(bodyParser.json());
 
 // Add routes for skills and statements
 app.use('/skills', skillRoutes);
@@ -21,7 +25,7 @@ app.use('/statements', statementRoutes);
 app.use('/users', userRoutes);
 app.use('/assessments', assessmentRoutes);
 app.use('/stats', statsRoutes);
-
+app.use('/auth', authRoutes);
 
 
 // Sync the database and handle errors
