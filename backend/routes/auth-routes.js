@@ -1,7 +1,10 @@
-const express = require('express');
+import express from "express"
+import { User } from '../models/index.js';
+import jwt from "jsonwebtoken"
+import dotenv from 'dotenv'
+dotenv.config()
+
 const router = express.Router();
-const jwt = require('jsonwebtoken');
-const User = require('../models/index.js');
 const SECRET_KEY = process.env.JWT_SECRET
 
 router.post('/signup', async (req, res) => {
@@ -60,4 +63,4 @@ router.get('/me', async (req, res) => {
     }
 })
 
-module.exports = router;
+export default router;

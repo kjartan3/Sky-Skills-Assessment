@@ -6,6 +6,7 @@ const Skills = () => {
     return (
         <div>
             <TitleVideo />
+           
         </div>
     );
 };

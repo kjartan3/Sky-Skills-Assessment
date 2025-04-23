@@ -11,7 +11,7 @@ import express from 'express';
 import cors from 'cors';
 import { body } from 'express-validator';
 
-const bodyParser = require('body-parser');
+import bodyParser from "body-parser"
 
 const app = express();
 app.use(express.json());

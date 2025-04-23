@@ -1,13 +1,14 @@
 import sequelize from '../config/db.js';
 import { DataTypes } from 'sequelize';
-
-const bcrypt = require('bcrypt');
+import bcrypt from "bcrypt"
+import {v4 as uuidv4} from 'uuid'
 
 const User = sequelize.define("User", {
     userId: {
         type: DataTypes.STRING, 
         allowNull: false,
-        unique: true
+        unique: true,
+        defaultValue: () => uuidv4()
     },
     name: {
         type: DataTypes.STRING,

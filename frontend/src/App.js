@@ -4,7 +4,7 @@ import Assessment from './pages/Assessment'
 import Navbar from './components/Navbar';
 import Skills from './pages/Skills';
 import AssessmentSummary from './pages/AssessmentSummary';
-
+import Auth from "./pages/Auth"
 
 function App() {
   return (
@@ -15,6 +15,7 @@ function App() {
         <Route path="/assessment" element={<Assessment />} />
         <Route path="/assessmentsummary" element={<AssessmentSummary />} />
         <Route path="/skills" element={<Skills />} />
+        <Route path="/auth" element={<Auth />} />
 
       </Routes>
     </Router>
