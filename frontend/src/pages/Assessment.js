@@ -4,6 +4,8 @@ import ProgressBar from "../components/Assessment/ProgressBar";
 import StatementGroup from "../components/Assessment/StatementGroup";
 import NavigationButtons from "../components/Assessment/NavigationButtons";
 import './Assessment.css'
+import GetUserId from "../components/Auth/GetUserId";
+
 const Assessment = () => {
   const navigate = useNavigate();
   const [statements, setStatements] = useState([]);
@@ -12,7 +14,14 @@ const Assessment = () => {
   const [loading, setLoading] = useState(true);
 
   const statementsPerPage = 4;
+  const userId = GetUserId()
+  const token = sessionStorage.getItem('token');
 
+  if (!userId) {
+    alert('User is not authenticted')
+    navigate('/auth')
+  }
+ 
   // Fetch statements
   useEffect(() => {
     const fetchStatements = async () => {
@@ -83,8 +92,9 @@ const Assessment = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token},`
         },
-        body: JSON.stringify({ userId: 1, responses: responsePayload }), // Static userId for now
+        body: JSON.stringify({ userId, responses:responsePayload }), 
       });
 
       

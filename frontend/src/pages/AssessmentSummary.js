@@ -3,6 +3,7 @@ import axios from 'axios';
 import AssessmentList from '../components/Summary/AssessmentList';
 import SkillsBreakdown from '../components/Summary/SkillsBreakdown';
 import RadarChartContainer from '../components/Summary/RadarChartContainer';
+import GetUserId from '../components/Auth/GetUserId';
 import './AssessmentSummary.css';
 
 const COLORS = ['#007bff', '#28a745', '#ffc107', '#17a2b8', '#dc3545', '#6f42c1', '#fd7e14'];
@@ -14,11 +15,14 @@ const AssessmentSummary = () => {
   const [expandedSkillId, setExpandedSkillId] = useState(null);
   const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
 
+  
+  
 
   useEffect(() => {
     const fetchAssessments = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/assessments/1`);
+        const userId = GetUserId()
+        const res = await axios.get(`http://localhost:5000/assessments/${userId}`);
         setAssessments(res.data);
 
         const statsPromises = res.data.map((a) =>

@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 
 
-const SignupForm = (onAuthSuccess) => {
+const SignupForm = ({ onAuthSuccess }) => {
     const [formData, setFormData] = useState({ 
         name: "",
         email: "",
@@ -30,6 +30,7 @@ const SignupForm = (onAuthSuccess) => {
             const data = await res.json()
 
             if (res.ok) {
+                console.log("Token recieved", data.token)
                 sessionStorage.setItem("token", data.token);
                 onAuthSuccess();
             } 
@@ -38,7 +39,7 @@ const SignupForm = (onAuthSuccess) => {
             }
         } catch (err) {
             console.error("Sign-up error", err)
-            setError(err)
+            setError(err.message || "Something went wrong")
         }
     }
 

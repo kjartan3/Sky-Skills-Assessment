@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-const LoginForm = ({onAuthSuccess}) => {
+const LoginForm = ({ onAuthSuccess }) => {
     const [formData, setFormData] = useState({ 
             email: "",
             password: "" 
@@ -33,11 +33,11 @@ const LoginForm = ({onAuthSuccess}) => {
     
                 } 
                 else {
-                alert(data.message || "Login failed")
+                setError(data.message || "Login failed")
                 }
             } catch (err) {
                 console.error("Login error", err)
-                setError(err)
+                setError(err.message || "Something went wrong")
          }
         }
 
