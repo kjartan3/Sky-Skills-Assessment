@@ -28,7 +28,7 @@ const Navbar = () => {
                 {dropdownOpen && (
                     <div className="dropdown-menu">
                         <Link to="/assessment" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Assessment</Link>
-                        <Link to="/summary" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Summary</Link>
+                        <Link to="/assessmentsummary" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Summary</Link>
                         <Link to="/profile" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Profile</Link>
                         <Link to="/skills" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Skills</Link>
                         <button className='dropdown-item logout-btn' onClick={handleLogout}>Logout</button>
