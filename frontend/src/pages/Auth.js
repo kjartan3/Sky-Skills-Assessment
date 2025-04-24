@@ -5,30 +5,25 @@ import React, {useState} from 'react'
 
 
 const Auth = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(true)
-    const navigate = useNavigate()
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    const navigate = useNavigate();
 
     const handleAuthSuccess = () => {
-        navigate("/")
-    }
+        navigate("/");
+    };
+
+    const toggleForm = () => setIsLoggedIn(!isLoggedIn);
 
     return (
         <div className="auth-container">
             {isLoggedIn ? (
-                <LoginForm onAuthSuccess={handleAuthSuccess}/>
+                <LoginForm onAuthSuccess={handleAuthSuccess} toggleForm={toggleForm} />
             ) : (
-                <SignupForm onAuthSuccess={handleAuthSuccess}/>
+                <SignupForm onAuthSuccess={handleAuthSuccess} toggleForm={toggleForm} />
             )}
-
-            <p style={{marginTop: "1rem"}}>
-                {isLoggedIn ? "Don't have an account?" : "Already have an account"}{" "}
-                <button onClick={() => setIsLoggedIn(!isLoggedIn)}>
-                {isLoggedIn ? "Sign-up" : "Log in"} 
-                </button>
-            </p>
-
         </div>
-    )
+    );
 };
+
 
 export default Auth;

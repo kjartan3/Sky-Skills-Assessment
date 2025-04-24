@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
+import './Register.css';
 
-const LoginForm = ({ onAuthSuccess }) => {
+const LoginForm = ({ onAuthSuccess, toggleForm }) => {
     const [formData, setFormData] = useState({ 
             email: "",
             password: "" 
@@ -44,8 +45,8 @@ const LoginForm = ({ onAuthSuccess }) => {
         return (
             <form onSubmit={handleSubmit} className='login-form'>
                 <h2>Login</h2>
-                {error && <p style={{color: "red"}}>{error}</p>}
-                
+                {error && <p style={{ color: "red" }}>{error}</p>}
+    
                 <input
                     type='email'
                     name='email'
@@ -62,10 +63,16 @@ const LoginForm = ({ onAuthSuccess }) => {
                     onChange={handleChange}
                     required
                 />
-                <button type='submit'>Login</button>
+                <button className="form-button" type='submit'>Login</button>
+    
+                <p>
+                    Don't have an account?{" "}
+                    <button type="button" onClick={toggleForm}>
+                        Sign-up
+                    </button>
+                </p>
             </form>
-
-        )
+        );
 }
 
 export default LoginForm;
