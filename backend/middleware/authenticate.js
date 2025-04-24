@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { User } from '../models/index'
+import { User } from '../models/index.js'
 
 const SECRET_KEY = process.env.JWT_SECRET
 

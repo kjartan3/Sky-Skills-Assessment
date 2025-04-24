@@ -1,7 +1,6 @@
 // routes/assessments-route.js
 import express from 'express';
 import { Assessment, Response, Statement } from '../models/index.js';
-import jwt from "jsonwebtoken";
 import authenticate from '../middleware/authenticate.js';
 
 
@@ -9,12 +8,13 @@ const router = express.Router();
 
 // Create a new assessment with responses
 router.post('/', authenticate, async (req, res) => {
-  
+  console.log('Authenticated user', req.user)
   
     try {
       
       const userId = req.user.id
       const { responses } = req.body
+      console.log("responses", responses)
 
       const assessment = await Assessment.create({ userId });
       const responseData = responses.map((r) => ({
@@ -37,7 +37,7 @@ router.get('/', authenticate, async (req, res) => {
     try {
       
       const userId = req.user.id
-      
+      console.log("userID", userId)
       const assessments = await Assessment.findAll({
         where: { userId },
         include: [
