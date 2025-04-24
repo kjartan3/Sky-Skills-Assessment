@@ -33,7 +33,8 @@ const AssessmentSummary = () => {
           return;
         }
         const res = await axios.get(`http://localhost:5000/assessments`, {
-          headers: `bearer ${token}`
+          headers: {
+            Authorization: `Bearer ${token}` }
         });
         setAssessments(res.data);
 

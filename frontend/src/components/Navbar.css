@@ -60,9 +60,24 @@
     text-decoration: none;
     color: #007bff;
     transition: background 0.2s ease-in-out;
+    display: block;
 }
 
 .dropdown-item:hover {
+    background: #007bff;
+    color: white;
+}
+button.dropdown-item.logout-btn {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    text-align: left;
+    padding: 10px;
+    display: block;
+}
+
+button.dropdown-item.logout-btn:hover {
     background: #007bff;
     color: white;
 }

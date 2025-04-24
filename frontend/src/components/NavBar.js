@@ -1,13 +1,18 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
-
+    const navigate = useNavigate()
     const toggleDropdown = () => {
         setDropdownOpen((prev) => !prev); // Prevents unnecessary re-renders
     };
+
+    const handleLogout = () => {
+        sessionStorage.removeItem('token')
+        navigate('/auth');
+    }
 
     return (
         <nav className="navbar">
@@ -26,6 +31,7 @@ const Navbar = () => {
                         <Link to="/summary" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Summary</Link>
                         <Link to="/profile" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Profile</Link>
                         <Link to="/skills" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Skills</Link>
+                        <button className='dropdown-item logout-btn' onClick={handleLogout}>Logout</button>
                     </div>
                 )}
             </div>

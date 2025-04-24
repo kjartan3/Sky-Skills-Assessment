@@ -8,13 +8,13 @@ const router = express.Router();
 
 // Create a new assessment with responses
 router.post('/', authenticate, async (req, res) => {
-  console.log('Authenticated user', req.user)
+  
   
     try {
       
       const userId = req.user.id
       const { responses } = req.body
-      console.log("responses", responses)
+      
 
       const assessment = await Assessment.create({ userId });
       const responseData = responses.map((r) => ({

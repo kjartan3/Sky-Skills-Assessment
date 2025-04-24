@@ -1,9 +1,8 @@
+
 import express from "express"
 import { User } from '../models/index.js';
 import jwt from "jsonwebtoken"
-import dotenv from 'dotenv'
 
-dotenv.config()
 
 const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET
@@ -61,10 +60,12 @@ router.get('/me', async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
+        console.log("decoded", decoded)
         const user = await User.findByPk({
             where: {userId: decoded.userId},
             attributes: { exclude: ['passwordHash']}
                 })
+                console.log("user", user)
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }

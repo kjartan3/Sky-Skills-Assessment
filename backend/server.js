@@ -1,3 +1,6 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 import skillRoutes from './routes/skills-route.js';
 import behaviourRoutes from './routes/behaviours-route.js';
 import statementRoutes from './routes/statements-route.js';
@@ -9,9 +12,9 @@ import authRoutes from './routes/auth-routes.js';
 import sequelize from './config/db.js';
 import express from 'express';
 import cors from 'cors';
-import { body } from 'express-validator';
-
 import bodyParser from "body-parser"
+
+
 
 const app = express();
 app.use(express.json());
@@ -26,6 +29,8 @@ app.use('/users', userRoutes);
 app.use('/assessments', assessmentRoutes);
 app.use('/stats', statsRoutes);
 app.use('/auth', authRoutes);
+
+
 
 
 // Sync the database and handle errors
@@ -44,5 +49,7 @@ const startServer = async () => {
     console.error('Error syncing database:', error);
   }
 };
+
+
 
 startServer();

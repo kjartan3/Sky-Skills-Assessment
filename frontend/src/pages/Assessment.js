@@ -82,6 +82,8 @@ const Assessment = () => {
   const handleSubmit = async () => {
     try {
       // 1. Format responses for submission
+      console.log("Submitting to: ", "http://localhost:5000/assessments")
+      console.log("using token:", token)
       const responsePayload = Object.entries(answers).map(([statementId, score]) => ({
         statementId: parseInt(statementId),
         score,
