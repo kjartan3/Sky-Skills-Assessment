@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
+
 const Navbar = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null)
     const navigate = useNavigate()
     const toggleDropdown = () => {
-        setDropdownOpen((prev) => !prev); // Prevents unnecessary re-renders
+        setDropdownOpen((prev) => !prev); 
     };
 
     const handleLogout = () => {
@@ -15,6 +17,24 @@ const Navbar = () => {
     }
 
     const isLoggedIn = !!sessionStorage.getItem("token");
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+          if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+            setDropdownOpen(false);
+          }
+        };
+     
+        if (dropdownOpen) {
+          document.addEventListener('click', handleClickOutside);
+        } else {
+          document.removeEventListener('click', handleClickOutside);
+        }
+    
+        return () => document.removeEventListener('click', handleClickOutside);
+      }, [dropdownOpen]);
+
+    
     
     return (
         <nav className="navbar">
@@ -23,7 +43,7 @@ const Navbar = () => {
             <h4 className="logo-title">Sky Skills Assessment</h4>
             </Link>
             {isLoggedIn && (
-            <div className="dropdown">
+            <div className="dropdown" ref={dropdownRef}>
                 <button className="dropdown-btn" onClick={toggleDropdown}>
                     Menu ▼
                 </button>
@@ -33,7 +53,7 @@ const Navbar = () => {
                         <Link to="/assessmentsummary" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Summary</Link>
                         <Link to="/profile" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Profile</Link>
                         <Link to="/skills" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Skills</Link>
-                        <button className='dropdown-item logout-btn' onClick={handleLogout}>Logout</button>
+                        <Link to="/auth" className='dropdown-item logout-btn' onClick={handleLogout}>Logout</Link>
                     </div>
                 )}
             </div>

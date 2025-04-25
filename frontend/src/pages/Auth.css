@@ -1,0 +1,78 @@
+/* Container styles */
+.auth-container {
+    width: 400px;
+    margin: 100px auto; /* Center vertically and horizontally */
+    padding: 30px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff; /* Clean background for forms */
+    text-align: center;
+}
+
+/* Form transition text (at the bottom) */
+.auth-container p {
+    font-size: 14px;
+    color: #333;
+    margin-top: 20px;
+}
+
+.auth-container button {
+    background-color: transparent;
+    color: #007BFF;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.auth-container button:hover {
+    color: #0056b3; /* Slightly darker shade for hover effect */
+}
+
+/* Add spacing between elements */
+.auth-container h2 {
+    color: #007BFF;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.auth-container input {
+    width: calc(100% - 20px); /* Fit container width */
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.auth-container input:focus {
+    outline: none;
+    border-color: #007BFF;
+}
+
+.auth-container button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.auth-container button[type="submit"]:hover {
+    background-color: #0056b3; /* Slightly darker shade for hover effect */
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .auth-container {
+        width: 90%; /* Adjust container width for smaller screens */
+    }
+}
