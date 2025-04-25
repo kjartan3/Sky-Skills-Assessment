@@ -67,7 +67,7 @@ const LoginForm = ({ onAuthSuccess, toggleForm }) => {
     
                 <p>
                     Don't have an account?{" "}
-                    <button type="button" onClick={toggleForm}>
+                    <button className="sign-up-button" type="button" onClick={toggleForm}>
                         Sign-up
                     </button>
                 </p>

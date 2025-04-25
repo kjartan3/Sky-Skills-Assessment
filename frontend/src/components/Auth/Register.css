@@ -19,6 +19,7 @@
     box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 450px;
+    margin-bottom: 150px;
 }
 
 .form-button {
@@ -69,8 +70,9 @@
 
 .signup-form button[type='submit']:hover,
 .login-form button[type='submit']:hover {
-    background-color: #0056b3;
+    background-color: #004a99;
 }
+
 
 /* Error message */
 .signup-form p,
@@ -87,19 +89,18 @@
     color: #333;
 }
 
-.auth-container > p button {
-    background: none;
+.auth-container p button {
+    all: unset;
+    font-family: inherit;
+    font-size: inherit;
     color: #007bff;
-    border: none;
-    font-weight: bold;
+    font-weight: 500; /* Reserve space with mid-weight */
     cursor: pointer;
-    font-size: 16px;
-    margin-left: 5px;
-    text-decoration: underline;
-
+    margin-top: 25px;
+    margin-left: 10px;
+    transition: color 0.2s ease;
 }
 
-.auth-container > p button:hover {
-    color: #0056b3;
+.auth-container p button:hover {
+    color: #004a99;
 }
-
