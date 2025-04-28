@@ -1,2 +1,4 @@
 database.sqlite
 test-database.sqlite
+.env
+node_modules/

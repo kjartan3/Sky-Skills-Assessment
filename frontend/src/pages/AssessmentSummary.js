@@ -7,18 +7,26 @@ import './AssessmentSummary.css';
 
 const COLORS = ['#007bff', '#28a745', '#ffc107', '#17a2b8', '#dc3545', '#6f42c1', '#fd7e14'];
 
-const AssessmentSummary = () => {
+const AssessmentSummary = ({ user }) => {
   const [assessments, setAssessments] = useState([]);
   const [stats, setStats] = useState({});
   const [hoveredId, setHoveredId] = useState(null);
   const [expandedSkillId, setExpandedSkillId] = useState(null);
   const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
-
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAssessments = async () => {
+      if (!user || !user.id) {
+        console.error("User information is missing");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const res = await axios.get(`http://localhost:5000/assessments/1`);
+        const res = await axios.get(`http://localhost:5000/assessments/${user.id}`, {
+          withCredentials: true, // Include session cookies
+        });
         setAssessments(res.data);
 
         const statsPromises = res.data.map((a) =>
@@ -34,12 +42,13 @@ const AssessmentSummary = () => {
 
         setStats(statsByAssessmentId);
 
-        // Automatically select the first assessment
         if (res.data.length > 0) {
-          setSelectedAssessmentId(res.data[0].id);
+          setSelectedAssessmentId(res.data[0].id); // Automatically select the first assessment
         }
       } catch (err) {
         console.error('Error fetching assessments or stats:', err);
+      } finally {
+        setLoading(false);
       }
     };
 

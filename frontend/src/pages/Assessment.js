@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import ProgressBar from "../components/Assessment/ProgressBar";
 import StatementGroup from "../components/Assessment/StatementGroup";
 import NavigationButtons from "../components/Assessment/NavigationButtons";
-import './Assessment.css'
-const Assessment = () => {
+import './Assessment.css';
+
+const Assessment = ({ user }) => {
   const navigate = useNavigate();
   const [statements, setStatements] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -13,83 +14,45 @@ const Assessment = () => {
 
   const statementsPerPage = 4;
 
-  // Fetch statements
   useEffect(() => {
     const fetchStatements = async () => {
       try {
-        const response = await fetch("http://localhost:5000/statements");
+        const response = await fetch("http://localhost:5000/statements", {
+          credentials: 'include',
+        });
         const data = await response.json();
         setStatements(data);
-        sessionStorage.setItem("statements", JSON.stringify(data)); // Save to sessionStorage
+        sessionStorage.setItem("statements", JSON.stringify(data));
       } catch (error) {
         console.error("Error fetching statements:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     };
 
     fetchStatements();
   }, []);
 
-  // Get current page statements
-  const currentStatements = statements.slice(currentPage * statementsPerPage, (currentPage + 1) * statementsPerPage);
-
-  // Check if all statements on the current page belong to the same behavior
-  const getCurrentBehaviourName = () => {
-    const names = new Set(currentStatements.map((s) => s.Behaviour.name));
-    return names.size === 1 ? [...names][0] : null;
-   
-  };
-
-  const getCurrentSkillName = () => {
-    const names = new Set(currentStatements.map((s) => s.Behaviour.Skill.name));
-    return [...names][0]; // Assuming all statements on the current page have the same skill
-  };
-
-
-
-  const handleAnswerChange = (statementId, value) => {
-    const updatedAnswers = {...answers, [statementId]: value};
-    setAnswers(updatedAnswers);
-    sessionStorage.setItem("answers", JSON.stringify(updatedAnswers)); // Save updated answers to sessionStorage
-  };
-
-  const handleNext = () => {
-    if (currentPage < Math.ceil(statements.length / statementsPerPage) - 1) {
-      setCurrentPage((prev) => prev + 1);
-    } else {
-      handleSubmit(); // Submit when the last page is reached
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentPage > 0) {
-      setCurrentPage((prev) => prev - 1);
-    }
-  };
-
-
-  // Handle form submission
   const handleSubmit = async () => {
     try {
-      // 1. Format responses for submission
+      if (!user || !user.id) {
+        throw new Error("User information is missing");
+      }
+
       const responsePayload = Object.entries(answers).map(([statementId, score]) => ({
         statementId: parseInt(statementId),
         score,
       }));
 
-      // 2. Create a new assessment with responses
       const res = await fetch("http://localhost:5000/assessments", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId: 1, responses: responsePayload }), // Static userId for now
+        body: JSON.stringify({ userId: user.id, responses: responsePayload }),
       });
 
-      
       if (res.status === 201) {
-        // 3. Navigate to the summary page
         navigate("/assessmentsummary");
       } else {
         throw new Error("Failed to create assessment.");
@@ -100,7 +63,7 @@ const Assessment = () => {
     }
   };
 
- 
+  const currentStatements = statements.slice(currentPage * statementsPerPage, (currentPage + 1) * statementsPerPage);
   const progressPercentage = statements.length > 0 ? (Object.keys(answers).length / statements.length) * 100 : 0;
 
   if (loading) {
@@ -113,27 +76,33 @@ const Assessment = () => {
 
   return (
     <div className="container">
-      < ProgressBar progress={progressPercentage}/>
-      
-      <StatementGroup 
-        skillName={getCurrentSkillName()}
-        behaviourName={getCurrentBehaviourName()}
+      <ProgressBar progress={progressPercentage} />
+
+      <StatementGroup
+        skillName={currentStatements[0]?.Behaviour.Skill.name}
+        behaviourName={currentStatements[0]?.Behaviour.name}
         statements={currentStatements}
         answers={answers}
-        onAnswerChange={handleAnswerChange}
+        onAnswerChange={(statementId, value) => {
+          const updatedAnswers = { ...answers, [statementId]: value };
+          setAnswers(updatedAnswers);
+          sessionStorage.setItem("answers", JSON.stringify(updatedAnswers));
+        }}
       />
-      
-      <NavigationButtons 
-        onPrevious={handlePrevious}
-        onNext={handleNext}
-        isFirstPage={currentPage===0}
+
+      <NavigationButtons
+        onPrevious={() => setCurrentPage((prev) => Math.max(0, prev - 1))}
+        onNext={() => {
+          if (currentPage < Math.ceil(statements.length / statementsPerPage) - 1) {
+            setCurrentPage((prev) => prev + 1);
+          } else {
+            handleSubmit();
+          }
+        }}
+        isFirstPage={currentPage === 0}
         isLastPage={currentPage === Math.ceil(statements.length / statementsPerPage) - 1}
-        canProceed={
-          Object.keys(answers).length >= (currentPage + 1) * statementsPerPage
-        }
+        canProceed={Object.keys(answers).length >= (currentPage + 1) * statementsPerPage}
       />
-      
-      
     </div>
   );
 };
