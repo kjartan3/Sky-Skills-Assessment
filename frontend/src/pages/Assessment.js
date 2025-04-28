@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ProgressBar from "../components/Assessment/ProgressBar";
 import StatementGroup from "../components/Assessment/StatementGroup";
 import NavigationButtons from "../components/Assessment/NavigationButtons";
+import axios from 'axios';
 import './Assessment.css';
 
 const Assessment = ({ user }) => {
@@ -17,12 +18,11 @@ const Assessment = ({ user }) => {
   useEffect(() => {
     const fetchStatements = async () => {
       try {
-        const response = await fetch("http://localhost:5000/statements", {
-          credentials: 'include',
+        const res = await axios.get("http://localhost:5000/statements", {
+          withCredentials: true,
         });
-        const data = await response.json();
-        setStatements(data);
-        sessionStorage.setItem("statements", JSON.stringify(data));
+        setStatements(res.data);
+        sessionStorage.setItem("statements", JSON.stringify(res.data));
       } catch (error) {
         console.error("Error fetching statements:", error);
       } finally {
@@ -44,12 +44,13 @@ const Assessment = ({ user }) => {
         score,
       }));
 
-      const res = await fetch("http://localhost:5000/assessments", {
-        method: "POST",
+      const res = await axios.post("http://localhost:5000/assessments", {
+        userId: user.id,
+        responses: responsePayload,
+      }, {
         headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId: user.id, responses: responsePayload }),
+          "Content-Type": "application/json"
+        }
       });
 
       if (res.status === 201) {

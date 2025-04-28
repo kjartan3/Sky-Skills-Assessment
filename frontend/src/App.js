@@ -6,19 +6,18 @@ import AssessmentSummary from './pages/AssessmentSummary';
 import ProtectedRoute from './components/protectedRoute';
 import Skills from './pages/Skills'
 import Navbar from './components/Navbar'
+import axios from 'axios';
+
 const App = () => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await fetch('http://localhost:5000/auth/user-info', {
-                    credentials: 'include',
+                const res = await axios.get('http://localhost:5000/auth/user-info', {
+                    withCredentials: true,
                 });
-                if (response.ok) {
-                    const data = await response.json();
-                    setUser(data);
-                }
+                setUser(res.data);
             } catch (error) {
                 console.error('Error fetching user info:', error);
             }

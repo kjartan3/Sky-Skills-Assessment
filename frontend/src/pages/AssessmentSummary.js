@@ -53,9 +53,12 @@ const AssessmentSummary = ({ user }) => {
     };
 
     fetchAssessments();
-  }, []);
+  }, [user]);
 
   return (
+    loading ? (
+      <div className='loading-container'>Loading assessment summary...</div>
+    ) :
     <div className="assessment-summary-container">
       <h2 className="summary-title">Assessment Summary</h2>
 

@@ -1,7 +1,7 @@
 // routes/assessments-route.js
 import express from 'express';
 import { Assessment, Response, Statement } from '../models/index.js';
-import requireAuth from './middleware/requireAuth.js';
+import requireAuth from '../middleware/requireAuth.js';
 
 const router = express.Router();
 
