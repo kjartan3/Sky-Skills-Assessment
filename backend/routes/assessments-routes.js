@@ -1,11 +1,19 @@
 // routes/assessments-route.js
 import express from 'express';
 import { Assessment, Response, Statement } from '../models/index.js';
+<<<<<<< HEAD
+=======
+import requireAuth from '../middleware/requireAuth.js';
+>>>>>>> user
 
 const router = express.Router();
 
 // Create a new assessment with responses
+<<<<<<< HEAD
 router.post('/', async (req, res) => {
+=======
+router.post('/',requireAuth, async (req, res) => {
+>>>>>>> user
   const { userId, responses } = req.body;
   try {
     const assessment = await Assessment.create({ userId });
@@ -20,7 +28,11 @@ router.post('/', async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 router.get('/:userId', async (req, res) => {
+=======
+router.get('/:userId', requireAuth, async (req, res) => {
+>>>>>>> user
   const { userId } = req.params;
 
   try {
