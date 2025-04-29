@@ -1,10 +1,21 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
-const Home = () => {
+const Home = ({ user }) => {
+    const handleLogin = () => {
+        window.location.href = 'http://localhost:5000/auth/login';
+    };
+
     return (
         <div className="home-container">
             <h1>Sky Skills Assessment</h1>
+
+            {user ? (
+                <p>Welcome back, {user.name}!</p>
+            ) : (
+                <button onClick={handleLogin} className="btn login-btn">Login with SSO</button>
+            )}
 
             <div className="link-boxes">
                 <div className="box">
@@ -16,7 +27,7 @@ const Home = () => {
                 <div className="box">
                     <h2>Summary</h2>
                     <img src="/icons/analytics.png" alt="Summary" />
-                    <Link to="/summary" className="btn">View</Link>
+                    <Link to="/assessmentsummary" className="btn">View</Link>
                 </div>
 
                 <div className="box">
