@@ -18,7 +18,7 @@ const Assessment = ({ user }) => {
   useEffect(() => {
     const fetchStatements = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/statements", {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/statements`, {
           withCredentials: true,
         });
         setStatements(res.data);
@@ -44,7 +44,7 @@ const Assessment = ({ user }) => {
         score,
       }));
 
-      const res = await axios.post("http://localhost:5000/assessments", {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/assessments`, {
         userId: user.id,
         responses: responsePayload,
       }, {

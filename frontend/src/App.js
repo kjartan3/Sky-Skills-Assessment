@@ -5,7 +5,7 @@ import Assessment from './pages/Assessment';
 import AssessmentSummary from './pages/AssessmentSummary';
 import ProtectedRoute from './components/protectedRoute';
 import Skills from './pages/Skills'
-import Navbar from './components/Navbar'
+import Navbar from './components/Navbar';
 import axios from 'axios';
 
 const App = () => {
@@ -14,7 +14,7 @@ const App = () => {
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/auth/user-info', {
+                const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/user-info`, {
                     withCredentials: true,
                 });
                 setUser(res.data);

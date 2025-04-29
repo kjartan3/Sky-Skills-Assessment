@@ -30,7 +30,7 @@ const AssessmentSummary = ({ user }) => {
         setAssessments(res.data);
 
         const statsPromises = res.data.map((a) =>
-          axios.get(`http://localhost:5000/stats/${a.id}`)
+          axios.get(`${process.env.REACT_APP_API_URL}/stats/${a.id}`)
         );
 
         const statsResponses = await Promise.all(statsPromises);
