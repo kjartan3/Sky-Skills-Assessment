@@ -12,6 +12,7 @@ import userRoutes from './routes/users-routes.js';
 import assessmentRoutes from './routes/assessments-routes.js';
 import statsRoutes from './routes/stats-routes.js';
 import authRoutes from './routes/auth-routes.js';
+import samlMetaDataRoutes from './routes/saml-metadata.js'
 
 const app = express();
 app.use(express.json());
@@ -41,6 +42,7 @@ app.use('/users', userRoutes);
 app.use('/assessments', assessmentRoutes);
 app.use('/stats', statsRoutes);
 app.use('/auth', authRoutes);
+app.use('/metadata', samlMetaDataRoutes)
 
 // Sync the database and start the server
 const startServer = async () => {
