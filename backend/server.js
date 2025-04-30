@@ -18,6 +18,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+
+
 // Configure express-session
 app.use(session({
     secret: process.env.SESSION_SECRET || 'default-secret', // Replace with a strong secret
