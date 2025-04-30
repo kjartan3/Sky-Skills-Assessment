@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+console.log("Debug value: ", process.env.DEBUG)
 import express from 'express';
 import cors from 'cors';
 import sequelize from './config/db.js';
