@@ -32,7 +32,7 @@ const App = () => {
     <Router>
      <Navbar />
         <Routes>
-      <Route path="/" element={<Home user={user} />} />
+      <Route path="/" element={<Home  />} />
       <Route path="/assessment"  element={
         <ProtectedRoute user={user}>
           <Assessment user={user} />

@@ -2,17 +2,28 @@ import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
-const Home = ({ user }) => {
+const Home = () => {
     const [checked, setChecked] = useState(false)
+    const [user, setUser] = useState(null)
 
     useEffect(() => {
-        if (user === null && !checked) {
-            console.log("User not logged in, redirecting to SSO")
-            window.location.href = `${process.env.REACT_APP_API_URL}/auth/login`
+        fetch(`${process.env.REACT_APP_API_URL}/debug-session`, {credentials: 'include'})
+        .then(res => res.json())
+        .then(data => {
+            console.log("session check", data)
+            if (data.session && data.session.user) {
+                setUser(data.session.user)
+            } else {
+                console.log("User not logged in, redirecting to SSO")
+                window.location.href = `${process.env.REACT_APP_API_URL}/auth/login`
+            }
+        })
+        .catch(err => console.error("session fetch erorr:", err))   
+        .finally(() => setChecked(true))  
             
-        }
-        setChecked(true)
-    }, [user, checked]);
+        
+        
+    }, []);
 
     if (!checked) {
         return <p>Loading...</p>
