@@ -1,44 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
-const Home = () => {
-    const [checked, setChecked] = useState(false)
-    const [user, setUser] = useState(null)
 
-    useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/debug-session`, {credentials: 'include'})
-        .then(res => res.json())
-        .then(data => {
-            console.log("session check", data)
-            if (data.session && data.session.user) {
-                setUser(data.session.user)
-            } else {
-                console.log("User not logged in, redirecting to SSO")
-                window.location.href = `${process.env.REACT_APP_API_URL}/auth/login`
+
+    const Home = ({ user }) => {
+        useEffect(() => {
+            if (!user || !user.userId) {
+                console.log("No valid user data found, redirecting to SSO...");
+                window.location.href = `${process.env.REACT_APP_API_URL}/auth/login?returnTo=${window.location.origin}`;
             }
-        })
-        .catch(err => console.error("session fetch erorr:", err))   
-        .finally(() => setChecked(true))  
-            
-        
-        
-    }, []);
+        }, [user]);
 
-    if (!checked) {
-        return <p>Loading...</p>
-    }
-    
+   
 
     return (
         <div className="home-container">
             <h1>Sky Skills Assessment</h1>
 
-            {user ? (
-                <p>Welcome back, {user.nameId || "User"}!</p>
-            ) : (
-                <p>Redirecting to SSO</p>
-            )}
+            
 
             <div className="link-boxes">
                 <div className="box">

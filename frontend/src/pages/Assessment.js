@@ -35,7 +35,7 @@ const Assessment = ({ user }) => {
 
   const handleSubmit = async () => {
     try {
-      if (!user || !user.id) {
+      if (!user || !user.userId) {
         throw new Error("User information is missing");
       }
 
@@ -45,7 +45,7 @@ const Assessment = ({ user }) => {
       }));
 
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/assessments`, {
-        userId: user.id,
+        userId: user.userId,
         responses: responsePayload,
       }, {
         headers: {

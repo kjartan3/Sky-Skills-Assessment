@@ -1,53 +1,89 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Assessment from './pages/Assessment';
 import AssessmentSummary from './pages/AssessmentSummary';
 import ProtectedRoute from './components/protectedRoute';
 import Skills from './pages/Skills'
 import Navbar from './components/Navbar';
-import axios from 'axios';
+
+
 
 const App = () => {
     const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchUserInfo = async () => {
-            try {
-                const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/user-info`, {
-                    withCredentials: true,
-                });
-                setUser(res.data);
-            } catch (error) {
-                console.error('Error fetching user info:', error);
-            }
-        };
+      const fetchUserInfo = async () => {
+          try {
+              const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/user-info`, {
+                  credentials: 'include',
+                  headers: {
+                      'Accept': 'application/json'
+                  }
+              });
+              
+              if (response.ok) {
+                  const userData = await response.json();
+                  setUser(userData);
+              } else {
+                  // Clear user state if unauthorized
+                  setUser(null);
+              }
+          } catch (error) {
+              console.error('Error fetching user info:', error);
+              setUser(null);
+          } finally {
+              setIsLoading(false);
+          }
+      };
+      
+      fetchUserInfo();
+  }, []);
 
-        fetchUserInfo();
+useEffect(() => {
+        // Check if this is a return from SAML auth (might have SAMLResponse in URL)
+        const url = new URL(window.location.href);
+        if (url.pathname === '/auth/login/callback' || url.searchParams.has('SAMLResponse')) {
+            console.log("Detected SAML callback - handling authentication response");
+            // The backend will handle the actual SAML processing
+        }
     }, []);
+    
+    if (isLoading) {
+        return <div>Loading authentication...</div>;
+    }
 
+    return (
+      <Router>
+          <Navbar user={user} />
+          <Routes>
+          <Route path="/" element={<Home user={user} />} />
 
-
-  return (
-    <Router>
-     <Navbar />
-        <Routes>
-      <Route path="/" element={<Home  />} />
-      <Route path="/assessment"  element={
-        <ProtectedRoute user={user}>
-          <Assessment user={user} />
-        </ProtectedRoute>
-      } />
-      <Route path="/assessmentsummary"  element={
-        <ProtectedRoute user={user}>
-          <AssessmentSummary user={user} />
-        </ProtectedRoute>
-      } />
-      <Route path="/skills" element={<Skills />} />
-    </Routes>
-
-    </Router>
-  )
+              <Route 
+                  path="/assessment" 
+                  element={
+                      <ProtectedRoute user={user}>
+                          <Assessment user={user} />
+                      </ProtectedRoute>
+                  } 
+              />
+              <Route 
+                  path="/assessmentsummary" 
+                  element={
+                      <ProtectedRoute user={user}>
+                          <AssessmentSummary user={user} />
+                      </ProtectedRoute>
+                  } 
+              />
+              <Route path="/skills" element={<Skills />} />
+              
+              {/* Add a catch-all SAML callback route */}
+              <Route path="/auth/login/callback" element={<Navigate to="/" />} />
+          </Routes>
+      </Router>
+  );
+    
 }
 
 export default App;

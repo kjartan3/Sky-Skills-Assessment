@@ -124,8 +124,8 @@ const seedDatabase = async () => {
 
     // Create an assessment for the user
     const assessments = await Assessment.bulkCreate([
-      { userId: user.id },
-      { userId: user.id }, // second assessment for the same user
+      { userId: user.userId },
+      { userId: user.userId }, // second assessment for the same user
     ]);
 
     // Get all the statements to generate responses

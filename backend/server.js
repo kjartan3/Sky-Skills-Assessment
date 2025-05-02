@@ -20,11 +20,19 @@ import samlMetaDataRoutes from './routes/saml-metadata.js'
 dotenv.config()
 
 const app = express();
+// 1. Add proper body parsers - crucial for SAML POST responses
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Important for SAML POST responses
+
+// 2. Update CORS configuration
 app.use(cors({
-  origin: "https://10.133.198.64:3000",
+  origin: "https://10.133.198.64:3000", // Your frontend URL
   credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Set-Cookie'], // This allows the browser to see the cookie headers
 }));
+
 
 app.get("/", (req, res) => {
   res.send("Secure server running")
@@ -37,20 +45,21 @@ app.use((req, res, next) => {
 
 // Configure express-session
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'default-secret', // Replace with a strong secret
-    resave: false, // Prevent resaving unchanged sessions
-    saveUninitialized: false, // Avoid creating empty sessions
-    cookie: {
-        secure: true, // Set to true in production with HTTPS
-        httpOnly: true, // Prevent JavaScript access to cookies
-        maxAge: 1000 * 60 * 60, // Session expires in 1 hour
-        sameSite: "none",
-    },
+  secret: process.env.SESSION_SECRET || 'default-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: true, // Required for cross-domain cookies with HTTPS
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60, // 1 hour
+    sameSite: 'none', // Required for cross-domain cookies
+    
+  },
 }));
 
-// Initialize Passport middleware for session management
+// 4. Initialize Passport with these specific settings
 app.use(passport.initialize());
-app.use(passport.session()); // Enable session support in Passport
+app.use(passport.session());
 
 // Add routes for skills, statements, and SAML
 app.use('/skills', skillRoutes);
@@ -66,6 +75,27 @@ const options = {
   key: fs.readFileSync("ssl/server.key"),
   cert: fs.readFileSync("ssl/server.crt"),
 };
+
+app.get('/metadata', (req, res) => {
+  try {
+    const strategy = passport._strategies.saml;
+    const metadata = strategy.generateServiceProviderMetadata();
+    
+    res.header('Content-Type', 'text/xml').send(metadata);
+  } catch (error) {
+    console.error('Error generating SAML metadata:', error);
+    res.status(500).send('Error generating metadata');
+  }
+});
+
+app.use((req, res, next) => {
+  if (!req.isAuthenticated) {
+    req.isAuthenticated = function() {
+      return !!(req.user);
+    };
+  }
+  next();
+});
 
 // Sync the database and start the server
 const startServer = async () => {

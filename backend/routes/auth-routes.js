@@ -1,65 +1,75 @@
 import express from 'express';
 import passport from '../saml-auth.js';
 import User from '../models/User.js';
-import fs from 'fs'
-
 const router = express.Router();
-
 
 // Route to initiate login
 router.get('/login', (req, res, next) => {
-  console.log("SSO login intitaied, calling Pasport");
+  console.log("Initiating SAML authentication flow");
+  
+  // Store the original URL to redirect back after authentication
+  req.session.returnTo = req.query.returnTo || 'https://10.133.198.64:3000';
+  
   passport.authenticate('saml')(req, res, next);
-  console.log("Redirecting to Identity Provider")
-})
+});
 
-// Route to handle SAML response
+// Route to handle SAML response - POST is the standard for SAML assertions
 router.post('/login/callback', 
-  passport.authenticate('saml', { failureRedirect: '/login/fail' }),
-  async (req, res) => {
-    console.log("SSO callback triggerd")
-    console.log("Headers:", req.headers)
-    console.log("Body", req.body)
-    console.log("User:", req.user)
-    console.log(`Logged in successfully. Welcome, ${req.user.nameID}!`);
+  express.urlencoded({ extended: false }), // Important: parse the SAML response
+  (req, res, next) => {
+    console.log("SAML callback POST received");
+    // Don't log sensitive information in production
     
-    res.send("SSO callback recieved")
+    // Save returnTo URL before passport potentially modifies the session
+    const returnTo = req.session.returnTo || 'https://10.133.198.64:3000';
+    
+    passport.authenticate('saml', {
+      failureRedirect: '/auth/login/fail',
+      failureFlash: true,
+      session: true
+    })(req, res, next);
+  },
+  async (req, res) => {
+    console.log("SAML authentication successful");
+    
     try {
       if (!req.user) {
-        console.error("No user data recieved from SAML")
-        return res.status(400).send("User Authentication failed")
-        
+        console.error("No user data received from SAML");
+        return res.status(400).send("User Authentication failed");
       }
-      req.session.user = req.user;
-      console.log(`User authenticated: ${req.session.user}`)
-      const {nameId, email} = req.user
       
-      let user = await User.findOne({ where: { userId: nameId }})
+      // Now req.user should contain user data from SAML
+      const { nameID, email } = req.user;
+      
+      // Find or create user in your database
+      let user = await User.findOne({ where: { userId: nameID } });
       if (!user) {
         user = await User.create({
-          userId: nameId,
+          userId: nameID,
           email: email || 'No email provided'
         });
-        console.log(`New user created: ${nameId}`)
+        console.log(`New user created: ${nameID}`);
       } else {
-        console.log(`User ${nameId} found in database`)
+        console.log(`User ${nameID} found in database`);
       }
-      console.log("redirecting user to home page")
-    res.redirect("https://10.133.198.64:3000")// Redirect to home page after successful login
-  } catch (err) {
-    console.error('Error handling SAML login:', err)
-    res.status(500).send("Internal Server Error")
+      
+      // Get the return URL from the session
+      const returnTo = req.session.returnTo || 'https://10.133.198.64:3000';
+      delete req.session.returnTo; // Clean up
+      
+      console.log(`Redirecting authenticated user to: ${returnTo}`);
+      res.redirect(returnTo);
+    } catch (err) {
+      console.error('Error handling SAML login:', err);
+      res.status(500).send("Internal Server Error");
+    }
   }
-}
 );
 
-router.get("/login/callback", (req ,res) => {
-  console.log("Get request to SAML callback recieved");
-  res.send("SSO Callback page")
-})
 
 // Login failure route
 router.get('/login/fail', (req, res) => {
+  console.error("SAML authentication failed");
   res.status(401).send('Login failed. Please try again.');
 });
 
@@ -67,8 +77,8 @@ router.get('/login/fail', (req, res) => {
 router.get('/user-info', (req, res) => {
     if (req.isAuthenticated && req.isAuthenticated()) {
         const userInfo = {
-            userId: req.user.nameID || 'Unknown User', // Graceful fallback for name
-            email: req.user.email || 'No email provided', // Handle missing attributes
+            userId: req.user.nameID || 'Unknown User',
+            email: req.user.email || 'No email provided',
         };
         res.json(userInfo);
     } else {
@@ -80,7 +90,25 @@ router.get('/user-info', (req, res) => {
 });
 
 router.get("/debug-session", (req, res) => {
-  console.log("session data:", req.session)
-  res.json({session: req.session})
-})
+  // Sanitize session data for debugging - don't expose all data in production
+  const sanitizedSession = { 
+    authenticated: req.isAuthenticated(),
+    userId: req.user?.nameID,
+    // Add other non-sensitive session data as needed
+  };
+  
+  res.json({ session: sanitizedSession });
+});
+
+// Logout route
+router.get('/logout', (req, res) => {
+  req.logout(function(err) {
+    if (err) { 
+      console.error('Error during logout:', err);
+      return res.status(500).send('Error during logout');
+    }
+    res.redirect('https://10.133.198.64:3000');
+  });
+});
+
 export default router;

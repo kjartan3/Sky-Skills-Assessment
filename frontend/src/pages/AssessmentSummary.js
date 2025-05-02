@@ -17,14 +17,14 @@ const AssessmentSummary = ({ user }) => {
 
   useEffect(() => {
     const fetchAssessments = async () => {
-      if (!user || !user.id) {
+      if (!user || !user.userId) {
         console.error("User information is missing");
         setLoading(false);
         return;
       }
 
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/assessments/${user.id}`, {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/assessments/${user.userId}`, {
           withCredentials: true, // Include session cookies
         });
         setAssessments(res.data);
