@@ -1,8 +1,10 @@
 import express from 'express';
 import passport from '../saml-auth.js';
 import User from '../models/User.js';
+import fs from 'fs'
 
 const router = express.Router();
+
 
 // Route to initiate login
 router.get('/login', (req, res, next) => {
@@ -20,13 +22,16 @@ router.post('/login/callback',
     console.log("Body", req.body)
     console.log("User:", req.user)
     console.log(`Logged in successfully. Welcome, ${req.user.nameID}!`);
+    
     res.send("SSO callback recieved")
     try {
       if (!req.user) {
         console.error("No user data recieved from SAML")
-        return res.status(400).send("UserA Authentication failed")
+        return res.status(400).send("User Authentication failed")
         
       }
+      req.session.user = req.user;
+      console.log(`User authenticated: ${req.session.user}`)
       const {nameId, email} = req.user
       
       let user = await User.findOne({ where: { userId: nameId }})
@@ -40,7 +45,7 @@ router.post('/login/callback',
         console.log(`User ${nameId} found in database`)
       }
       console.log("redirecting user to home page")
-    res.json({message: "SSO successful", user: req.user}); // Redirect to home page after successful login
+    res.redirect("https://10.133.198.64:3000")// Redirect to home page after successful login
   } catch (err) {
     console.error('Error handling SAML login:', err)
     res.status(500).send("Internal Server Error")
@@ -74,4 +79,8 @@ router.get('/user-info', (req, res) => {
     }
 });
 
+router.get("/debug-session", (req, res) => {
+  console.log("session data:", req.session)
+  res.json({session: req.session})
+})
 export default router;

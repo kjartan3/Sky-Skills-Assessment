@@ -1,14 +1,22 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
 const Home = ({ user }) => {
+    const [checked, setChecked] = useState(false)
+
     useEffect(() => {
-        if (user === null) {
+        if (user === null && !checked) {
             console.log("User not logged in, redirecting to SSO")
             window.location.href = `${process.env.REACT_APP_API_URL}/auth/login`
+            
         }
-    }, [user]);
+        setChecked(true)
+    }, [user, checked]);
+
+    if (!checked) {
+        return <p>Loading...</p>
+    }
     
 
     return (
@@ -16,7 +24,7 @@ const Home = ({ user }) => {
             <h1>Sky Skills Assessment</h1>
 
             {user ? (
-                <p>Welcome back, {user.name}!</p>
+                <p>Welcome back, {user.nameId || "User"}!</p>
             ) : (
                 <p>Redirecting to SSO</p>
             )}
