@@ -8,10 +8,12 @@ const samlConfig = {
     issuer: process.env.SAML_ENTITY_ID,
     cert: process.env.SAML_X509_CERTIFICATE,
     callbackUrl: process.env.CALLBACK_URL,
+    signatureAlgorithm: "sha256"
 };
 
 passport.use(new SamlStrategy(samlConfig, (profile, done) => {
     try {
+        console.log("SAML Strategy Executed!");
         console.log('SAML Profile:', profile); // Debugging user attributes
         return done(null, profile); // Return the user profile to be stored in session
     } catch (error) {

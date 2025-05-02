@@ -1,11 +1,15 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
 const Home = ({ user }) => {
-    const handleLogin = () => {
-        window.location.href = `${process.env.REACT_APP_API_URL}/auth/login`;
-    };
+    useEffect(() => {
+        if (user === null) {
+            console.log("User not logged in, redirecting to SSO")
+            window.location.href = `${process.env.REACT_APP_API_URL}/auth/login`
+        }
+    }, [user]);
+    
 
     return (
         <div className="home-container">
@@ -14,7 +18,7 @@ const Home = ({ user }) => {
             {user ? (
                 <p>Welcome back, {user.name}!</p>
             ) : (
-                <button onClick={handleLogin} className="btn login-btn">Login with SSO</button>
+                <p>Redirecting to SSO</p>
             )}
 
             <div className="link-boxes">
