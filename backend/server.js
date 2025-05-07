@@ -71,7 +71,7 @@ app.use('/assessments', assessmentRoutes);
 app.use('/stats', statsRoutes);
 app.use('/auth', authRoutes);
 app.use('/metadata', samlMetaDataRoutes);
-app.use('/pdf', pdfRoutes)
+app.use('/pdf', pdfRoutes);
 
 const options = {
   key: fs.readFileSync("ssl/server.key"),

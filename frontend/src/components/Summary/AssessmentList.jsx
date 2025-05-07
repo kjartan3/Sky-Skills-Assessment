@@ -1,7 +1,7 @@
 import React from 'react';
 
 const downloadReport = (assessmentId) => {
-  const url = `${process.env.REACT_APP_API_URL}/download/${assessmentId}`;
+  const url = `${process.env.REACT_APP_API_URL}/pdf/${assessmentId}`;
   window.open(url, '_blank');
 };
 

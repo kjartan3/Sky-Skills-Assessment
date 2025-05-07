@@ -3,7 +3,8 @@ import PDFDocument from "pdfkit"
 import { Assessment } from '../models/index.js'
 const router = express.Router();
 
-router.get('/download/:assessmentId', async (req, res) => {
+router.get('/:assessmentId', async (req, res) => {
+    console.log(`Recived request for assessment id : ${req.params.assessmentId}`)
     const { assessmentId } = req.params;
    
     try {
@@ -19,8 +20,7 @@ router.get('/download/:assessmentId', async (req, res) => {
       doc.fontSize(20).text('Assessment Summary Report', { align: 'center' });
       doc.moveDown();
       doc.fontSize(14).text(`Assessment ID: ${assessment.id}`);
-      doc.text(`User: ${assessment.user.userId}`);
-      doc.text(`Score: ${assessment.score}`);
+     
       
    
       doc.end();
