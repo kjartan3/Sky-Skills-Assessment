@@ -72,6 +72,7 @@ const AssessmentSummary = ({ user }) => {
             setHoveredId={setHoveredId}
             setSelectedAssessmentId={setSelectedAssessmentId}
             COLORS={COLORS}
+            stats={stats}
           />
 
           <RadarChartContainer 

@@ -1,6 +1,7 @@
 import express from 'express'
 import PDFDocument from "pdfkit"
 import { Assessment } from '../models/index.js'
+
 const router = express.Router();
 
 router.get('/:assessmentId', async (req, res) => {
@@ -10,6 +11,8 @@ router.get('/:assessmentId', async (req, res) => {
     try {
       const assessment = await Assessment.findByPk(assessmentId);
       if (!assessment) return res.status(404).send('Assessment not found');
+
+      
    
       res.setHeader('Content-Disposition', `attachment; filename=assessment-${assessmentId}.pdf`);
       res.setHeader('Content-Type', 'application/pdf');
@@ -20,6 +23,9 @@ router.get('/:assessmentId', async (req, res) => {
       doc.fontSize(20).text('Assessment Summary Report', { align: 'center' });
       doc.moveDown();
       doc.fontSize(14).text(`Assessment ID: ${assessment.id}`);
+      doc.moveDown();
+
+     
      
       
    
