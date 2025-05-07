@@ -1,5 +1,9 @@
 import React from 'react';
 
+const downloadReport = (assessmentId) => {
+  const url = `${process.env.REACT_APP_API_URL}/download/${assessmentId}`;
+  window.open(url, '_blank');
+};
 
 const AssessmentList = ({assessments, hoveredId, setHoveredId, setSelectedAssessmentId, COLORS}) => {
     return (
@@ -20,7 +24,9 @@ const AssessmentList = ({assessments, hoveredId, setHoveredId, setSelectedAssess
                 Assessment
                 <br />
                 <small>{new Date(a.createdAt).toLocaleDateString()}</small>
+                <button onClick={() => downloadReport(a.id)}>Download as PDF</button>
               </div>
+              
             ))}
           </div>
     )

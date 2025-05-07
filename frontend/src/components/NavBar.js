@@ -39,7 +39,7 @@ const Navbar = () => {
             <Link to="/" className="logo"><img src="/icons/sky-learn-logo.jpeg" className="logo-img" alt="Assessment" />
             <h4 className="logo-title">Sky Skills Assessment</h4>
             </Link>
-            {isLoggedIn && (
+            
             <div className="dropdown" ref={dropdownRef}>
                 <button className="dropdown-btn" onClick={toggleDropdown}>
                     Menu ▼
@@ -54,7 +54,7 @@ const Navbar = () => {
                     </div>
                 )}
             </div>
-            )}
+            
         </nav>
     );
 };

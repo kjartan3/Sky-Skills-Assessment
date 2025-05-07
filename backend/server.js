@@ -16,6 +16,7 @@ import assessmentRoutes from './routes/assessments-routes.js';
 import statsRoutes from './routes/stats-routes.js';
 import authRoutes from './routes/auth-routes.js';
 import samlMetaDataRoutes from './routes/saml-metadata.js'
+import pdfRoutes from "./routes/pdf-routes.js"
 
 dotenv.config()
 
@@ -69,7 +70,8 @@ app.use('/users', userRoutes);
 app.use('/assessments', assessmentRoutes);
 app.use('/stats', statsRoutes);
 app.use('/auth', authRoutes);
-app.use('/metadata', samlMetaDataRoutes)
+app.use('/metadata', samlMetaDataRoutes);
+app.use('/pdf', pdfRoutes)
 
 const options = {
   key: fs.readFileSync("ssl/server.key"),

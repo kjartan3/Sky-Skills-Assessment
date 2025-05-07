@@ -22,9 +22,9 @@ import './Home.css';
 
             <div className="link-boxes">
             <div className="box">
-                    <h2>Skills</h2>
+                    <h2>Introduction Video</h2>
                     <img src="/icons/online-learning.png" alt="Skills" />
-                    <Link to="/skills" className="btn">Intro to Sky Skills Assessment</Link>
+                    <Link to="/skills" className="btn">Explore</Link>
                 </div>
                 <div className="box">
                     <h2>Assessment</h2>
@@ -38,11 +38,11 @@ import './Home.css';
                     <Link to="/assessmentsummary" className="btn">View</Link>
                 </div>
 
-                <div className="box">
+                {/* <div className="box">
                     <h2>Profile</h2>
                     <img src="/icons/user-2.png" alt="Profile" />
                     <Link to="/profile" className="btn">Open</Link>
-                </div>
+                </div> */}
 
                
             </div>
