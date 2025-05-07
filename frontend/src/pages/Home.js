@@ -21,6 +21,11 @@ import './Home.css';
             
 
             <div className="link-boxes">
+            <div className="box">
+                    <h2>Skills</h2>
+                    <img src="/icons/online-learning.png" alt="Skills" />
+                    <Link to="/skills" className="btn">Intro to Sky Skills Assessment</Link>
+                </div>
                 <div className="box">
                     <h2>Assessment</h2>
                     <img src="/icons/3d-cube.png" alt="Assessment" />
@@ -39,11 +44,7 @@ import './Home.css';
                     <Link to="/profile" className="btn">Open</Link>
                 </div>
 
-                <div className="box">
-                    <h2>Skills</h2>
-                    <img src="/icons/online-learning.png" alt="Skills" />
-                    <Link to="/skills" className="btn">Explore</Link>
-                </div>
+               
             </div>
         </div>
     );

@@ -17,7 +17,7 @@ const AssessmentList = ({assessments, hoveredId, setHoveredId, setSelectedAssess
                   cursor: 'pointer',
                 }}
               >
-                Assessment #{a.id}
+                Assessment
                 <br />
                 <small>{new Date(a.createdAt).toLocaleDateString()}</small>
               </div>
