@@ -14,6 +14,7 @@ const AssessmentSummary = ({ user }) => {
   const [expandedSkillId, setExpandedSkillId] = useState(null);
   const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showAll, setShowAll] = useState(false)
 
   useEffect(() => {
     const fetchAssessments = async () => {
@@ -55,19 +56,26 @@ const AssessmentSummary = ({ user }) => {
     fetchAssessments();
   }, [user]);
 
+  const displayedAssessments = showAll ? assessments : assessments.slice(-3)
+
   return (
     loading ? (
       <div className='loading-container'>Loading assessment summary...</div>
     ) :
     <div className="assessment-summary-container">
       <h2 className="summary-title">Assessment Summary</h2>
-
+      
       {assessments.length === 0 ? (
         <p>No assessments found.</p>
       ) : (
+        
+
         <div className="chart-with-list">
+          <button onClick={() => setShowAll(!showAll)}>
+          {showAll ? "Show Last 3 Assessments" : "Show All Assessments"}
+        </button>
           <AssessmentList
-            assessments={assessments}
+            assessments={displayedAssessments}
             hoveredId={hoveredId}
             setHoveredId={setHoveredId}
             setSelectedAssessmentId={setSelectedAssessmentId}
@@ -76,7 +84,7 @@ const AssessmentSummary = ({ user }) => {
           />
 
           <RadarChartContainer 
-            assessments={assessments}
+            assessments={displayedAssessments}
             stats={stats}
             selectedAssessmentId={selectedAssessmentId}
             COLORS={COLORS}
