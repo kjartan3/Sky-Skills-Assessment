@@ -10,7 +10,7 @@ const getLevel = (score) => {
 const SkillsBreakdown = ({ assessmentId, assessment, stats, expandedSkillId, setExpandedSkillId }) => {
     return (
         <div className="assessment">
-          <h3 className="assessment-title">Assessment #{assessmentId}</h3>
+          <h3 className="assessment-title">Assessment</h3>
           <p style={{ marginTop: "-10px", color: "#777", fontSize: "14px" }}>
             Taken on {new Date(
               assessment.createdAt
