@@ -1,11 +1,39 @@
 import React from "react";
 
+const learningResources = {
+  Welcoming: {
+    Beginner: "https://example.com/welcoming-beginner",
+    Intermediate: "https://example.com/welcoming-intermediate",
+    Advanced: "https://example.com/welcoming-advanced",
+  },
+  Creative: {
+    Beginner: "https://example.com/creative-beginner",
+    Intermediate: "https://example.com/creative-intermediate",
+    Advanced: "https://example.com/creative-advanced",
+  },
+  Simplifying: {
+    Beginner: "https://example.com/simplifying-beginner",
+    Intermediate: "https://example.com/simplifying-intermediate",
+    Advanced: "https://example.com/simplifying-advanced",
+  },
+  "Doing the right thing": {
+    Beginner: "https://example.com/doingtherightthing-beginner",
+    Intermediate: "https://example.com/doingtherightthing-intermediate",
+    Advanced: "https://example.com/doingtherightthing-advanced",
+  },
+}
 
 const getLevel = (score) => {
     if (score >= 3.75) return "Advanced";
     if (score >= 2.5) return "Intermediate";
     return "Beginner";
 };
+
+const getLearningLink = (skillName, score) => {
+  
+  const level = getLevel(score)
+  return learningResources[skillName]?.[level] || "#"
+}
 
 const SkillsBreakdown = ({ assessmentId, assessment, stats, expandedSkillId, setExpandedSkillId }) => {
     return (
@@ -42,6 +70,12 @@ const SkillsBreakdown = ({ assessmentId, assessment, stats, expandedSkillId, set
                       {getLevel(s.averageScore)} ({s.averageScore.toFixed(2)})
                     </span>
                   </h3>
+                  <a href={getLearningLink(s.skillName, s.averageScore)}
+                  target="blank"
+                  className="learning-link"
+                  >
+                    Recommended Learning
+                  </a>
 
                   {isExpanded && (
                     <div className="behaviour-breakdown">
@@ -52,6 +86,7 @@ const SkillsBreakdown = ({ assessmentId, assessment, stats, expandedSkillId, set
                             {getLevel(b.averageScore)} (
                             {b.averageScore.toFixed(2)})
                           </div>
+                          
                         ))
                       ) : (
                         <div className="behaviour-item">
@@ -59,6 +94,7 @@ const SkillsBreakdown = ({ assessmentId, assessment, stats, expandedSkillId, set
                         </div>
                       )}
                     </div>
+                    
                   )}
                 </div>
               );

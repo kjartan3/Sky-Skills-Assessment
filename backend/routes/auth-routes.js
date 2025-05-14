@@ -8,7 +8,7 @@ router.get('/login', (req, res, next) => {
   console.log("Initiating SAML authentication flow");
   
   // Store the original URL to redirect back after authentication
-  req.session.returnTo = req.query.returnTo || 'https://10.133.198.64:3000';
+  req.session.returnTo = req.query.returnTo || 'https://10.133.198.220:3000';
   
   passport.authenticate('saml')(req, res, next);
 });
@@ -21,7 +21,7 @@ router.post('/login/callback',
     // Don't log sensitive information in production
     
     // Save returnTo URL before passport potentially modifies the session
-    const returnTo = req.session.returnTo || 'https://10.133.198.64:3000';
+    const returnTo = req.session.returnTo || 'https://10.133.198.6220:3000';
     
     passport.authenticate('saml', {
       failureRedirect: '/auth/login/fail',
@@ -54,7 +54,7 @@ router.post('/login/callback',
       }
       
       // Get the return URL from the session
-      const returnTo = req.session.returnTo || 'https://10.133.198.64:3000';
+      const returnTo = req.session.returnTo || 'https://10.133.198.220:3000';
       delete req.session.returnTo; // Clean up
       
       console.log(`Redirecting authenticated user to: ${returnTo}`);
@@ -107,7 +107,7 @@ router.get('/logout', (req, res) => {
       console.error('Error during logout:', err);
       return res.status(500).send('Error during logout');
     }
-    res.redirect('https://10.133.198.64:3000');
+    res.redirect('https://10.133.198.220:3000');
   });
 });
 
