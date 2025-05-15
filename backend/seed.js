@@ -120,28 +120,55 @@ const seedDatabase = async () => {
       date.setMonth(date.getMonth() - months);
       return date;
     }
-
+ 
     // Create an assessment for the user
     const assessments = await Assessment.bulkCreate([
-      { userId: 'khj551', createdAt: monthsAgo(11), updatedAt: new Date()}, // second assessment for the same user
-      { userId: 'khj551', createdAt: monthsAgo(2), updatedAt: new Date()}, // second assessment for the same user
-      { userId: 'khj551', createdAt: monthsAgo(5), updatedAt: new Date()}, // second assessment for the same user
+      { userId: 'khj551', createdAt: monthsAgo(11), updatedAt: new Date()}, 
+      { userId: 'khj551', createdAt: monthsAgo(2), updatedAt: new Date()}, 
+      { userId: 'khj551', createdAt: monthsAgo(5), updatedAt: new Date()},
+      { userId: 'bre896', createdAt: monthsAgo(11), updatedAt: new Date()}, 
+      { userId: 'bre896', createdAt: monthsAgo(2), updatedAt: new Date()}, 
+      { userId: 'bre896', createdAt: monthsAgo(5), updatedAt: new Date()},  
     ],
     { returning: true }
     );
-
+ 
     // Get all the statements to generate responses
     const allStatements = await Statement.findAll();
-
+ 
     // Create responses with random scores (1–5) for each statement
     const responses = allStatements.flatMap((statement) => [
-      assessments.map((assessment) => ({
-        
-        assessmentId: assessment.id,
+      {
+        assessmentId : assessments[0].id,
         statementId: statement.id,
         score: Math.floor(Math.random() * 4) + 1,
-        
-      }))
+      },
+      {
+        assessmentId : assessments[1].id,
+        statementId: statement.id,
+        score: Math.floor(Math.random() * 4) + 1,
+      },
+      {
+        assessmentId : assessments[2].id,
+        statementId: statement.id,
+        score: Math.floor(Math.random() * 4) + 1,
+      },
+      {
+        assessmentId : assessments[3].id,
+        statementId: statement.id,
+        score: Math.floor(Math.random() * 4) + 1,
+      },
+      {
+        assessmentId : assessments[4].id,
+        statementId: statement.id,
+        score: Math.floor(Math.random() * 4) + 1,
+      },
+      {
+        assessmentId : assessments[5].id,
+        statementId: statement.id,
+        score: Math.floor(Math.random() * 4) + 1,
+      },
+
     ]);
 
     // Insert Responses into the database

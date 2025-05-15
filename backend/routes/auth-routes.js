@@ -9,6 +9,7 @@ router.get('/login', (req, res, next) => {
   
   // Store the original URL to redirect back after authentication
   req.session.returnTo = req.query.returnTo || 'https://10.133.198.220:3000';
+  req.session.returnTo = req.query.returnTo || 'https://10.133.198.220:3000';
   
   passport.authenticate('saml')(req, res, next);
 });
@@ -21,7 +22,7 @@ router.post('/login/callback',
     // Don't log sensitive information in production
     
     // Save returnTo URL before passport potentially modifies the session
-    const returnTo = req.session.returnTo || 'https://10.133.198.220:3000';
+    const returnTo = req.session.returnTo || 'https://10.133.198.64:3000';
     
     passport.authenticate('saml', {
       failureRedirect: '/auth/login/fail',
