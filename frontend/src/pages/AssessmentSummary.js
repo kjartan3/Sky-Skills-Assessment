@@ -56,12 +56,17 @@ const AssessmentSummary = ({ user }) => {
  
     fetchAssessments();
   }, [user]);
+
+  
  
   const filterAssessmentsByTime = () => {
+    if ( !assessments || assessments.length === 0) {
+      console.error("No assessments found")
+      return [];
+    }
     if (selectedTimeFrame === 'latest') {
-      console.log("assessments", [assessments[0]])
-      // setSelectedAssessmentId(assessments[0].id)
-      return assessments.length > 0 ? [assessments[0]] : []
+      
+      return [assessments[0]]
     }
     const cutOffDate = new Date();
     cutOffDate.setMonth(cutOffDate.getMonth() - Number(selectedTimeFrame));
@@ -71,6 +76,15 @@ const AssessmentSummary = ({ user }) => {
  
   const displayedAssessments = filterAssessmentsByTime(assessments, selectedTimeFrame);
   // const displayedAssessments = showAll ? assessments : assessments.slice(0, 3)
+
+  const handleTimeFrameChange = (e) => {
+    const value = e.target.value
+    setSelectedTimeFrame(value)
+
+    if (value === "latest") {
+      setSelectedAssessmentId(assessments[0]?.id)
+    }
+  }
 
   
  
@@ -93,7 +107,7 @@ const AssessmentSummary = ({ user }) => {
         )} */}
         <select
           value={selectedTimeFrame}
-          onChange={(e) => setSelectedTimeFrame(e.target.value)}
+          onChange={handleTimeFrameChange}
           >
           <option value='latest'>Latest</option>
           <option value='3'>Last 3 Months</option>
