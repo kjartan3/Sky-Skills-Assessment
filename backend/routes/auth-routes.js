@@ -22,7 +22,7 @@ router.post('/login/callback',
     // Don't log sensitive information in production
     
     // Save returnTo URL before passport potentially modifies the session
-    const returnTo = req.session.returnTo || 'https://10.133.198.64:3000';
+    const returnTo = req.session.returnTo || 'https://10.133.198.220:3000';
     
     passport.authenticate('saml', {
       failureRedirect: '/auth/login/fail',

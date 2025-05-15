@@ -57,8 +57,37 @@ const AssessmentSummary = ({ user }) => {
     fetchAssessments();
   }, [user]);
 
-  const displayedAssessments = showAll ? assessments : assessments.slice(-3)
+  
+ 
+  const filterAssessmentsByTime = () => {
+    if ( !assessments || assessments.length === 0) {
+      console.error("No assessments found")
+      return [];
+    }
+    if (selectedTimeFrame === 'latest') {
+      
+      return [assessments[0]]
+    }
+    const cutOffDate = new Date();
+    cutOffDate.setMonth(cutOffDate.getMonth() - Number(selectedTimeFrame));
+ 
+    return assessments.filter(a => new Date(a.createdAt) >= cutOffDate);
+  }
+ 
+  const displayedAssessments = filterAssessmentsByTime(assessments, selectedTimeFrame);
+  // const displayedAssessments = showAll ? assessments : assessments.slice(0, 3)
 
+  const handleTimeFrameChange = (e) => {
+    const value = e.target.value
+    setSelectedTimeFrame(value)
+
+    if (value === "latest") {
+      setSelectedAssessmentId(assessments[0]?.id)
+    }
+  }
+
+  
+ 
   return (
     loading ? (
 <div className='loading-container'>Loading assessment summary...</div>
@@ -75,6 +104,18 @@ const AssessmentSummary = ({ user }) => {
         <button onClick={() => setShowAll(!showAll)}>
           {showAll ? "Show less" : "Show more"}
         </button>
+        )} */}
+        <select
+          value={selectedTimeFrame}
+          onChange={(e) => setSelectedTimeFrame(e.target.value)}
+          >
+          <option value='latest'>Latest</option>
+          <option value='3'>Last 3 Months</option>
+          <option value='6'>Last 6 Months</option>
+          <option value='12'>Last 12 Months</option>
+ 
+        </select>
+ 
           <AssessmentList
             assessments={displayedAssessments}
             hoveredId={hoveredId}
