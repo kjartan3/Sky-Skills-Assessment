@@ -9,7 +9,6 @@ router.get('/login', (req, res, next) => {
   
   // Store the original URL to redirect back after authentication
   req.session.returnTo = req.query.returnTo || 'https://10.133.198.220:3000';
-  req.session.returnTo = req.query.returnTo || 'https://10.133.198.220:3000';
   
   passport.authenticate('saml')(req, res, next);
 });

@@ -107,7 +107,7 @@ const AssessmentSummary = ({ user }) => {
         )} */}
         <select
           value={selectedTimeFrame}
-          onChange={(e) => setSelectedTimeFrame(e.target.value)}
+          onChange={handleTimeFrameChange}
           >
           <option value='latest'>Latest</option>
           <option value='3'>Last 3 Months</option>
@@ -126,7 +126,7 @@ const AssessmentSummary = ({ user }) => {
           />
         
           <RadarChartContainer 
-            assessments={displayedAssessments.filter((a) => a.id === selectedAssessmentId)}
+            assessments={displayedAssessments}
             stats={stats}
             selectedAssessmentId={selectedAssessmentId}
             COLORS={COLORS}
