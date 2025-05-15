@@ -138,11 +138,37 @@ const seedDatabase = async () => {
  
     // Create responses with random scores (1–5) for each statement
     const responses = allStatements.flatMap((statement) => [
-      assessments.map((assessment) => ({
-        assessmentId: assessment.id,
+      {
+        assessmentId : assessments[0].id,
         statementId: statement.id,
         score: Math.floor(Math.random() * 4) + 1,
-      }))
+      },
+      {
+        assessmentId : assessments[1].id,
+        statementId: statement.id,
+        score: Math.floor(Math.random() * 4) + 1,
+      },
+      {
+        assessmentId : assessments[2].id,
+        statementId: statement.id,
+        score: Math.floor(Math.random() * 4) + 1,
+      },
+      {
+        assessmentId : assessments[3].id,
+        statementId: statement.id,
+        score: Math.floor(Math.random() * 4) + 1,
+      },
+      {
+        assessmentId : assessments[4].id,
+        statementId: statement.id,
+        score: Math.floor(Math.random() * 4) + 1,
+      },
+      {
+        assessmentId : assessments[5].id,
+        statementId: statement.id,
+        score: Math.floor(Math.random() * 4) + 1,
+      },
+
     ]);
 
     // Insert Responses into the database

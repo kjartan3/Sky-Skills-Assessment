@@ -14,8 +14,8 @@ const AssessmentSummary = ({ user }) => {
   const [expandedSkillId, setExpandedSkillId] = useState(null);
   const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showAll, setShowAll] = useState(false);
-  const [selectedTimeFrame, setSelectedTimeFrame] = useState('3');
+  const [selectedTimeFrame, setSelectedTimeFrame] = useState('latest');
+  // const [showAll, setShowAll] = useState(false)
  
   useEffect(() => {
     const fetchAssessments = async () => {
@@ -57,14 +57,22 @@ const AssessmentSummary = ({ user }) => {
     fetchAssessments();
   }, [user]);
  
-  const filterAssessmentsByTime = (assessments, months) => {
+  const filterAssessmentsByTime = () => {
+    if (selectedTimeFrame === 'latest') {
+      console.log("assessments", [assessments[0]])
+      // setSelectedAssessmentId(assessments[0].id)
+      return assessments.length > 0 ? [assessments[0]] : []
+    }
     const cutOffDate = new Date();
-    cutOffDate.setMonth(cutOffDate.getMonth() - months);
+    cutOffDate.setMonth(cutOffDate.getMonth() - Number(selectedTimeFrame));
  
     return assessments.filter(a => new Date(a.createdAt) >= cutOffDate);
   }
  
   const displayedAssessments = filterAssessmentsByTime(assessments, selectedTimeFrame);
+  // const displayedAssessments = showAll ? assessments : assessments.slice(0, 3)
+
+  
  
   return (
     loading ? (
@@ -78,17 +86,19 @@ const AssessmentSummary = ({ user }) => {
 
  
         <div className="chart-with-list">
-<button onClick={() => setShowAll(!showAll)}>
-          {showAll ? "Show Last 3 Assessments" : "Show All Assessments"}
-</button>
- 
+        {/* {assessments.length > 3 && (
+        <button onClick={() => setShowAll(!showAll)}>
+          {showAll ? "Show less" : "Show more"}
+        </button>
+        )} */}
         <select
           value={selectedTimeFrame}
           onChange={(e) => setSelectedTimeFrame(e.target.value)}
->
-<option value='3'>Last 3 Months</option>
-<option value='6'>Last 6 Months</option>
-<option value='12'>Last 12 Months</option>
+          >
+          <option value='latest'>Latest</option>
+          <option value='3'>Last 3 Months</option>
+          <option value='6'>Last 6 Months</option>
+          <option value='12'>Last 12 Months</option>
  
         </select>
  
@@ -100,19 +110,20 @@ const AssessmentSummary = ({ user }) => {
             COLORS={COLORS}
             stats={stats}
           />
- 
+        
           <RadarChartContainer 
-            assessments={displayedAssessments.filter((a) => a.id === selectedAssessmentId)}
+            assessments={displayedAssessments}
             stats={stats}
             selectedAssessmentId={selectedAssessmentId}
             COLORS={COLORS}
           />
+        
 </div>
       )}
  
       {/* Selected assessment skill + behaviour breakdown */}
-      {selectedAssessmentId && (
-<SkillsBreakdown
+      {selectedAssessmentId &&  (
+      <SkillsBreakdown
           assessmentId={selectedAssessmentId}
           assessment={assessments.find((a) => a.id === selectedAssessmentId)}
           stats={stats[selectedAssessmentId]}
