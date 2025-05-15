@@ -115,34 +115,33 @@ const seedDatabase = async () => {
 
     // Add this after inserting Statements
 
-    // Create a test user
-    const user = await User.create({
-      name: 'Jane Doe',
-      email: 'jane.doe@example.com',
-      userId: 1,
-    });
+    const monthsAgo = (months) => {
+      const date = new Date();
+      date.setMonth(date.getMonth() - months);
+      return date;
+    }
 
     // Create an assessment for the user
     const assessments = await Assessment.bulkCreate([
-      { userId: user.userId },
-      { userId: user.userId }, // second assessment for the same user
-    ]);
+      { userId: 'khj551', createdAt: monthsAgo(11), updatedAt: new Date()}, // second assessment for the same user
+      { userId: 'khj551', createdAt: monthsAgo(2), updatedAt: new Date()}, // second assessment for the same user
+      { userId: 'khj551', createdAt: monthsAgo(5), updatedAt: new Date()}, // second assessment for the same user
+    ],
+    { returning: true }
+    );
 
     // Get all the statements to generate responses
     const allStatements = await Statement.findAll();
 
     // Create responses with random scores (1–5) for each statement
     const responses = allStatements.flatMap((statement) => [
-      {
-        assessmentId: assessments[0].id,
+      assessments.map((assessment) => ({
+        
+        assessmentId: assessment.id,
         statementId: statement.id,
         score: Math.floor(Math.random() * 4) + 1,
-      },
-      {
-        assessmentId: assessments[1].id,
-        statementId: statement.id,
-        score: Math.floor(Math.random() * 4) + 1,
-      },
+        
+      }))
     ]);
 
     // Insert Responses into the database

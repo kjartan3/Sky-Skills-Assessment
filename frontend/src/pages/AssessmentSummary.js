@@ -14,7 +14,8 @@ const AssessmentSummary = ({ user }) => {
   const [expandedSkillId, setExpandedSkillId] = useState(null);
   const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showAll, setShowAll] = useState(false)
+  const [showAll, setShowAll] = useState(false);
+  const [selectedTimeFrame, setSelectedTimeFrame] = useState('3');
 
   useEffect(() => {
     const fetchAssessments = async () => {
@@ -56,7 +57,14 @@ const AssessmentSummary = ({ user }) => {
     fetchAssessments();
   }, [user]);
 
-  const displayedAssessments = showAll ? assessments : assessments.slice(-3)
+  const filterAssessmentsByTime = (assessments, months) => {
+    const cutOffDate = new Date();
+    cutOffDate.setMonth(cutOffDate.getMonth() - months);
+
+    return assessments.filter(a => new Date(a.createdAt) >= cutOffDate);
+  }
+
+  const displayedAssessments = filterAssessmentsByTime(assessments, selectedTimeFrame);
 
   return (
     loading ? (
@@ -74,6 +82,17 @@ const AssessmentSummary = ({ user }) => {
           <button onClick={() => setShowAll(!showAll)}>
           {showAll ? "Show Last 3 Assessments" : "Show All Assessments"}
         </button>
+
+        <select
+          value={selectedTimeFrame}
+          onChange={(e) => setSelectedTimeFrame(e.target.value)}
+        >
+          <option value='3'>Last 3 Months</option>
+          <option value='6'>Last 6 Months</option>
+          <option value='12'>Last 12 Months</option>
+
+        </select>
+
           <AssessmentList
             assessments={displayedAssessments}
             hoveredId={hoveredId}
@@ -84,7 +103,7 @@ const AssessmentSummary = ({ user }) => {
           />
 
           <RadarChartContainer 
-            assessments={displayedAssessments}
+            assessments={displayedAssessments.filter((a) => a.id === selectedAssessmentId)}
             stats={stats}
             selectedAssessmentId={selectedAssessmentId}
             COLORS={COLORS}
