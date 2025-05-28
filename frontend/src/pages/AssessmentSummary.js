@@ -12,6 +12,7 @@ const AssessmentSummary = ({ user }) => {
   const [stats, setStats] = useState({});
   const [hoveredId, setHoveredId] = useState(null);
   const [expandedSkillId, setExpandedSkillId] = useState(null);
+  const [expandedBehaviourId, setExpandedBehaviourId] = useState(null);
   const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedTimeFrame, setSelectedTimeFrame] = useState('latest');
@@ -143,6 +144,8 @@ const AssessmentSummary = ({ user }) => {
           stats={stats[selectedAssessmentId]}
           expandedSkillId={expandedSkillId}
           setExpandedSkillId={setExpandedSkillId}
+          expandedBehaviourId={expandedBehaviourId}
+          setExpandedBehaviourId={setExpandedBehaviourId}
         />
       )}
 </div>

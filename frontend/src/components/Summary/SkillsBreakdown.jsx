@@ -35,7 +35,7 @@ const getLearningLink = (skillName, score) => {
   return learningResources[skillName]?.[level] || "#"
 }
 
-const SkillsBreakdown = ({ assessmentId, assessment, stats, expandedSkillId, setExpandedSkillId }) => {
+const SkillsBreakdown = ({ assessmentId, assessment, stats, expandedSkillId, setExpandedSkillId, expandedBehaviourId, setExpandedBehaviourId }) => {
     return (
         <div className="assessment">
           <h3 className="assessment-title">Assessment</h3>
@@ -56,10 +56,10 @@ const SkillsBreakdown = ({ assessmentId, assessment, stats, expandedSkillId, set
                   (b) => b.skillId === s.skillId
                 ) || [];
 
-              return (
+              return isExpanded || !expandedSkillId ? (
                 <div
                   key={s.skillId}
-                  className="skill-card"
+                  className={`skill-card ${isExpanded ? "expanded" : ""}`}
                   onClick={() => setExpandedSkillId(isExpanded ? null : skillKey)}
                   style={{ cursor: 'pointer' }}
                 >
@@ -70,24 +70,35 @@ const SkillsBreakdown = ({ assessmentId, assessment, stats, expandedSkillId, set
                       {getLevel(s.averageScore)} ({s.averageScore.toFixed(2)})
                     </span>
                   </h3>
-                  <a href={getLearningLink(s.skillName, s.averageScore)}
+                  {/* <a href={getLearningLink(s.skillName, s.averageScore)}
                   target="blank"
                   className="learning-link"
                   >
                     Recommended Learning
-                  </a>
+                  </a> */}
 
                   {isExpanded && (
                     <div className="behaviour-breakdown">
                       {behavioursForSkill.length > 0 ? (
-                        behavioursForSkill.map((b) => (
-                          <div key={b.behaviourId} className="behaviour-item">
-                            <strong>{b.behaviourName}</strong> —{" "}
-                            {getLevel(b.averageScore)} (
-                            {b.averageScore.toFixed(2)})
-                          </div>
-                          
-                        ))
+                        behavioursForSkill.map((b) => {
+                          const isExpanded = expandedBehaviourId === b.behaviourId;
+                        
+                          return (
+                            <div key={b.behaviourId} className="accordion-item">          {/* Accordion Header - Click to Expand/Collapse */}    
+                            <div className="accordion-header"onClick={(e) => {
+                                e.stopPropagation()
+                                setExpandedBehaviourId(isExpanded ? null : b.behaviourId)
+                                }}>      
+
+                                <strong>{b.behaviourName}</strong> — {getLevel(b.averageScore)} ({b.averageScore.toFixed(2)})
+                                <span className="accordion-toggle">{isExpanded ? "▲" : "▼"}</span></div>
+                              {/* Accordion Content - Expands when clicked */}
+                              {isExpanded && (
+                                <div className="accordion-content"><p>{b.detailedDescription || "No detailed breakdown available."}</p></div>
+                              )}
+                            </div>
+                          );
+                        })
                       ) : (
                         <div className="behaviour-item">
                           No behaviours linked to this skill.
@@ -97,7 +108,7 @@ const SkillsBreakdown = ({ assessmentId, assessment, stats, expandedSkillId, set
                     
                   )}
                 </div>
-              );
+              ):null;
             })}
             </div>
         </div>

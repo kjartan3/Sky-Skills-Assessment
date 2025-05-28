@@ -49,7 +49,7 @@ body {
   .skills-breakdown {
     margin-top: 30px;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
     text-align: left;
     padding: 0 20px;
@@ -74,6 +74,11 @@ body {
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   }
+
+  .skill-card.expanded {
+    grid-column: span 2;
+
+  }
   
   .skill-name {
     font-size: 20px;
@@ -84,6 +89,38 @@ body {
     font-size: 14px;
     color: #007bff;
     font-weight: 600;
+  }
+
+  .accordion-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+
+  }
+   
+  .accordion-header {
+    padding: 12px;
+    background: #f1f1f1;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+  }
+   
+  .accordion-header:hover {
+    background: #e0e0e0;
+  }
+   
+  .accordion-toggle {
+    font-size: 16px;
+  }
+   
+  .accordion-content {
+    padding: 12px;
+    background: #f8f9fa;
+    border-left: 4px solid #007bff;
+    transition: max-height 0.3s ease-in-out;
   }
   
   /* Behaviours inside skill card */
