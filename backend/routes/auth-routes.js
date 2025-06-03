@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Route to initiate login
 router.get('/login', (req, res, next) => {
-  console.log("Initiating SAML authentication flow");
+  // console.log("Initiating SAML authentication flow");
   
   // Store the original URL to redirect back after authentication
   req.session.returnTo = req.query.returnTo || 'https://10.133.198.220:3000';
@@ -17,7 +17,7 @@ router.get('/login', (req, res, next) => {
 router.post('/login/callback', 
   express.urlencoded({ extended: false }), // Important: parse the SAML response
   (req, res, next) => {
-    console.log("SAML callback POST received");
+    // console.log("SAML callback POST received");
     // Don't log sensitive information in production
     
     // Save returnTo URL before passport potentially modifies the session
@@ -30,7 +30,7 @@ router.post('/login/callback',
     })(req, res, next);
   },
   async (req, res) => {
-    console.log("SAML authentication successful");
+    // console.log("SAML authentication successful");
     
     try {
       if (!req.user) {

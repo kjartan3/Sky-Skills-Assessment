@@ -2,66 +2,67 @@ import React from "react";
 
 const learningResources = {
   "Be inclusive by nature": {
-    Beginner: "https://example.com/welcoming-beginner",
-    Intermediate: "https://example.com/welcoming-intermediate",
-    Advanced: "https://example.com/welcoming-advanced",
+    Beginner: "https://sky.edcast.com/pathways/emotional-intelligence-beginners",
+    Intermediate: "https://sky.edcast.com/pathways/copy-of-emotional-intelligence-beginner",
+    Advanced: "https://sky.edcast.com/pathways/emotional-intelligence-advanced",
   },
   "Play as one team": {
-    Beginner: "https://example.com/creative-beginner",
-    Intermediate: "https://example.com/creative-intermediate",
-    Advanced: "https://example.com/creative-advanced",
+    Beginner: "https://sky.edcast.com/journey/our-sky-story-our",
+    Intermediate: "https://sky.edcast.com/journey/our-sky-story-our",
+    Advanced: "https://sky.edcast.com/journey/our-sky-story-our",
   },
   "Never stop learning": {
-    Beginner: "https://example.com/simplifying-beginner",
-    Intermediate: "https://example.com/simplifying-intermediate",
-    Advanced: "https://example.com/simplifying-advanced",
+    Beginner: "https://sky.edcast.com/pathways/growth-mindset-beginners",
+    Intermediate: "https://sky.edcast.com/pathways/copy-of-accelerate-your-career-growth-mindset-for-managers",
+    Advanced: "https://sky.edcast.com/pathways/growth-mindset-advanced",
   },
   "Be curious": {
-    Beginner: "https://example.com/doingtherightthing-beginner",
-    Intermediate: "https://example.com/doingtherightthing-intermediate",
-    Advanced: "https://example.com/doingtherightthing-advanced",
+    Beginner: "https://sky.edcast.com/pathways/digital-curiosity-beginner",
+    Intermediate: "https://sky.edcast.com/pathways/curiosity-intermediate",
+    Advanced: "https://sky.edcast.com/pathways/curiosity-advanced",
   },
   "Be ambitious": {
-    Beginner: "https://example.com/welcoming-beginner",
-    Intermediate: "https://example.com/welcoming-intermediate",
-    Advanced: "https://example.com/welcoming-advanced",
+    Beginner: "https://sky.edcast.com/pathways/agile-thinking-beginner",
+    Intermediate: "https://sky.edcast.com/pathways/copy-of-agile-thinking-beginner",
+    Advanced: "https://sky.edcast.com/pathways/copy-of-agile-thinking-intermediate",
   },
   "Embrace challenge": {
-    Beginner: "https://example.com/creative-beginner",
-    Intermediate: "https://example.com/creative-intermediate",
-    Advanced: "https://example.com/creative-advanced",
+    Beginner: "https://sky.edcast.com/pathways/change-management",
+    Intermediate: "https://sky.edcast.com/pathways/change-management-for-managers",
+    Advanced: "https://sky.edcast.com/pathways/change-management-for-leaders",
   },
   "Prioritise ruthlessly": {
-    Beginner: "https://example.com/simplifying-beginner",
-    Intermediate: "https://example.com/simplifying-intermediate",
-    Advanced: "https://example.com/simplifying-advanced",
+    Beginner: "https://sky.edcast.com/pathways/prioritisation",
+    Intermediate: "https://sky.edcast.com/pathways/copy-of-prioritisation-beginner",
+    Advanced: "https://sky.edcast.com/pathways/prioritisation-advanced",
   },
   "Reduce complexity": {
-    Beginner: "https://example.com/doingtherightthing-beginner",
-    Intermediate: "https://example.com/doingtherightthing-intermediate",
-    Advanced: "https://example.com/doingtherightthing-advanced",
+    Beginner: "https://sky.edcast.com/pathways/critical-thinking",
+    Intermediate: "https://sky.edcast.com/pathways/critical-thinking-intermediate",
+    Advanced: "https://sky.edcast.com/pathways/copy-of-critical-thinking-advanced",
   },
   "Make it better": {
-    Beginner: "https://example.com/welcoming-beginner",
-    Intermediate: "https://example.com/welcoming-intermediate",
-    Advanced: "https://example.com/welcoming-advanced",
+    Beginner: "https://sky.edcast.com/pathways/continuous-improvement-beginner-continuous",
+    Intermediate: "https://sky.edcast.com/pathways/continuous-improvement-intermediate-continuous",
+    Advanced: "https://sky.edcast.com/pathways/continuous-improvement-advanced-continuous",
   },
   "Own it": {
-    Beginner: "https://example.com/creative-beginner",
-    Intermediate: "https://example.com/creative-intermediate",
-    Advanced: "https://example.com/creative-advanced",
+    Beginner: "https://sky.edcast.com/pathways/accountability-beginner",
+    Intermediate: "https://sky.edcast.com/pathways/accountability-intermediate",
+    Advanced: "https://sky.edcast.com/pathways/accountability-advanced",
   },
   "Act with integrity": {
-    Beginner: "https://example.com/simplifying-beginner",
-    Intermediate: "https://example.com/simplifying-intermediate",
-    Advanced: "https://example.com/simplifying-advanced",
+    Beginner: "https://sky.edcast.com/pathways/transparency-beginner",
+    Intermediate: "https://sky.edcast.com/pathways/transparency-intermediate",
+    Advanced: "https://sky.edcast.com/pathways/transparency-advanced",
   },
   "Act with care": {
-    Beginner: "https://example.com/doingtherightthing-beginner",
-    Intermediate: "https://example.com/doingtherightthing-intermediate",
-    Advanced: "https://example.com/doingtherightthing-advanced",
+    Beginner: "https://sky.edcast.com/pathways/right-conversations-beginner",
+    Intermediate: "https://sky.edcast.com/pathways/right-conversations-intermediate",
+    Advanced: "https://sky.edcast.com/pathways/right-conversations-advanced",
   },
 };
+
 
 const getLevel = (score) => {
   if (score >= 3.75) return "Advanced";
@@ -131,7 +132,7 @@ const SkillsBreakdown = ({
                       Placeholder text. This is an example paragraph for testing
                       purposes. Placeholder text. This is an example paragraph for
                       testing purposes. Placeholder text. This is an example
-                      paragraph for testing purposes.
+                      paragraph for testing purposes. Test
                     </p>
                   </div>
                   <div className="behaviour-breakdown">
