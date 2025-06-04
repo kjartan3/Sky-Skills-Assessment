@@ -17,11 +17,11 @@ const SkillsBreakdown = ({
 
   // Helper to extract unique content items for a given behaviourId from assessment responses.
   const getContentForBehaviour = (behaviourId) => {
-    if (!assessment || !assessment.responses) return [];
+    if (!assessment || !assessment.Responses) return [];
     const contentsMap = {};
-    assessment.responses.forEach((response) => {
+    assessment.Responses.forEach((response) => {
       const content = response.Statement?.Content;
-      if (content && content.behaviourId === behaviourId) {
+      if (content && content.Behaviour?.id === behaviourId) {
         contentsMap[content.id] = content;
       }
     });
@@ -79,6 +79,7 @@ const SkillsBreakdown = ({
                     {behavioursForSkill.length > 0 ? (
                       behavioursForSkill.map((b) => {
                         const isExpanded = expandedBehaviourId === b.behaviourId;
+                        const level = getLevel(b.averageScore)
                         return (
                           <div key={b.behaviourId} className="accordion-item">
                             <div
@@ -104,47 +105,30 @@ const SkillsBreakdown = ({
                             </div>
                             {isExpanded && (
                               <div className="accordion-content">
-                                {getContentForBehaviour(b.behaviourId).map((contentItem) => (
-                                  <div key={contentItem.id} style={{ marginLeft: '20px', marginTop: '5px' }}>
-                                    <h4 style={{ margin: 0 }}>{contentItem.title}</h4>
-                                    <p style={{ margin: 0 }}>{contentItem.description}</p>
-                                    {contentItem.learningLinks && (
+                                {getContentForBehaviour(b.behaviourId).map((contentItem) => {
+                                const learningLink = contentItem.learningLinks && contentItem.learningLinks[level];
+                                return (
+                                  <div key={contentItem.id} >
+                                    <h4>{contentItem.id}</h4>
+                                    <p>{contentItem.description}</p>
+                                    {learningLink ? (
                                       <div>
-                                        <strong>Learning Links: </strong>
-                                        <ul>
-                                          {contentItem.learningLinks.Beginner && (
-                                            <li>
-                                              Beginner:{" "}
-                                              <a href={contentItem.learningLinks.Beginner} target="_blank" rel="noopener noreferrer">
-                                                {contentItem.learningLinks.Beginner}
-                                              </a>
-                                            </li>
-                                          )}
-                                          {contentItem.learningLinks.Intermediate && (
-                                           
-                                           <li>
-                                           Intermediate:{" "}
-                                           <a href={contentItem.learningLinks.Intermediate} target="_blank" rel="noopener noreferrer">
-                                             {contentItem.learningLinks.Intermediate}
-                                           </a>
-                                         </li>
-                                       )}
-                                       {contentItem.learningLinks.Advanced && (
-                                         <li>
-                                           Advanced:{" "}
-                                           <a href={contentItem.learningLinks.Advanced} target="_blank" rel="noopener noreferrer">
-                                             {contentItem.learningLinks.Advanced}
-                                           </a>
-                                         </li>
-                                       )}
-                                     </ul>
-                                   </div>
-                                 )}
-                               </div>
-                             ))}
-                             {getContentForBehaviour(b.behaviourId).length === 0 && (
-                               <div style={{ marginLeft: '20px' }}>No content available for this behaviour.</div>
-                             )}
+                                        
+                                        <a href={learningLink} target="_blank" rel="noopener noreferrer">
+                                          Recommended Learning
+                                        </a>
+                                      </div>
+                                    ) : (
+                                      <div>
+                                        No Learning Link available for 
+                                      </div>
+                                    )}
+                                  </div>
+                                  )                             
+                                })}
+                                {getContentForBehaviour(b.behaviourId).length === 0 && (
+                                  <div style={{ marginLeft: '20px' }}>No content available for this behaviour.</div>
+                              )}
                            </div>
                          )}
                        </div>
