@@ -1,30 +1,37 @@
 import express from "express";
-import { Statement, Skill, Behaviour } from "../models/index.js"
+import { Statement, Skill, Behaviour, Content } from "../models/index.js"
 const router = express.Router();
 
 // Get all statements
 
-    router.get("/", async (req, res) => {
-        try {
-          const statements = await Statement.findAll({
-            include: [
-              {
-                model: Behaviour,
-                attributes: ["id", "name"],
-                include: [
-                  {
-                    model: Skill,
-                    attributes: ["id", "name"],
-                  },
-                ],
-              },
-            ],
-          });
-          res.json(statements);
-        } catch (error) {
-          res.status(500).json({ message: error.message });
-        }
-      });
+router.get("/", async (req, res) => {
+  try {
+    const statements = await Statement.findAll({
+      include: [
+        {
+          model: Content,
+          attributes: ["id", "title", "description", "learningLinks"],
+          include: [
+            {
+              model: Behaviour,
+              attributes: ["id", "name"],
+              include: [
+                {
+                  model: Skill,
+                  attributes: ["id", "name"],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    res.status(200).json(statements);
+  } catch (error) {
+    console.error("Error fetching statements:", error);
+    res.status(500).json({ message: error.message });
+}});
+ 
     
     
 // Get statements by behaviour name

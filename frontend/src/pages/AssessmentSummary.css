@@ -77,10 +77,7 @@ body {
 
   .skill-card.expanded {
     grid-column: span 2;
-
   }
-
-  .skill-card.expanded 
   
   .skill-name {
     font-size: 20px;

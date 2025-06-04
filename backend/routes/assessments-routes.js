@@ -1,6 +1,12 @@
-// routes/assessments-route.js
 import express from 'express';
-import { Assessment, Response, Statement } from '../models/index.js';
+import {
+  Assessment,
+  Response,
+  Statement,
+  Content,
+  Behaviour,
+  Skill,
+} from '../models/index.js';
 import requireAuth from '../middleware/requireAuth.js';
 
 const router = express.Router();
@@ -36,27 +42,42 @@ router.post('/', async (req, res) => {
 
 router.get('/:userId', async (req, res) => {
   const { userId } = req.params;
-
   try {
     const assessments = await Assessment.findAll({
       where: { userId },
       include: [
         {
           model: Response,
+          attributes: ['statementId', 'score'],
           include: [
             {
-              model: Statement, // Optional: include Statement text
-              attributes: ['text', 'behaviourId']
-            }
+              model: Statement,
+              attributes: ['id', 'text'],
+              include: [
+                {
+                  model: Content,
+                  attributes: ['id', 'title', 'description', 'learningLinks'],
+                  include: [
+                    {
+                      model: Behaviour,
+                      attributes: ['id', 'name'],
+                      include: [
+                        {
+                          model: Skill,
+                          attributes: ['id', 'name'],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
           ],
-          attributes: ['statementId', 'score']
-        }
+        },
       ],
-      order: [
-        ["createdAt", "DESC"],
-      ]
+      order: [['createdAt', 'DESC']],
     });
-
+ 
     res.json(assessments);
   } catch (err) {
     console.error(err);

@@ -1,78 +1,9 @@
-import React from "react";
-
-const learningResources = {
-  "Be inclusive by nature": {
-    Beginner: "https://sky.edcast.com/pathways/emotional-intelligence-beginners",
-    Intermediate: "https://sky.edcast.com/pathways/copy-of-emotional-intelligence-beginner",
-    Advanced: "https://sky.edcast.com/pathways/emotional-intelligence-advanced",
-  },
-  "Play as one team": {
-    Beginner: "https://sky.edcast.com/journey/our-sky-story-our",
-    Intermediate: "https://sky.edcast.com/journey/our-sky-story-our",
-    Advanced: "https://sky.edcast.com/journey/our-sky-story-our",
-  },
-  "Never stop learning": {
-    Beginner: "https://sky.edcast.com/pathways/growth-mindset-beginners",
-    Intermediate: "https://sky.edcast.com/pathways/copy-of-accelerate-your-career-growth-mindset-for-managers",
-    Advanced: "https://sky.edcast.com/pathways/growth-mindset-advanced",
-  },
-  "Be curious": {
-    Beginner: "https://sky.edcast.com/pathways/digital-curiosity-beginner",
-    Intermediate: "https://sky.edcast.com/pathways/curiosity-intermediate",
-    Advanced: "https://sky.edcast.com/pathways/curiosity-advanced",
-  },
-  "Be ambitious": {
-    Beginner: "https://sky.edcast.com/pathways/agile-thinking-beginner",
-    Intermediate: "https://sky.edcast.com/pathways/copy-of-agile-thinking-beginner",
-    Advanced: "https://sky.edcast.com/pathways/copy-of-agile-thinking-intermediate",
-  },
-  "Embrace challenge": {
-    Beginner: "https://sky.edcast.com/pathways/change-management",
-    Intermediate: "https://sky.edcast.com/pathways/change-management-for-managers",
-    Advanced: "https://sky.edcast.com/pathways/change-management-for-leaders",
-  },
-  "Prioritise ruthlessly": {
-    Beginner: "https://sky.edcast.com/pathways/prioritisation",
-    Intermediate: "https://sky.edcast.com/pathways/copy-of-prioritisation-beginner",
-    Advanced: "https://sky.edcast.com/pathways/prioritisation-advanced",
-  },
-  "Reduce complexity": {
-    Beginner: "https://sky.edcast.com/pathways/critical-thinking",
-    Intermediate: "https://sky.edcast.com/pathways/critical-thinking-intermediate",
-    Advanced: "https://sky.edcast.com/pathways/copy-of-critical-thinking-advanced",
-  },
-  "Make it better": {
-    Beginner: "https://sky.edcast.com/pathways/continuous-improvement-beginner-continuous",
-    Intermediate: "https://sky.edcast.com/pathways/continuous-improvement-intermediate-continuous",
-    Advanced: "https://sky.edcast.com/pathways/continuous-improvement-advanced-continuous",
-  },
-  "Own it": {
-    Beginner: "https://sky.edcast.com/pathways/accountability-beginner",
-    Intermediate: "https://sky.edcast.com/pathways/accountability-intermediate",
-    Advanced: "https://sky.edcast.com/pathways/accountability-advanced",
-  },
-  "Act with integrity": {
-    Beginner: "https://sky.edcast.com/pathways/transparency-beginner",
-    Intermediate: "https://sky.edcast.com/pathways/transparency-intermediate",
-    Advanced: "https://sky.edcast.com/pathways/transparency-advanced",
-  },
-  "Act with care": {
-    Beginner: "https://sky.edcast.com/pathways/right-conversations-beginner",
-    Intermediate: "https://sky.edcast.com/pathways/right-conversations-intermediate",
-    Advanced: "https://sky.edcast.com/pathways/right-conversations-advanced",
-  },
-};
-
+import React, { useState } from "react";
 
 const getLevel = (score) => {
   if (score >= 3.75) return "Advanced";
   if (score >= 2.5) return "Intermediate";
   return "Beginner";
-};
-
-const getLearningLink = (skillName, score) => {
-  const level = getLevel(score);
-  return learningResources[skillName]?.[level] || "#";
 };
 
 const SkillsBreakdown = ({
@@ -81,12 +12,25 @@ const SkillsBreakdown = ({
   stats,
   expandedSkillId,
   setExpandedSkillId,
-  expandedBehaviourId,
-  setExpandedBehaviourId,
 }) => {
+  const [expandedBehaviourId, setExpandedBehaviourId] = useState(null);
+
+  // Helper to extract unique content items for a given behaviourId from assessment responses.
+  const getContentForBehaviour = (behaviourId) => {
+    if (!assessment || !assessment.responses) return [];
+    const contentsMap = {};
+    assessment.responses.forEach((response) => {
+      const content = response.Statement?.Content;
+      if (content && content.behaviourId === behaviourId) {
+        contentsMap[content.id] = content;
+      }
+    });
+    return Object.values(contentsMap);
+  };
+
   return (
     <div className="assessment">
-      <h3 className="assessment-title">Assessment</h3>
+      <h3 className="assessment-title">Assessment #{assessmentId}</h3>
       <p style={{ marginTop: "-10px", color: "#777", fontSize: "14px" }}>
         Taken on {new Date(assessment.createdAt).toLocaleDateString()}
       </p>
@@ -96,15 +40,21 @@ const SkillsBreakdown = ({
           const skillKey = `${assessmentId}-${s.skillId}`;
           const isExpanded = expandedSkillId === skillKey;
 
+          // Filter behaviours for this skill using the aggregated stats.
           const behavioursForSkill =
             stats?.behaviourAverages?.filter((b) => b.skillId === s.skillId) || [];
 
-          return isExpanded || !expandedSkillId ? (
+          const shouldHide = expandedSkillId && expandedSkillId !== skillKey;
+      
+          return (
             <div
               key={s.skillId}
               className={`skill-card ${isExpanded ? "expanded" : ""}`}
               onClick={() => setExpandedSkillId(isExpanded ? null : skillKey)}
-              style={{ cursor: "pointer" }}
+              style={{
+                cursor: "pointer",
+                display: shouldHide ? "none" : "block", // 👈 hide non-expanded cards
+              }}
             >
               <h3 className="skill-name">
                 {s.skillName}
@@ -113,17 +63,6 @@ const SkillsBreakdown = ({
                   {getLevel(s.averageScore)} ({s.averageScore.toFixed(2)})
                 </span>
               </h3>
-
-              {/* Uncomment if you want to show recommended learning link
-              <a
-                href={getLearningLink(s.skillName, s.averageScore)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="learning-link"
-              >
-                Recommended Learning
-              </a>
-              */}
 
               {isExpanded && (
                 <div className="expanded-content">
@@ -135,11 +74,11 @@ const SkillsBreakdown = ({
                       paragraph for testing purposes. Test
                     </p>
                   </div>
+
                   <div className="behaviour-breakdown">
                     {behavioursForSkill.length > 0 ? (
                       behavioursForSkill.map((b) => {
                         const isExpanded = expandedBehaviourId === b.behaviourId;
-
                         return (
                           <div key={b.behaviourId} className="accordion-item">
                             <div
@@ -155,7 +94,8 @@ const SkillsBreakdown = ({
                                 <strong className="behaviour-name">
                                   {b.behaviourName}
                                 </strong>
-                                <span className="behaviour-level"> {"  —  "} {getLevel(b.averageScore)}
+                                <span className="behaviour-level">
+                                  {"  —  "} {getLevel(b.averageScore)}
                                 </span>
                               </span>
                               <span className="accordion-toggle">
@@ -164,29 +104,65 @@ const SkillsBreakdown = ({
                             </div>
                             {isExpanded && (
                               <div className="accordion-content">
-                                <p>
-                                  {b.detailedDescription ||
-                                    "Placeholder text. This is an example paragraph for testing purposes."}
-                                </p>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })
-                    ) : (
-                      <div className="behaviour-item">
-                        No behaviours linked to this skill.
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : null;
-        })}
-      </div>
-    </div>
-  );
+                                {getContentForBehaviour(b.behaviourId).map((contentItem) => (
+                                  <div key={contentItem.id} style={{ marginLeft: '20px', marginTop: '5px' }}>
+                                    <h4 style={{ margin: 0 }}>{contentItem.title}</h4>
+                                    <p style={{ margin: 0 }}>{contentItem.description}</p>
+                                    {contentItem.learningLinks && (
+                                      <div>
+                                        <strong>Learning Links: </strong>
+                                        <ul>
+                                          {contentItem.learningLinks.Beginner && (
+                                            <li>
+                                              Beginner:{" "}
+                                              <a href={contentItem.learningLinks.Beginner} target="_blank" rel="noopener noreferrer">
+                                                {contentItem.learningLinks.Beginner}
+                                              </a>
+                                            </li>
+                                          )}
+                                          {contentItem.learningLinks.Intermediate && (
+                                           
+                                           <li>
+                                           Intermediate:{" "}
+                                           <a href={contentItem.learningLinks.Intermediate} target="_blank" rel="noopener noreferrer">
+                                             {contentItem.learningLinks.Intermediate}
+                                           </a>
+                                         </li>
+                                       )}
+                                       {contentItem.learningLinks.Advanced && (
+                                         <li>
+                                           Advanced:{" "}
+                                           <a href={contentItem.learningLinks.Advanced} target="_blank" rel="noopener noreferrer">
+                                             {contentItem.learningLinks.Advanced}
+                                           </a>
+                                         </li>
+                                       )}
+                                     </ul>
+                                   </div>
+                                 )}
+                               </div>
+                             ))}
+                             {getContentForBehaviour(b.behaviourId).length === 0 && (
+                               <div style={{ marginLeft: '20px' }}>No content available for this behaviour.</div>
+                             )}
+                           </div>
+                         )}
+                       </div>
+                     );
+                   })
+                 ) : (
+                   <div className="behaviour-item">No behaviours linked to this skill.</div>
+                 )}
+               </div>
+             </div>
+           )}
+         </div>
+       );
+     })}
+   </div>
+ </div>
+);
 };
 
 export default SkillsBreakdown;
+

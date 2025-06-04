@@ -7,11 +7,11 @@ const Statement = sequelize.define('Statement', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  behaviourId: {
+  contentId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Behaviours', // Refers to the Behaviours table
+      model: 'Contents', // Refers to the Behaviours table
       key: 'id', // Primary key in Behaviours table
     },
   },

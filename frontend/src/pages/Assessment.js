@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import ProgressBar from "../components/Assessment/ProgressBar";
 import StatementGroup from "../components/Assessment/StatementGroup";
 import NavigationButtons from "../components/Assessment/NavigationButtons";
-import axios from 'axios';
-import './Assessment.css';
+
+import "./Assessment.css";
 
 const Assessment = ({ user }) => {
   const navigate = useNavigate();
@@ -12,8 +13,8 @@ const Assessment = ({ user }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
-
-  const statementsPerPage = 4;
+  
+  const statementsPerPage = 6;
 
   useEffect(() => {
     const fetchStatements = async () => {
@@ -44,14 +45,18 @@ const Assessment = ({ user }) => {
         score,
       }));
 
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/assessments`, {
-        userId: user.userId,
-        responses: responsePayload,
-      }, {
-        headers: {
-          "Content-Type": "application/json"
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/assessments`,
+        {
+          userId: user.userId,
+          responses: responsePayload,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
 
       if (res.status === 201) {
         navigate("/assessmentsummary");
@@ -64,8 +69,13 @@ const Assessment = ({ user }) => {
     }
   };
 
-  const currentStatements = statements.slice(currentPage * statementsPerPage, (currentPage + 1) * statementsPerPage);
-  const progressPercentage = statements.length > 0 ? (Object.keys(answers).length / statements.length) * 100 : 0;
+  const currentStatements = statements.slice(
+    currentPage * statementsPerPage,
+    (currentPage + 1) * statementsPerPage
+  );
+
+  const progressPercentage =
+    statements.length > 0 ? (Object.keys(answers).length / statements.length) * 100 : 0;
 
   if (loading) {
     return <div>Loading statements...</div>;
@@ -78,10 +88,9 @@ const Assessment = ({ user }) => {
   return (
     <div className="container">
       <ProgressBar progress={progressPercentage} />
-
       <StatementGroup
-        skillName={currentStatements[0]?.Behaviour.Skill.name}
-        behaviourName={currentStatements[0]?.Behaviour.name}
+        skillName={currentStatements[0]?.Content?.Behaviour?.Skill?.name}
+        behaviourName={currentStatements[0]?.Content?.Behaviour?.name}
         statements={currentStatements}
         answers={answers}
         onAnswerChange={(statementId, value) => {
@@ -90,7 +99,6 @@ const Assessment = ({ user }) => {
           sessionStorage.setItem("answers", JSON.stringify(updatedAnswers));
         }}
       />
-
       <NavigationButtons
         onPrevious={() => setCurrentPage((prev) => Math.max(0, prev - 1))}
         onNext={() => {
@@ -109,3 +117,4 @@ const Assessment = ({ user }) => {
 };
 
 export default Assessment;
+

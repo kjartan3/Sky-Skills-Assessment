@@ -28,6 +28,7 @@
   .skill-title {
     font-size: 35px;
     padding-top: 30px;
+    margin-bottom: 40px;
   }
 
   .behaviour-title {
@@ -53,6 +54,7 @@
     color: #555;
     margin: 0; /* Remove default margin */
     text-align: left;
+    margin-right: 100px;
   }
   
   /* Ensure radio buttons are aligned in a row */
