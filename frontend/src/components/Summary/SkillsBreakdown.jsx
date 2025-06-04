@@ -12,22 +12,11 @@ const SkillsBreakdown = ({
   stats,
   expandedSkillId,
   setExpandedSkillId,
+  getContentForBehaviour,
 }) => {
   const [expandedBehaviourId, setExpandedBehaviourId] = useState(null);
-
-  // Helper to extract unique content items for a given behaviourId from assessment responses.
-  const getContentForBehaviour = (behaviourId) => {
-    if (!assessment || !assessment.Responses) return [];
-    const contentsMap = {};
-    assessment.Responses.forEach((response) => {
-      const content = response.Statement?.Content;
-      if (content && content.Behaviour?.id === behaviourId) {
-        contentsMap[content.id] = content;
-      }
-    });
-    return Object.values(contentsMap);
-  };
-
+  
+  
   return (
     <div className="assessment">
       <h3 className="assessment-title">Assessment #{assessmentId}</h3>

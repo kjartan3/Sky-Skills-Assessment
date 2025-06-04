@@ -92,6 +92,18 @@ const AssessmentSummary = ({ user }) => {
     }
   };
   
+  const getContentForBehaviour = (behaviourId) => {
+    const assessmentObj = assessments.find(a => a.id === selectedAssessmentId);
+    if (!assessmentObj || !assessmentObj.Responses) return [];
+    const contentsMap = {};
+    assessmentObj.Responses.forEach((response) => {
+      const content = response.Statement?.Content;
+      if (content && content.Behaviour?.id === behaviourId) {
+        contentsMap[content.id] = content;
+      }
+    });
+    return Object.values(contentsMap);
+  };
 
   return (
     loading ? (
@@ -121,6 +133,7 @@ const AssessmentSummary = ({ user }) => {
               setSelectedAssessmentId={setSelectedAssessmentId}
               COLORS={COLORS}
               stats={stats}
+              getContentForBehaviour={getContentForBehaviour}
             />
 
             <RadarChartContainer 
@@ -139,6 +152,8 @@ const AssessmentSummary = ({ user }) => {
             stats={stats[selectedAssessmentId]}
             expandedSkillId={expandedSkillId}
             setExpandedSkillId={setExpandedSkillId}
+            getContentForBehaviour={getContentForBehaviour}
+          
           />
         )}
       </div>
