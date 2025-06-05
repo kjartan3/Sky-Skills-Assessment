@@ -14,14 +14,13 @@ const generatePDF = (assessmentId, stats, assessment, getContentForBehaviour) =>
   // Header
   doc.setFont("helvetica");
   doc.setFontSize(20);
-  doc.text("Assessment Summary Report", 20, y);
+  doc.text("Sky Skills Assessment Summary", 20, y);
   y += 10;
 
   // Section header
-  doc.setFontSize(16);
-  doc.text("Skills Breakdown", 20, y);
+  doc.text("This report is more than a reflection — it’s an invitation. An invitation to understand who you are at your best and how you show up for others. Whether you're someone who welcomes and includes, creates new possibilities, simplifies the complex, or always strives to do the right thing, your assessment reveals the unique blend of behaviours that make you you. Inside, you’ll find data-driven insights about your strengths, your impact on those around you, and how your behaviours align with Sky’s core values. Let it provoke curiosity. Ask yourself: Where do I shine? Where can I grow? This is your foundation — now build on it. Because growth doesn’t stop with one assessment, and neither should you.", 20, y);
   y += 12;
-  doc.setFontSize(12);
+  doc.setFontSize(10);
 
   // Loop through each skill and draw its progress bar and breakdown
   stats.skillAverages.forEach((skill) => {

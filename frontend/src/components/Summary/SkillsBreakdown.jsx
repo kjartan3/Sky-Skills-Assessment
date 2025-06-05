@@ -16,7 +16,7 @@ const SkillsBreakdown = ({
 }) => {
   const [expandedBehaviourId, setExpandedBehaviourId] = useState(null);
   
-  
+
   return (
     <div className="assessment">
       <h3 className="assessment-title">Assessment #{assessmentId}</h3>
@@ -49,7 +49,7 @@ const SkillsBreakdown = ({
                 {s.skillName}
                 <br />
                 <span className="skill-level">
-                  {getLevel(s.averageScore)} ({s.averageScore.toFixed(2)})
+                  {getLevel(s.averageScore)}
                 </span>
               </h3>
 
@@ -98,7 +98,7 @@ const SkillsBreakdown = ({
                                 const learningLink = contentItem.learningLinks && contentItem.learningLinks[level];
                                 return (
                                   <div key={contentItem.id} >
-                                    <h4>{contentItem.id}</h4>
+                                    <h4 style={{ fontSize: '18px' }}>{contentItem.title}</h4>
                                     <p>{contentItem.description}</p>
                                     {learningLink ? (
                                       <div>
