@@ -45,7 +45,7 @@ const generatePDF = (assessmentId, stats, assessment, getContentForBehaviour) =>
   // ─── Pre Intro Paragraph (left aligned) ─────────────
   doc.setFontSize(10);
   doc.setTextColor(0, 0, 0);
-  const preIntro = "Knowing where to start your learning journey can be tricky, which is why we have Sky Skills – the top skills to set you up for success here at Sly.";
+  const preIntro = "Knowing where to start your learning journey can be tricky, which is why we have Sky Skills – the top skills to set you up for success here at Sky.";
   const preIntroLines = doc.splitTextToSize(preIntro, pageWidth - 40);
   preIntroLines.forEach(line => {
     doc.text(line, 20, y);
