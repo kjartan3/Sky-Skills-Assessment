@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true })); // Important for SAML POST resp
 
 // 2. Update CORS configuration
 app.use(cors({
-  origin: "https://10.133.198.220:3000", // Your frontend URL
+  origin: `${process.env.FRONT_END_URL}`, // Your frontend URL
   credentials: true,
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],

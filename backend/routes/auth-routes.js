@@ -1,14 +1,16 @@
 import express from 'express';
 import passport from '../saml-auth.js';
 import User from '../models/User.js';
+import dotenv from 'dotenv'
 const router = express.Router();
+dotenv.config()
 
 // Route to initiate login
 router.get('/login', (req, res, next) => {
   // console.log("Initiating SAML authentication flow");
   
   // Store the original URL to redirect back after authentication
-  req.session.returnTo = req.query.returnTo || 'https://10.133.198.220:3000';
+  req.session.returnTo = req.query.returnTo || `${process.env.FRONT_END_URL}`;
   
   passport.authenticate('saml')(req, res, next);
 });
@@ -21,7 +23,8 @@ router.post('/login/callback',
     // Don't log sensitive information in production
     
     // Save returnTo URL before passport potentially modifies the session
-    const returnTo = req.session.returnTo || 'https://10.133.198.220:3000';
+    const returnTo = req.session.returnTo || `${process.env.FRONT_END_URL}`;
+    console.log("test", `${process.env.FRONT_END_URL}`)
     
     passport.authenticate('saml', {
       failureRedirect: '/auth/login/fail',
@@ -54,7 +57,7 @@ router.post('/login/callback',
       }
       
       // Get the return URL from the session
-      const returnTo = req.session.returnTo || 'https://10.133.198.220:3000';
+      const returnTo = req.session.returnTo || `${process.env.FRONT_END_URL}`;
       delete req.session.returnTo; // Clean up
       
       console.log(`Redirecting authenticated user to: ${returnTo}`);
