@@ -37,22 +37,53 @@ const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS 
   return (
     <div className="chart-container">
       <ResponsiveContainer width="100%" height={400}>
-        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
+        <RadarChart
+          cx="50%"
+          cy="50%"
+          outerRadius="80%"
+          data={chartData}
+          margin={{ top: 40, right: 40, bottom: 40, left: 40 }} // 👈 Add this line
+        >
           <PolarGrid />
           
           {/* ✅ Skill labels now show Skill Name + Skill Level next to it */}
           <PolarAngleAxis
             dataKey="skillName"
-            tickFormatter={(skillName) => {
-              if (!selectedAssessmentId || !selectedAssessmentStats) return skillName;
-
-              const skillData = selectedAssessmentStats.find(skill => skill.skillName === skillName);
-              if (skillData) {
-                return `${skillName} (${getLevel(skillData.averageScore)})`; // Skill level next to name
-              }
-              return skillName;
+            tick={(props) => {
+              const { payload, x, y, textAnchor, cx = 0, cy = 0 } = props;
+              const skillName = payload.value;
+              const skillData = selectedAssessmentStats?.find(skill => skill.skillName === skillName);
+              const level = skillData ? getLevel(skillData.averageScore) : null;
+            
+              // Calculate vector from center to label
+              const dx = x - cx;
+              const dy = y - cy;
+            
+              // Extend the vector to push label outward
+              const newX = cx + dx * 1.33;
+              const newY = cy + dy * 1.2;
+            
+              // Check for the long skill name
+              const isLongSkill = skillName === "Doing the right thing";
+            
+              return (
+                <text x={newX} y={newY} textAnchor="middle" fill="#333" fontSize={12}>
+                  {isLongSkill ? (
+                    <>
+                      <tspan x={newX} dy="-5" fontSize="15.5" fontWeight="bold">Doing the</tspan>
+                      <tspan x={newX} dy="17" fontSize="15.5" fontWeight="bold">right thing</tspan>
+                    </>
+                  ) : (
+                    <tspan x={newX} dy="0" fontSize="15.5" fontWeight="bold">{skillName}</tspan>
+                  )}
+                  {level && (
+                    <tspan x={newX} dy="20" fontWeight="normal" fontStyle="italic">{level}</tspan>
+                  )}
+                </text>
+              );
             }}
           />
+
 
           {/* ✅ Updated domain to [1, 2.5, 4] */}
           <PolarRadiusAxis domain={[1, 2.5, 4]} tick={false} />

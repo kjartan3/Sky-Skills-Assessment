@@ -14,11 +14,24 @@ const seedDatabase = async () => {
     
     // Create Skills in the database
     const skills = await Skill.bulkCreate([
-        { name: 'Welcoming' },
-        { name: 'Creative' },
-        { name: 'Simplifying' },
-        { name: 'Doing the right thing' },
+        { 
+          name: 'Welcoming', 
+          description: 'We are inclusive, collaborative and respectful, creating a sense of belonging and opportunity for everyone.' 
+        },
+        { 
+          name: 'Creative', 
+          description: 'We are ambitious and innovative, challenging the status quo to raise the bar on quality for customers.' 
+        },
+        { 
+          name: 'Simplifying', 
+          description: 'We bring clarity, cut through complexity and remove obstacles.' 
+        },
+        { 
+          name: 'Doing the right thing', 
+          description: 'We are fair and act with integrity, each one of us taking responsibility.' 
+        },
     ]);
+
 
     // Create Behaviours in the database
     const behaviours = await Behaviour.bulkCreate([
@@ -248,8 +261,8 @@ const seedDatabase = async () => {
         behaviourId: behaviours[8].id,
         learningLinks: {
           Beginner: 'https://sky.edcast.com/pathways/data-fluency-beginner',
-          Intermediate: '',
-          Advanced: '',
+          Intermediate: 'https://sky.edcast.com/pathways/data-fluency-intermediate',
+          Advanced: 'https://sky.edcast.com/pathways/data-fluency-advanced-data',
         },
       },
     

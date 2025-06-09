@@ -15,7 +15,13 @@ const SkillsBreakdown = ({
   getContentForBehaviour,
 }) => {
   const [expandedBehaviourId, setExpandedBehaviourId] = useState(null);
-  
+
+const skillDescriptions = {
+  Welcoming: "We are inclusive, collaborative and respectful, creating a sense of belonging and opportunity for everyone.",
+  Creative: "We are ambitious and innovative, challenging the status quo to raise the bar on quality for customers.",
+  Simplifying: "We bring clarity, cut through complexity and remove obstacles.",
+  "Doing the right thing": "We are fair and act with integrity, each one of us taking responsibility.",
+};
 
   return (
     <div className="assessment">
@@ -56,12 +62,7 @@ const SkillsBreakdown = ({
               {isExpanded && (
                 <div className="expanded-content">
                   <div className="skill-details">
-                    <p>
-                      Placeholder text. This is an example paragraph for testing
-                      purposes. Placeholder text. This is an example paragraph for
-                      testing purposes. Placeholder text. This is an example
-                      paragraph for testing purposes. Test
-                    </p>
+                    <p>{skillDescriptions[s.skillName] || "No description available."}</p>
                   </div>
 
                   <div className="behaviour-breakdown">
@@ -85,7 +86,7 @@ const SkillsBreakdown = ({
                                   {b.behaviourName}
                                 </strong>
                                 <span className="behaviour-level">
-                                  {"  —  "} {getLevel(b.averageScore)}
+                                  {" — "}&nbsp;&nbsp;&nbsp;{getLevel(b.averageScore)}
                                 </span>
                               </span>
                               <span className="accordion-toggle">
@@ -128,7 +129,7 @@ const SkillsBreakdown = ({
                  )}
                </div>
              </div>
-           )}
+            )}
          </div>
        );
      })}

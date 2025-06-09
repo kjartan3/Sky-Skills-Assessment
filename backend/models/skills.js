@@ -6,6 +6,11 @@ const Skill = sequelize.define('Skill', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false, 
+  },
+
 });
 
 export default Skill;
