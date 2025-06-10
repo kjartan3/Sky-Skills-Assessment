@@ -74,7 +74,7 @@ const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS 
                     <tspan x={newX} dy="0" fontSize="16" fontWeight="bold">{skillName}</tspan>
                   )}
                   {level && (
-                    <tspan x={newX} dy="22" fontWeight="normal" fontStyle="italic">{level}</tspan>
+                    <tspan x={newX} dy="22" fontWeight="normal" fontStyle="italic">({level})</tspan>
                   )}
                 </text>
               );

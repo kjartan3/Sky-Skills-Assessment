@@ -108,21 +108,19 @@ const generatePDF = (assessmentId, stats, assessment, getContentForBehaviour) =>
     y += 8;
     y = checkAddPage(doc, y);
   });
-  y += 10;
+  y += 15;
 
 
-  doc.setFontSize(14)
+  doc.setFontSize(18)
+  doc.setTextColor(50, 50, 50)
   doc.text("A Deeper Dive", pageWidth / 2, y , { align: "center" });
-  y += 10;
+  y += 25;
   y = checkAddPage(doc, y);
 
   // ─── Skills Breakdown Section ───────────────────
   stats.skillAverages.forEach((skill) => {
     doc.setFontSize(12);
-    // Center the skill name.
-    doc.text(`${skill.skillName}`, pageWidth / 2, y, { align: "center" });
-    y += 5;
-    y = checkAddPage(doc, y);
+  
 
     // Draw a centered progress bar.
     const barWidth = pageWidth * 0.8;
@@ -136,12 +134,17 @@ const generatePDF = (assessmentId, stats, assessment, getContentForBehaviour) =>
     doc.roundedRect(barX, barY, fillWidth, barHeight, 2, 2, 'F');
 
     // Position the level text above the right side of the progress bar.
-    const levelText = `${getLevel(skill.averageScore)}`;
+    const leftX = 20
+    const levelText = getLevel(skill.averageScore)
+    const levelTextWidth = doc.getTextWidth(levelText)
+    const levelTextX = barX + barWidth - levelTextWidth
+
+
+    doc.text(`${skill.skillName}`, leftX, y - 5)
+    doc.text(levelText, levelTextX, y - 5)
     doc.setFontSize(10);
-    const levelTextWidth = doc.getTextWidth(levelText);
-    const levelTextX = barX + barWidth - levelTextWidth - 5;
-    doc.text(levelText, levelTextX, barY + barHeight + 6);
-    y += barHeight + 10;
+    
+    y += barHeight + 18;
     y = checkAddPage(doc, y);
 
     //   const behaviours = stats.behaviourAverages.filter(b => b.skillId === skill.skillId);More actions

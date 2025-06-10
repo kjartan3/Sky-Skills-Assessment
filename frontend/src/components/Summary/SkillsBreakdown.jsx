@@ -53,13 +53,15 @@ const SkillsBreakdown = ({
                 display: shouldHide ? "none" : "block", // 👈 hide non-expanded cards
               }}
             >
-              <h3 className="skill-name">
-                {s.skillName}
-                <br />
-                <span className="skill-level">
-                  {getLevel(s.averageScore)}
-                </span>
-              </h3>
+            <h3 className="skill-name" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+             <div style={{ display: "flex", flexDirection: "column" }}>
+              <span>{s.skillName}</span>
+              <span className="skill-level">{getLevel(s.averageScore)}</span> {/* ✅ Stays below the title */}
+            </div>
+
+            <span style={{ fontSize: "14px" }}>{isExpanded ? "▲" : "▼"}</span> {/* ✅ Moves the arrow to the right */}
+          </h3>
+
 
               {isExpanded && (
                 <div className="expanded-content">
@@ -72,7 +74,7 @@ const SkillsBreakdown = ({
                     {behavioursForSkill.length > 0 ? (
                       behavioursForSkill.map((b) => {
                         const isExpanded = expandedBehaviourId === b.behaviourId;
-                        const level = getLevel(b.averageScore)
+                        const behaviourLevel = getLevel(b.averageScore)
                         return (
                           <div key={b.behaviourId} className="accordion-item">
                             <div
@@ -89,10 +91,10 @@ const SkillsBreakdown = ({
                                   {b.behaviourName}
                                 </strong>
                                 <span className="behaviour-level">
-                                  {" — "}&nbsp;&nbsp;&nbsp;{getLevel(b.averageScore)}
+                                  {" — "}&nbsp;&nbsp;&nbsp;{behaviourLevel}
                                 </span>
                               </span>
-                              <span className="accordion-toggle">
+                              <span className="accordion-toggle" style={{ fontSize: "14px" }}>
                                 {isExpanded ? "▲" : "▼"}
                               </span>
                             </div>
@@ -101,7 +103,8 @@ const SkillsBreakdown = ({
                                 {getContentForBehaviour(b.behaviourId).map((contentItem) => {
                                   const relatedResponse = assessment.Responses?.find((response) => response.Statement?.Content?.id === contentItem.id)
                                   const contentScore = relatedResponse?.score;
-                                const learningLink = contentItem.learningLinks && contentItem.learningLinks[level];
+                                  const contentLevel = getLevel(contentScore)
+                                const learningLink = contentItem.learningLinks && contentItem.learningLinks[contentLevel];
                                 return (
                                   <div key={contentItem.id} >
                                    <div className="behaviour-title-line" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
