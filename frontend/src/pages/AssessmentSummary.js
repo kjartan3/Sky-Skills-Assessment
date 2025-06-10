@@ -37,13 +37,18 @@ const AssessmentSummary = ({ user }) => {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/assessments/${user.userId}`, {
           withCredentials: true,
         });
+        
+        console.log("data", JSON.stringify(res.data, null, 2))
         setAssessments(res.data);
+       
+        
 
         // Fetch aggregated stats for each assessment
         const statsPromises = res.data.map((a) =>
           axios.get(`${process.env.REACT_APP_API_URL}/stats/${a.id}`)
         );
         const statsResponses = await Promise.all(statsPromises);
+        console.log("stats", statsResponses)
         const statsByAssessmentId = {};
         res.data.forEach((a, i) => {
           statsByAssessmentId[a.id] = statsResponses[i].data;

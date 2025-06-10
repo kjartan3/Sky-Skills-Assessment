@@ -214,3 +214,11 @@ body {
   padding-left: 13px;
   
 }
+.content-level {
+  font-weight: normal;
+  font-style: italic;
+  color: #555;
+  font-size: 14px;
+  padding-left:6px;
+  
+}

@@ -64,7 +64,8 @@ router.get('/:userId', async (req, res) => {
                       include: [
                         {
                           model: Skill,
-                          attributes: ['id', 'name'],
+                          attributes: ['id', 'name', 'description'],
+                          required: true,
                         },
                       ],
                     },

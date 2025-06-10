@@ -5,6 +5,8 @@ import ProgressBar from "../components/Assessment/ProgressBar";
 import StatementGroup from "../components/Assessment/StatementGroup";
 import NavigationButtons from "../components/Assessment/NavigationButtons";
 
+
+
 import "./Assessment.css";
 
 const Assessment = ({ user }) => {
@@ -15,6 +17,14 @@ const Assessment = ({ user }) => {
   const [loading, setLoading] = useState(true);
   
   const statementsPerPage = 6;
+
+  const skillColors = {
+    Welcoming: "#FF8C00",  // Orange
+    Creative: "#FF00A0",   // Pink
+    Simplifying: "#8C28FF", // Purple
+    "Doing the right thing": "#19A0FF" // Blue
+  };
+
 
   useEffect(() => {
     const fetchStatements = async () => {
@@ -91,6 +101,7 @@ const Assessment = ({ user }) => {
       <StatementGroup
         skillName={currentStatements[0]?.Content?.Behaviour?.Skill?.name}
         behaviourName={currentStatements[0]?.Content?.Behaviour?.name}
+        skillColor={skillColors[currentStatements[0]?.Content?.Behaviour?.Skill?.name] || "#b0b0b0"} // Default grey if no match
         statements={currentStatements}
         answers={answers}
         onAnswerChange={(statementId, value) => {

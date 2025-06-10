@@ -1,10 +1,6 @@
 import React, { useState } from "react";
+import { getLevel } from '../helper/getLevel';
 
-const getLevel = (score) => {
-  if (score >= 3.75) return "Advanced";
-  if (score >= 2.5) return "Intermediate";
-  return "Beginner";
-};
 
 const SkillsBreakdown = ({
   assessmentId,
@@ -16,16 +12,16 @@ const SkillsBreakdown = ({
 }) => {
   const [expandedBehaviourId, setExpandedBehaviourId] = useState(null);
 
-const skillDescriptions = {
-  Welcoming: "We are inclusive, collaborative and respectful, creating a sense of belonging and opportunity for everyone.",
-  Creative: "We are ambitious and innovative, challenging the status quo to raise the bar on quality for customers.",
-  Simplifying: "We bring clarity, cut through complexity and remove obstacles.",
-  "Doing the right thing": "We are fair and act with integrity, each one of us taking responsibility.",
-};
+// const skillDescriptions = {
+//   Welcoming: "We are inclusive, collaborative and respectful, creating a sense of belonging and opportunity for everyone.",
+//   Creative: "We are ambitious and innovative, challenging the status quo to raise the bar on quality for customers.",
+//   Simplifying: "We bring clarity, cut through complexity and remove obstacles.",
+//   "Doing the right thing": "We are fair and act with integrity, each one of us taking responsibility.",
+// };
 
   return (
     <div className="assessment">
-      <h3 className="assessment-title">Assessment #{assessmentId}</h3>
+      <h3 className="assessment-title">Assessment</h3>
       <p style={{ marginTop: "-10px", color: "#777", fontSize: "14px" }}>
         Taken on {new Date(assessment.createdAt).toLocaleDateString()}
       </p>
@@ -35,12 +31,18 @@ const skillDescriptions = {
           const skillKey = `${assessmentId}-${s.skillId}`;
           const isExpanded = expandedSkillId === skillKey;
 
+          
+
           // Filter behaviours for this skill using the aggregated stats.
           const behavioursForSkill =
             stats?.behaviourAverages?.filter((b) => b.skillId === s.skillId) || [];
 
           const shouldHide = expandedSkillId && expandedSkillId !== skillKey;
-      
+
+          const skillDesc = assessment.Responses?.find(
+            (r) => r.Statement?.Content?.Behaviour?.Skill?.name === s.skillName
+            )?.Statement?.Content?.Behaviour?.Skill?.description;
+          
           return (
             <div
               key={s.skillId}
@@ -62,7 +64,8 @@ const skillDescriptions = {
               {isExpanded && (
                 <div className="expanded-content">
                   <div className="skill-details">
-                    <p>{skillDescriptions[s.skillName] || "No description available."}</p>
+                    
+                    <p>{skillDesc || "No description available."}</p>
                   </div>
 
                   <div className="behaviour-breakdown">
@@ -96,17 +99,28 @@ const skillDescriptions = {
                             {isExpanded && (
                               <div className="accordion-content">
                                 {getContentForBehaviour(b.behaviourId).map((contentItem) => {
+                                  const relatedResponse = assessment.Responses?.find((response) => response.Statement?.Content?.id === contentItem.id)
+                                  const contentScore = relatedResponse?.score;
                                 const learningLink = contentItem.learningLinks && contentItem.learningLinks[level];
                                 return (
                                   <div key={contentItem.id} >
-                                    <h4 style={{ fontSize: '18px' }}>{contentItem.title}</h4>
+                                   <div className="behaviour-title-line" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                    <h4 style={{ fontSize: '18px', margin: 0 }}>{contentItem.title}</h4>
+                                      <span className="content-level" >
+                                        {" — "}&nbsp;&nbsp;{getLevel(contentScore)}
+                                      </span>
+                                    </div>
                                     <p>{contentItem.description}</p>
+                                    
+                                    
                                     {learningLink ? (
                                       <div>
                                         
                                         <a href={learningLink} target="_blank" rel="noopener noreferrer">
                                           Recommended Learning
                                         </a>
+                                        <br/>
+                                        <br/>
                                       </div>
                                     ) : (
                                       <div>

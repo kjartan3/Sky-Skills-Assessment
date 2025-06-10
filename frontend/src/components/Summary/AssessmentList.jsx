@@ -1,11 +1,7 @@
 import React from 'react';
 import { jsPDF } from 'jspdf';
+import { getLevel } from '../helper/getLevel';
 
-const getLevel = (score) => {
-  if (score >= 3.75) return "Advanced";
-  if (score >= 2.5) return "Intermediate";
-  return "Beginner";
-};
 
 // Helper to check if we need to add a new page.
 const checkAddPage = (doc, y) => {

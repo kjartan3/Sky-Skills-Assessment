@@ -74,11 +74,12 @@ router.get('/:assessmentId', async (req, res) => {
     });
  
     // Calculate averages for each skill
-    const skillAverages = Object.values(skillScores).map(s => ({
-      skillId: s.skillId,
-      skillName: s.skillName,
-      averageScore: s.scores.reduce((a, score) => a + score, 0) / s.scores.length,
-    }));
+   const skillAverages = Object.values(skillScores).map(s => ({
+  skillId: s.skillId,
+  skillName: s.skillName,
+  averageScore: s.scores.reduce((a, score) => a + score, 0) / s.scores.length,
+  description: responses.find(r => r.Statement?.Content?.Behaviour?.Skill?.id === s.skillId)?.Statement?.Content?.Behaviour?.Skill?.description || "No description available", // ✅ Include description
+}));
  
     res.json({ behaviourAverages, skillAverages });
   } catch (error) {

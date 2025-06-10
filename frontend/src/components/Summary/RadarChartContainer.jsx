@@ -7,12 +7,9 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import React from 'react';
+import { getLevel } from '../helper/getLevel';
 
-const getLevel = (score) => {
-  if (score >= 3.25) return "Advanced";
-  if (score >= 2.5) return "Intermediate";
-  return "Beginner";
-};
+
 
 const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS }) => {
   const selectedAssessmentStats = selectedAssessmentId ? stats[selectedAssessmentId]?.skillAverages : [];
@@ -50,7 +47,7 @@ const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS 
           <PolarAngleAxis
             dataKey="skillName"
             tick={(props) => {
-              const { payload, x, y, textAnchor, cx = 0, cy = 0 } = props;
+              const { payload, x, y, cx = 0, cy = 0 } = props;
               const skillName = payload.value;
               const skillData = selectedAssessmentStats?.find(skill => skill.skillName === skillName);
               const level = skillData ? getLevel(skillData.averageScore) : null;
@@ -60,24 +57,24 @@ const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS 
               const dy = y - cy;
             
               // Extend the vector to push label outward
-              const newX = cx + dx * 1.33;
-              const newY = cy + dy * 1.2;
+              const newX = cx + dx * 1.34;
+              const newY = cy + dy * 1.21;
             
               // Check for the long skill name
               const isLongSkill = skillName === "Doing the right thing";
             
               return (
-                <text x={newX} y={newY} textAnchor="middle" fill="#333" fontSize={12}>
+                <text x={newX} y={newY} textAnchor="middle" fill="#333" fontSize={13}>
                   {isLongSkill ? (
                     <>
-                      <tspan x={newX} dy="-5" fontSize="15.5" fontWeight="bold">Doing the</tspan>
-                      <tspan x={newX} dy="17" fontSize="15.5" fontWeight="bold">right thing</tspan>
+                      <tspan x={newX} dy="-5" fontSize="16" fontWeight="bold">Doing the</tspan>
+                      <tspan x={newX} dy="17" fontSize="16" fontWeight="bold">right thing</tspan>
                     </>
                   ) : (
-                    <tspan x={newX} dy="0" fontSize="15.5" fontWeight="bold">{skillName}</tspan>
+                    <tspan x={newX} dy="0" fontSize="16" fontWeight="bold">{skillName}</tspan>
                   )}
                   {level && (
-                    <tspan x={newX} dy="20" fontWeight="normal" fontStyle="italic">{level}</tspan>
+                    <tspan x={newX} dy="22" fontWeight="normal" fontStyle="italic">{level}</tspan>
                   )}
                 </text>
               );
