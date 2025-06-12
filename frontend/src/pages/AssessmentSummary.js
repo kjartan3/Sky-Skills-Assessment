@@ -38,7 +38,7 @@ const AssessmentSummary = ({ user }) => {
           withCredentials: true,
         });
         
-        console.log("data", JSON.stringify(res.data, null, 2))
+        
         setAssessments(res.data);
        
         
@@ -54,10 +54,9 @@ const AssessmentSummary = ({ user }) => {
           statsByAssessmentId[a.id] = statsResponses[i].data;
         });
         setStats(statsByAssessmentId);
+        setSelectedAssessmentId(prevId => prevId && statsByAssessmentId[prevId] ? prevId : res.data[0].id);
 
-        if (res.data.length > 0) {
-          setSelectedAssessmentId(res.data[0].id);
-        }
+      
       } catch (err) {
         console.error('Error fetching assessments or stats:', err);
       } finally {
