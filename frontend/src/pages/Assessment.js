@@ -4,13 +4,13 @@ import axios from "axios";
 import ProgressBar from "../components/Assessment/ProgressBar";
 import StatementGroup from "../components/Assessment/StatementGroup";
 import NavigationButtons from "../components/Assessment/NavigationButtons";
-
-
+import AssessmentIntro from "../components/Assessment/AssessmentIntro";
 
 import "./Assessment.css";
 
 const Assessment = ({ user }) => {
   const navigate = useNavigate();
+  const [showIntro, setShowIntro] = useState(true);
   const [statements, setStatements] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -19,12 +19,11 @@ const Assessment = ({ user }) => {
   const statementsPerPage = 6;
 
   const skillColors = {
-    Welcoming: "#FF8C00",  // Orange
-    Creative: "#FF00A0",   // Pink
-    Simplifying: "#8C28FF", // Purple
-    "Doing the right thing": "#19A0FF" // Blue
+    Welcoming: "#FF8C00",
+    Creative: "#FF00A0",
+    Simplifying: "#8C28FF",
+    "Doing the right thing": "#19A0FF"
   };
-
 
   useEffect(() => {
     const fetchStatements = async () => {
@@ -95,13 +94,17 @@ const Assessment = ({ user }) => {
     return <div>No statements available. Please try again later.</div>;
   }
 
+  if (showIntro) {
+    return <AssessmentIntro onStart={() => setShowIntro(false)} />;
+  }
+
   return (
     <div className="container">
       <ProgressBar progress={progressPercentage} />
       <StatementGroup
         skillName={currentStatements[0]?.Content?.Behaviour?.Skill?.name}
         behaviourName={currentStatements[0]?.Content?.Behaviour?.name}
-        skillColor={skillColors[currentStatements[0]?.Content?.Behaviour?.Skill?.name] || "#b0b0b0"} // Default grey if no match
+        skillColor={skillColors[currentStatements[0]?.Content?.Behaviour?.Skill?.name] || "#b0b0b0"}
         statements={currentStatements}
         answers={answers}
         onAnswerChange={(statementId, value) => {
@@ -128,4 +131,5 @@ const Assessment = ({ user }) => {
 };
 
 export default Assessment;
+
 

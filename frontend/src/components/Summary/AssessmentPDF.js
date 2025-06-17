@@ -1,5 +1,5 @@
 import React from "react";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { Document, Page, Text, Link, View, StyleSheet } from "@react-pdf/renderer";
 import { getLevel } from "../helper/getLevel";
 
 const styles = StyleSheet.create({
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   skillRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" },
   skillTitle: { fontSize: 12, textAlign: "left" },
   skillLevel: { fontSize: 12, textAlign: "right" },
-  progressBarContainer: { width: "100%", backgroundColor: "#ddd", borderRadius: 2, height: 5, marginVertical: 5, marginBottom:8 },
+  progressBarContainer: { width: "100%", backgroundColor: "#ddd", borderRadius: 2, height: 5, marginVertical: 5, marginBottom: 22 },
   filledProgress: { height: 5, backgroundColor: "#007bff", borderRadius: 2 },
   orangeText: { fontSize: 14, color: "orange", textAlign: "center", marginBottom: 15, marginTop: 20 },
 });
@@ -45,10 +45,12 @@ const AssessmentPDF = ({ assessmentId, stats, assessment, getContentForBehaviour
     </Page>
 
     {/* Skills Breakdown */}
-    <Page style={styles.page}>
-      <Text style={styles.header}>A Deeper Dive</Text>
-      {stats.skillAverages.map((skill) => (
-        <View key={skill.skillName} style={styles.skillContainer}>
+    {/* Skills Breakdown - One Page Per Skill */}
+    {stats.skillAverages.map((skill) => (
+      <Page key={skill.skillName} style={styles.page}>
+        <Text style={styles.header}>A Deeper Dive into: {skill.skillName}</Text>
+
+        <View style={styles.skillContainer}>
           <View style={styles.skillRow}>
             <Text style={styles.skillTitle}>{skill.skillName}</Text>
             <Text style={styles.skillLevel}>{getLevel(skill.averageScore)}</Text>
@@ -65,22 +67,34 @@ const AssessmentPDF = ({ assessmentId, stats, assessment, getContentForBehaviour
             .flatMap((behaviour) => getContentForBehaviour(behaviour.behaviourId))
             .slice(0, 6)
             .map((contentItem) => {
-              const relatedResponse = assessment.Responses?.find((response) => response.Statement?.Content?.id === contentItem.id);
+              const relatedResponse = assessment.Responses?.find(
+                (response) => response.Statement?.Content?.id === contentItem.id
+              );
               const contentScore = relatedResponse?.score || 0;
               const contentLevel = getLevel(contentScore);
               const learningLink = contentItem.learningLinks?.[contentLevel];
 
               return (
                 <View key={contentItem.id} style={{ marginBottom: 10 }}>
-                  <Text style={{ fontSize: 12, fontWeight: "bold" }}>{contentItem.title} - {getLevel(contentScore)}</Text>
-                  <Text style={{ fontSize: 10 }}>{contentItem.description}</Text>
-                  {learningLink && <Text style={{ fontSize: 10, color: "blue" }}>Learning Link: {learningLink}</Text>}
+                  <Text style={{ fontSize: 12, fontWeight: "bold", marginBottom: 10 }}>
+                    {contentItem.title} - {getLevel(contentScore)}
+                  </Text>
+                  <Text style={{ fontSize: 10, marginBottom: 7 }}>{contentItem.description}</Text>
+                  {learningLink && (
+                    <Link
+                      src={learningLink}
+                      style={{ fontSize: 10, color: "blue", textDecoration: "none", marginBottom: 15 }}
+                    >
+                      Recommended Learning
+                    </Link>
+                  )}
                 </View>
               );
             })}
         </View>
-      ))}
-    </Page>
+      </Page>
+    ))}
+
   </Document>
 );
 

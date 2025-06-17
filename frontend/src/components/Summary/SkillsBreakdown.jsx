@@ -119,7 +119,7 @@ const SkillsBreakdown = ({
                                     {learningLink ? (
                                       <div>
                                         
-                                        <a href={learningLink} target="_blank" rel="noopener noreferrer">
+                                        <a href={learningLink} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                                           Recommended Learning
                                         </a>
                                         <br/>
