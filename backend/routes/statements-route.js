@@ -7,6 +7,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const statements = await Statement.findAll({
+      attributes: ["id", "text", "guidanceText", "contentId"], // 👈 include guidanceText here
       include: [
         {
           model: Content,
@@ -30,7 +31,9 @@ router.get("/", async (req, res) => {
   } catch (error) {
     console.error("Error fetching statements:", error);
     res.status(500).json({ message: error.message });
-}});
+  }
+});
+
  
     
     

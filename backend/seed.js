@@ -363,41 +363,116 @@ await Promise.all(
    const createdContent = await Content.findAll({ order: [['id', 'ASC']] });
 
 const statementsData = [
-  'I actively invite others to speak that have yet to share their opinions.',
-  'I spend time consciously getting to know my team and colleagues.',
-  "I have a good understanding of Sky's priorities and products.",
-  'I collaborate effectively by considering how different personalities might respond to how I communicate.',
-  'I am comfortable with failure, I see it as a learning experience.',
-  "I continuously seek feedback from others on how I can do my job even better. I don't just wait for the end of the year.",
-  'I ask great questions to understand other points of view.',
-  'I embrace new technology, including AI, to best deliver results.',
-  'I push myself out of my comfort zone by doing things that sometimes feel uncomfortable.',
-  'I innovate by improving ways of working, processes or products that add value.',
-  'I manage my energy levels through the day to keep my resilience through times of change.',
-  'I communicate complex big topics in a way that resonates with others.',
-  "I prioritise what I work on (and my team*) by asking myself 'does this add the most value?'",
-  'I quickly spot what matters for customers and/or stakeholders.',
-  'When I have a new idea, I effectively tell stories by analysing multiple sources of data to bring it to life.',
-  'I feel confident using AI for day to day tasks in my role.',
-  "I seek opporunities to constantly look at 'how we can make things even better and simplified'.",
-  'I focus on what matters by using data and not just my gut feeling.',
-  "I hold myself (and my team*) to account by doing what I'll say I'll do.",
-  'I build confidence in others by recognising achievements and celebrating progress.',
-  "I am open about what I don't know and ask for help when I need it.",
-  "I make everyday decisions with Sky's operational and financial context in mind.",
-  'I use the strength of my relationships to challenge ideas contructively, encouraging diverse perspectives while mantaining alignment and mutual respect.',
-  'I manage my day-to-day distractions, to give my full attention to others - both face to face and/or virtual.'
+  {
+    text: 'I actively invite others to speak that have yet to share their opinions.',
+    guidanceText: 'Reflect on how you understand and manage emotions. Think about how you notice reactions, communicate sensitively, and lead with empathy.',
+  },
+  {
+    text: 'I spend time consciously getting to know my team and colleagues.',
+    guidanceText: 'Evaluate how you build honest and reliable relationships. Consider how you support others, stay accountable, and understand how others perceive you.',
+  },
+  {
+    text: "I consider Sky's priorities and products in my every day work",
+    guidanceText: 'Think about how your work aligns with Sky’s bigger picture. Reflect on how you involve others, understand systems, and plan strategically across teams.',
+  },
+  {
+    text: 'I collaborate effectively by considering how different personalities might respond to how I communicate.',
+    guidanceText: 'Assess how you work with others to achieve shared goals. Consider how you contribute, include others, and build helpful relationships.',
+  },
+  {
+    text: 'I am comfortable with failure, I see it as a learning experience.',
+    guidanceText: 'Reflect on how you view challenges as opportunities. Think about how you learn from setbacks, adapt plans, and stay resilient.',
+  },
+  {
+    text: "I continuously seek feedback from others on how I can do my job even better. I don't just wait for the end of the year.",
+    guidanceText: 'Reflect on how you give and receive feedback. Consider how you identify strengths, reflect on challenges, and communicate constructively.',
+  },
+  {
+    text: 'I ask great questions to understand other points of view.',
+    guidanceText: 'Explore your desire to learn and understand more. Reflect on how you ask open questions and approach new challenges with a positive mindset.',
+  },
+  {
+    text: 'I embrace new technology, including AI, to best deliver results.',
+    guidanceText: 'Think about how you challenge the norm and generate creative ideas. Consider how you identify patterns and reflect with others to improve.',
+  },
+  {
+    text: 'I push myself out of my comfort zone by doing things that sometimes feel uncomfortable.',
+    guidanceText: 'Assess how well you adapt in fast-paced situations. Think about how you manage reactions, balance workloads, and plan flexibly.',
+  },
+  {
+    text: 'I innovate by improving ways of working, processes or products that add value.',
+    guidanceText: 'Reflect on how you create and implement new ideas. Consider how you identify opportunities, stay curious, and foster creativity in others.',
+  },
+  {
+    text: 'I manage my energy levels through the day to keep my resilience through times of change.',
+    guidanceText: 'Reflect on how you take ownership of your energy and wellbeing throughout the day, and how you use intentional actions to stay focused, grounded and adaptable. ',
+  },
+  {
+    text: 'I communicate complex big topics in a way that resonates with others.',
+    guidanceText: "Consider how you organise your thoughts, listen actively, respond to others' ideas and engage your audience effectively.",
+  },
+  {
+    text: "I prioritise what I work on (and my team*) by asking myself 'does this add the most value?'",
+    guidanceText: 'Reflect on how you focus on what matters most. Think about how you manage resources, order tasks, and plan strategically.',
+  },
+  {
+    text: 'I quickly spot what matters for customers and/or stakeholders.',
+    guidanceText: 'Think about how you contribute to an inclusive and supportive environment. Consider how you express yourself, support others, and handle sensitive topics.',
+  },
+  {
+    text: 'When I have a new idea, I effectively tell stories by analysing multiple sources of data to bring it to life.',
+    guidanceText: 'Think about how you analyse information and challenge assumptions. Reflect on how you seek different perspectives and use questions to deepen understanding.',
+  },
+  {
+    text: 'I feel confident using AI for day to day tasks in my role.',
+    guidanceText: 'Reflect on how actively you explore and apply AI tools to streamline your daily work. Think about how you make informed choices about when and how to use AI.',
+  },
+  {
+    text: "I seek opporunities to constantly look at 'how we can make things even better and simplified'.",
+    guidanceText: 'Assess how you seek and implement improvements. Consider how you generate ideas, challenge assumptions, and use feedback to evolve your work',
+  },
+  {
+    text: 'I focus on what matters by using data and not just my gut feeling.',
+    guidanceText: 'Think about how you interpret data to tell meaningful stories. Reflect on how you find information, recognise patterns, and adapt plans using insights.',
+  },
+  {
+    text: "I hold myself (and my team*) to account by doing what I'll say I'll do.",
+    guidanceText: 'Think about how you take ownership of your actions. Reflect on how you complete tasks, stay accountable, and involve others in achieving goals.',
+  },
+  {
+    text: 'I build confidence in others by recognising achievements and celebrating progress.',
+    guidanceText: 'Assess how you enable others to thrive. Consider how you support, motivate, and inspire people to take initiative and grow.',
+  },
+  {
+    text: "I am open about what I don't know and ask for help when I need it.",
+    guidanceText: 'Reflect on how open and honest you are. Think about how you share information accurately, use facts, and communicate clearly in tough situations.',
+  },
+  {
+    text: "I make everyday decisions with Sky's operational and financial context in mind.",
+    guidanceText: 'Evaluate how you contribute to business success. Consider how you collaborate, avoid conflict, and identify risks and opportunities.',
+  },
+  {
+    text: 'I use the strength of my relationships to challenge ideas contructively, encouraging diverse perspectives while mantaining alignment and mutual respect.',
+    guidanceText: 'Think about how you engage in meaningful dialogue. Reflect on how you ask questions, adapt your communication, and negotiate effectively.',
+  },
+  {
+    text: 'I manage my day-to-day distractions, to give my full attention to others - both face to face and/or virtual.',
+    guidanceText: 'Assess how well you pay attention and understand others. Consider how you actively listen, and recognise influence in conversations.',
+  },
 ];
 
+
 await Promise.all(
-  statementsData.map((text, index) =>
+  statementsData.map((statement, index) =>
     Statement.upsert({
       id: index + 1,
-      text,
+      text: statement.text,
+      guidanceText: statement.guidanceText,
       contentId: createdContent[index].id,
     })
   )
 );
+
 
    
 

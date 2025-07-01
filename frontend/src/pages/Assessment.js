@@ -68,7 +68,7 @@ const Assessment = ({ user }) => {
       );
 
       if (res.status === 201) {
-        navigate("/assessmentsummary");
+        navigate("/assessmentoutro");
       } else {
         throw new Error("Failed to create assessment.");
       }

@@ -12,6 +12,7 @@ const StatementGroup = ({skillName, behaviourName, statements, answers, onAnswer
         value={answers[statement.id] || null} 
         onChange={onAnswerChange}
         skillColor={skillColor} 
+        
       />
     ))}
     </>

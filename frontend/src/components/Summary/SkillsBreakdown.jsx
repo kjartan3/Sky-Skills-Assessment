@@ -74,7 +74,6 @@ const SkillsBreakdown = ({
                     {behavioursForSkill.length > 0 ? (
                       behavioursForSkill.map((b) => {
                         const isExpanded = expandedBehaviourId === b.behaviourId;
-                        const behaviourLevel = getLevel(b.averageScore)
                         return (
                           <div key={b.behaviourId} className="accordion-item">
                             <div
@@ -90,9 +89,7 @@ const SkillsBreakdown = ({
                                 <strong className="behaviour-name">
                                   {b.behaviourName}
                                 </strong>
-                                <span className="behaviour-level">
-                                  {" — "}&nbsp;&nbsp;&nbsp;{behaviourLevel}
-                                </span>
+                               
                               </span>
                               <span className="accordion-toggle" style={{ fontSize: "14px" }}>
                                 {isExpanded ? "▲" : "▼"}

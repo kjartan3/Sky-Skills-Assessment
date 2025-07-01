@@ -46,8 +46,10 @@ const Navbar = () => {
                 </button>
                 {dropdownOpen && (
                     <div className="dropdown-menu">
+                        <Link to="/" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Home</Link>
                         <Link to="/assessment" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Assessment</Link>
                         <Link to="/assessmentsummary" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Summary</Link>
+                         
                         
                        
                     </div>
