@@ -28,6 +28,7 @@ const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS 
       const avg = stats[a.id]?.skillAverages?.find(s => s.skillName === skillName);
       point[a.id] = avg?.averageScore ?? 1;
     });
+    point._baseline = 4;
     return point;
   });
 
@@ -37,9 +38,9 @@ const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS 
         <RadarChart
           cx="50%"
           cy="50%"
-          outerRadius="80%"
+          outerRadius={120}
           data={chartData}
-          margin={{ top: 40, right: 40, bottom: 40, left: 40 }} // 👈 Add this line
+          margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
         >
           <PolarGrid />
           
@@ -84,7 +85,13 @@ const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS 
 
           {/* ✅ Updated domain to [1, 2.5, 4] */}
           <PolarRadiusAxis domain={[1, 2.5, 4]} tick={false} />
-          
+          <Radar 
+            dataKey='_baseline'
+            stroke='transparent'
+            fill='transparent'
+            isAnimationActive={false}
+          />
+    
           {assessments.map((a, index) => {
             const color = COLORS[index % COLORS.length];
             const isSelected = selectedAssessmentId === a.id;
@@ -96,7 +103,8 @@ const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS 
                 dataKey={a.id}
                 stroke={color}
                 fill={color}
-                fillOpacity={isSelected ? 0.8 : 0.05} // highlight selected, fade others
+                fillOpacity={isSelected ? 1 : 0.02}
+                strokeOpacity={isSelected ? 1 : 0.2}
               />
             );
           })}

@@ -3,7 +3,7 @@ import { Document, Page, Text, Link, View, StyleSheet } from "@react-pdf/rendere
 import { getLevel } from "../helper/getLevel";
 
 const styles = StyleSheet.create({
-  page: { padding: 70 },
+  page: { padding: 70, paddingVertical: 55 },
   title: { fontSize: 20, textAlign: "center", fontWeight: "bold", marginBottom: 35 },
   header: { fontSize: 16, marginVertical: 15, textAlign: "center" },
   subheader: { fontSize: 14, marginVertical: 15, textAlign: "center" },
@@ -18,6 +18,13 @@ const styles = StyleSheet.create({
   orangeText: { fontSize: 14, color: "orange", textAlign: "center", marginBottom: 15, marginTop: 20 },
   behaviourLink: {fontSize: 11, marginBottom: 10, textAlign: "center", textDecoration: "none"}
 });
+
+const skillColors = {
+  Welcoming: "#FF8C00",
+  Creative: "#FF00A0",
+  Simplifying: "#8C28FF",
+  "Doing the right thing": "#19A0FF"
+};
 
 const AssessmentPDF = ({ assessmentId, stats, assessment, getContentForBehaviour }) => (
   <Document>
@@ -65,7 +72,9 @@ const AssessmentPDF = ({ assessmentId, stats, assessment, getContentForBehaviour
 
       return (
         <Page key={skill.skillName} style={styles.page}>
-          <Text style={styles.header}>A Deeper Dive into: {skill.skillName}</Text>
+          <Text style={styles.header}>A Deeper Dive into:</Text>
+          <Text style={{fontSize: 20, textAlign: "center", paddingBottom: 6, marginTop: -3, color: skillColors[skill.skillName] || "#b0b0b0"}}>{skill.skillName}</Text>
+          
 
           <View style={styles.skillContainer}>
             <View style={styles.skillRow}>
@@ -86,7 +95,7 @@ const AssessmentPDF = ({ assessmentId, stats, assessment, getContentForBehaviour
                 <View key={behaviour.behaviourId} wrap={false}>
                   {/* Internal Anchor for Behaviour */}
                   <View id={`behaviour-${behaviour.behaviourId}`} style={{ marginTop: 20, marginBottom: 10 }}>
-                    <Text style={{ fontSize: 13, fontWeight: "bold", textAlign: "center", color: "#333" }}>
+                    <Text style={{ fontSize: 13, fontWeight: "bold", color: skillColors[skill.skillName] || "#b0b0b0" }}>
                       {behaviour.behaviourName}
                     </Text>
                   </View>
@@ -102,7 +111,7 @@ const AssessmentPDF = ({ assessmentId, stats, assessment, getContentForBehaviour
 
                     return (
                       <View key={contentItem.id} style={{ marginBottom: 10 }}>
-                        <Text style={{ fontSize: 12, fontWeight: "bold", marginBottom: 7 }}>
+                        <Text style={{ fontSize: 12, marginBottom: 7, paddingBottom: 4}}>
                           {contentItem.title} – {contentLevel}
                         </Text>
                         <Text style={{ fontSize: 10, marginBottom: 5 }}>{contentItem.description}</Text>
