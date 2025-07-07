@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import AssessmentList from '../components/Summary/AssessmentList';
 import SkillsBreakdown from '../components/Summary/SkillsBreakdown';
@@ -16,6 +17,7 @@ const COLORS = [
 ];
 
 const AssessmentSummary = ({ user }) => {
+  const navigate = useNavigate();
   const [assessments, setAssessments] = useState([]);
   const [stats, setStats] = useState({});
   const [hoveredId, setHoveredId] = useState(null);
@@ -110,26 +112,38 @@ const AssessmentSummary = ({ user }) => {
   };
 
   return (
-    loading ? (
-      <div className='loading-container'>Loading assessment summary...</div>
-    ) : (
-      <div className="assessment-summary-container">
-        <h2 className="summary-title">Assessment Summary</h2>
+  loading ? (
+    <div className='loading-container'>Loading assessment summary...</div>
+  ) : (
+    <div className="assessment-summary-container">
+      <h2 className="summary-title">Assessment Summary</h2>
 
-        {assessments.length === 0 ? (
-          <p>No assessments found.</p>
-        ) : (
+      {assessments.length === 0 ? (
+        <div className='intermission-content'>
+          <br />
+          <p>You have not completed an assessment yet.</p>
+          <p>Once you have completed one, your progress and insights will appear here.</p>
+          <br />
+          <button
+            className='start-assessment-button'
+            onClick={() => navigate("/assessment")}
+          >
+            Start Assessment
+          </button>
+        </div>
+      ) : (
+        <>
           <div className="chart-with-list">
             <select
               value={selectedTimeFrame}
-                onChange={handleTimeFrameChange}
-              >
-                <option value='latest'>Latest</option>
-                <option value='3'>Last 3 Months</option>
-                <option value='6'>Last 6 Months</option>
-                <option value='12'>Last 12 Months</option>
-
+              onChange={handleTimeFrameChange}
+            >
+              <option value='latest'>Latest</option>
+              <option value='3'>Last 3 Months</option>
+              <option value='6'>Last 6 Months</option>
+              <option value='12'>Last 12 Months</option>
             </select>
+
             <AssessmentList
               assessments={displayedAssessments}
               hoveredId={hoveredId}
@@ -147,22 +161,22 @@ const AssessmentSummary = ({ user }) => {
               COLORS={COLORS}
             />
           </div>
-        )}
 
-        {selectedAssessmentId && (
-          <SkillsBreakdown
-            assessmentId={selectedAssessmentId}
-            assessment={assessments.find((a) => a.id === selectedAssessmentId)}
-            stats={stats[selectedAssessmentId]}
-            expandedSkillId={expandedSkillId}
-            setExpandedSkillId={setExpandedSkillId}
-            getContentForBehaviour={getContentForBehaviour}
-          
-          />
-        )}
-      </div>
-    )
-  );
+          {selectedAssessmentId && (
+            <SkillsBreakdown
+              assessmentId={selectedAssessmentId}
+              assessment={assessments.find((a) => a.id === selectedAssessmentId)}
+              stats={stats[selectedAssessmentId]}
+              expandedSkillId={expandedSkillId}
+              setExpandedSkillId={setExpandedSkillId}
+              getContentForBehaviour={getContentForBehaviour}
+            />
+          )}
+        </>
+      )}
+    </div>
+  )
+);
 };
 
 export default AssessmentSummary;

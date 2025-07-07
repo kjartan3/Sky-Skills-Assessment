@@ -11,7 +11,8 @@ const seedDatabase = async () => {
   try {
     console.log('🔄 Dropping existing tables (except Assessments & Responses)...');
 
-
+    // Uncomment the below when first starting new server! 
+    // await sequelize.sync({ force: true });
     console.log('🔄 Resetting tables…');
     await Statement.drop();
     await Content.drop();
@@ -477,15 +478,15 @@ await Promise.all(
    
 
 
-    // Add this after inserting Statements
-
     // const monthsAgo = (months) => {
     //   const date = new Date();
     //   date.setMonth(date.getMonth() - months);
     //   return date;
     // }
+
+    // // await User.upsert({ userId: 'khj551' });
+    // // await User.upsert({ userId: 'bre896' });
  
-    // Create an assessment for the user
     // const assessments = await Assessment.bulkCreate([
     //   { userId: 'khj551', createdAt: monthsAgo(11), updatedAt: new Date()}, 
     //   { userId: 'khj551', createdAt: monthsAgo(2), updatedAt: new Date()}, 

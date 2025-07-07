@@ -24,7 +24,6 @@ router.post('/login/callback',
     
     // Save returnTo URL before passport potentially modifies the session
     const returnTo = req.session.returnTo || `${process.env.FRONT_END_URL}`;
-    console.log("test", `${process.env.FRONT_END_URL}`)
     
     passport.authenticate('saml', {
       failureRedirect: '/auth/login/fail',
@@ -110,7 +109,7 @@ router.get('/logout', (req, res) => {
       console.error('Error during logout:', err);
       return res.status(500).send('Error during logout');
     }
-    res.redirect('https://10.133.198.220:3000');
+    res.redirect(`${process.env.FRONT_END_URL}`);
   });
 });
 
