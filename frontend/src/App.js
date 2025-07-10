@@ -7,6 +7,8 @@ import ProtectedRoute from './components/protectedRoute';
 import Skills from './pages/Skills'
 import Navbar from './components/Navbar';
 import AssessmentOutro from './pages/AssessmentOutro'
+import Dashboard from './pages/Dashboard';
+
 
 
 
@@ -82,6 +84,7 @@ useEffect(() => {
               {/* Add a catch-all SAML callback route */}
               <Route path="/auth/login/callback" element={<Navigate to="/" />} />
               <Route path="/assessmentoutro" element={<AssessmentOutro  />} />
+              <Route path="/dashboard" element={<Dashboard  />} />
           </Routes>
       </Router>
   );

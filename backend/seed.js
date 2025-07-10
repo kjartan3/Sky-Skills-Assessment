@@ -484,16 +484,16 @@ await Promise.all(
     //   return date;
     // }
 
-    // // await User.upsert({ userId: 'khj551' });
+    // await User.upsert({ userId: 'khj551', firstName: 'Kjartan', lastName: 'Heimisson', email: 'kjartan.heimisson@sky.uk' });
     // // await User.upsert({ userId: 'bre896' });
  
     // const assessments = await Assessment.bulkCreate([
     //   { userId: 'khj551', createdAt: monthsAgo(11), updatedAt: new Date()}, 
     //   { userId: 'khj551', createdAt: monthsAgo(2), updatedAt: new Date()}, 
     //   { userId: 'khj551', createdAt: monthsAgo(5), updatedAt: new Date()},
-    //   { userId: 'bre896', createdAt: monthsAgo(11), updatedAt: new Date()}, 
-    //   { userId: 'bre896', createdAt: monthsAgo(2), updatedAt: new Date()}, 
-    //   { userId: 'bre896', createdAt: monthsAgo(5), updatedAt: new Date()},  
+    //   // { userId: 'bre896', createdAt: monthsAgo(11), updatedAt: new Date()}, 
+    //   // { userId: 'bre896', createdAt: monthsAgo(2), updatedAt: new Date()}, 
+    //   // { userId: 'bre896', createdAt: monthsAgo(5), updatedAt: new Date()},  
     // ],
     // { returning: true }
     // );
@@ -518,22 +518,6 @@ await Promise.all(
     //     statementId: statement.id,
     //     score: Math.floor(Math.random() * 4) + 1,
     //   },
-    //   {
-    //     assessmentId : assessments[3].id,
-    //     statementId: statement.id,
-    //     score: Math.floor(Math.random() * 4) + 1,
-    //   },
-    //   {
-    //     assessmentId : assessments[4].id,
-    //     statementId: statement.id,
-    //     score: Math.floor(Math.random() * 4) + 1,
-    //   },
-    //   {
-    //     assessmentId : assessments[5].id,
-    //     statementId: statement.id,
-    //     score: Math.floor(Math.random() * 4) + 1,
-    //   },
-
     // ]);
 
     // // Insert Responses into the database

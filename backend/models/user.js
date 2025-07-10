@@ -7,10 +7,27 @@ const User = sequelize.define("User", {
         allowNull: false,
         unique: true
     },
-    name: {
+    firstName: {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    lastName: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {isEmail: true}
+    },
+    managerFirstName: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    managerLastName: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },  
 });
 
 export default User;
