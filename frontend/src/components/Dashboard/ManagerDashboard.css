@@ -1,0 +1,97 @@
+/* Dashboard header */
+.dashboard-header {
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* Search input styling */
+input[type='text'] {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 30px;
+}
+
+/* User list container */
+.user-list {
+  text-align: left;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 40px;
+}
+
+/* Individual user row */
+.user-list > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding: 12px 0;
+}
+
+/* User info text */
+.user-list p {
+  margin: 0;
+  font-weight: 500;
+  color: #444;
+}
+
+/* Buttons */
+button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* User detail section */
+.user-detail {
+  text-align: left;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Assessment details styling */
+.assessment-details {
+  text-align: left;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #fefefe;
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Subheadings */
+.assessment-details h3,
+.user-detail h3 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* List items */
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+li {
+  margin-bottom: 8px;
+  color: #555;
+}

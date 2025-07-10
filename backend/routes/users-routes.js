@@ -19,8 +19,8 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
-    const users = await User.findAll();
-
+    const users = await User.findAll({ order: [['firstName', 'ASC']] });
+    
     res.status(200).json(users);
   } catch (err) {
     console.error('Error fetching users', err);

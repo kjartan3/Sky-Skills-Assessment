@@ -1,6 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+
+import './ManagerDashboard.css';
+
 const ManagerDashboard = () => {
     const [users, setUsers] = useState([]);
     const [searchFilter, setSearchFilter] = useState('');
@@ -56,8 +61,44 @@ const ManagerDashboard = () => {
         }
     }
 
+    const downloadAssessmentExcel = () => {
+      if (!userAssessments.length) return;
+        
+      const flattened = [];
+        
+      userAssessments.forEach((assessment) => {
+        const { id: assessmentId, userId, createdAt, Responses } = assessment;
+    
+        Responses.forEach((response) => {
+          const statement = response.Statement;
+          const content = statement?.Content;
+          const behaviour = content?.Behaviour;
+          const skill = behaviour?.Skill;
+        
+          flattened.push({
+            AssessmentID: assessmentId,
+            UserID: userId,
+            Date: new Date(createdAt).toLocaleDateString(),
+            Skill: skill?.name || 'N/A',
+            Behaviour: behaviour?.name || 'N/A',
+            Statement: statement?.text || 'N/A',
+            Score: response.score,
+            LearningLinks: content?.learningLinks || '',
+          });
+        });
+      });
+  
+      const worksheet = XLSX.utils.json_to_sheet(flattened);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Responses');
+  
+      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+      saveAs(blob, `${selectedUser.firstName}_assessment_responses.xlsx`);
+    };
+
     return (
-        <div className='dashboard-container'>
+        <div className='container'>
             <h2 className='dashboard-header'>Manager Dashboard</h2>
             <div>
                 <input 
@@ -69,19 +110,21 @@ const ManagerDashboard = () => {
             </div>
             <div className='user-list'>   
                 {filteredUsers.map((user) => (
-                    <div key={user.userId} onClick={() => handleUserClick(user)}>
-                        {user.firstName} {user.lastName} - {user.email}
+                    <div key={user.userId}>
+                        <p>{user.firstName} {user.lastName} - {user.email}</p>
+                        <button onClick={() => handleUserClick(user)}>View</button>
                     </div>    
                 ))}
             </div>
             {selectedUser && (
                 <div className='user-detail'>
                     <h3>{selectedUser.firstName}'s Assessments</h3>
+                     <button onClick={downloadAssessmentExcel}>📥 Download Assessments as Excel</button>
                     <ul>
                         {userAssessments.map((a) => (
-                            <li key={a.id} onClick={() => viewAssessmentDetails(a.id)}>
-                                Assessment #{a.id}
-                                
+                            <li key={a.id} >
+                                Assessment - <small>{new Date(a.createdAt).toLocaleDateString()}</small>
+                                <button onClick={() => viewAssessmentDetails(a.id)}>View Assessment</button>
                             </li>
                         ))}
                     </ul>
