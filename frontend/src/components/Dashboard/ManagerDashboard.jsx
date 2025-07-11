@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import { getLevel } from '../helper/getLevel';
 
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
@@ -43,7 +44,13 @@ const ManagerDashboard = () => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/assessments/${user.userId}`);
             console.log(res.data);
-            setUserAssessments(res.data);
+            const numberedAssessments = res.data
+                .map((assessment, index) => ({
+                ...assessment, 
+                displayNumber: index + 1,
+                
+            }))
+            setUserAssessments(numberedAssessments);
 
             } catch (err) {
                 console.error('Error fetching asssessments', err);
@@ -65,6 +72,9 @@ const ManagerDashboard = () => {
       if (!userAssessments.length) return;
         
       const flattened = [];
+      const behaviourMap = {};
+      const skillMap = {};
+
         
       userAssessments.forEach((assessment) => {
         const { id: assessmentId, userId, createdAt, Responses } = assessment;
@@ -76,22 +86,75 @@ const ManagerDashboard = () => {
           const skill = behaviour?.Skill;
         
           flattened.push({
-            AssessmentID: assessmentId,
+            AssessmentID: assessment.displayNumber,
             UserID: userId,
             Date: new Date(createdAt).toLocaleDateString(),
-            Skill: skill?.name || 'N/A',
+            Value: skill?.name || 'N/A',
             Behaviour: behaviour?.name || 'N/A',
+            Content: content?.title || 'N/A',
             Statement: statement?.text || 'N/A',
             Score: response.score,
-            LearningLinks: content?.learningLinks || '',
           });
+
+          const behaviourKey = `${assessmentId} - ${behaviour?.name}`;
+          if (!behaviourMap[behaviourKey]) {
+            behaviourMap[behaviourKey] = {
+                AssessmentID: assessment.displayNumber,
+                UserID: userId,
+                Value: skill?.name,
+                Behaviour: behaviour?.name,
+                scores: []
+            }
+          }
+          behaviourMap[behaviourKey].scores.push(response.score);
+          
+          const skillKey = `${assessmentId} - ${skill?.name}`;
+          if (!skillMap[skillKey]) {
+            skillMap[skillKey] = {
+                AssessmentID: assessment.displayNumber,
+                UserID: userId,
+                Value: skill?.name,
+                scores: []
+            }
+          }
+          skillMap[skillKey].scores.push(response.score);
         });
       });
-  
-      const worksheet = XLSX.utils.json_to_sheet(flattened);
+
+      const behaviourSheet = Object.values(behaviourMap).map(b => {
+        const avg = b.scores.reduce((a, s) => a + s, 0) / b.scores.length
+        return {
+            AssessmentID: b.AssessmentID,
+            UserID: b.UserID,
+            Value: b.Value,
+            Behaviour: b.Behaviour,
+            AverageScore: avg.toFixed(2),
+            Proficiency: getLevel(avg),
+        }
+      })
+
+      const skillSheet = Object.values(skillMap).map(s => {
+        const avg = s.scores.reduce((a, s) => a + s, 0) / s.scores.length
+        return {
+            AssessmentID: s.AssessmentID,
+            UserID: s.UserID,
+            Value: s.Value,
+            AverageScore: avg.toFixed(2),
+            Proficiency: getLevel(avg),
+        }
+      })
+
       const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Responses');
-  
+
+      const detailedSheet = XLSX.utils.json_to_sheet(flattened);
+      XLSX.utils.book_append_sheet(workbook, detailedSheet, 'Assessment Responses');
+
+      const behaviourSummary = XLSX.utils.json_to_sheet(behaviourSheet);
+      XLSX.utils.book_append_sheet(workbook, behaviourSummary, 'Behaviour Proficiency');
+
+      const skillSummary = XLSX.utils.json_to_sheet(skillSheet);
+      XLSX.utils.book_append_sheet(workbook, skillSummary, 'Value Proficiency');
+
       const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
       const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
       saveAs(blob, `${selectedUser.firstName}_assessment_responses.xlsx`);
