@@ -7,13 +7,21 @@ import { saveAs } from 'file-saver';
 
 import './ManagerDashboard.css';
 
+
+
 const ManagerDashboard = () => {
     const [users, setUsers] = useState([]);
     const [searchFilter, setSearchFilter] = useState('');
-    const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedUsers, setSelectedUsers] = useState([]);
     const [userAssessments, setUserAssessments] = useState([]);
     const [stats, setStats] = useState({});
     const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [selectedViewerUser, setSelectedViewerUser] = useState(null);
+
+
+
+    const usersPerPage = 10
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -26,6 +34,8 @@ const ManagerDashboard = () => {
         }
         fetchUsers();
     }, [])
+    
+  
 
     const filteredUsers = users.filter((user) => {
         const term = searchFilter.toLowerCase();
@@ -37,128 +47,197 @@ const ManagerDashboard = () => {
         );
     })
 
-    const handleUserClick = async (user) => {
-        setSelectedUser(user);
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
-        // api stuff ...
-        try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/assessments/${user.userId}`);
-            console.log(res.data);
-            const numberedAssessments = res.data
-                .map((assessment, index) => ({
-                ...assessment, 
-                displayNumber: index + 1,
-                
-            }))
-            setUserAssessments(numberedAssessments);
+    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
-            } catch (err) {
-                console.error('Error fetching asssessments', err);
-            }
+
+  const handleUserClick = async (user) => {
+  // If already viewing this user, collapse the panel
+  if (selectedViewerUser?.userId === user.userId) {
+    setSelectedViewerUser(null);
+    setUserAssessments([]);
+    setSelectedAssessmentId(null);
+    setStats({});
+    return;
+  }
+
+  // Otherwise, open their assessments
+  setSelectedViewerUser(user);
+
+  try {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/assessments/${user.userId}`);
+    const numberedAssessments = res.data.map((assessment, index) => ({
+      ...assessment,
+      displayNumber: index + 1,
+    }));
+    setUserAssessments(numberedAssessments);
+  } catch (err) {
+    console.error('Error fetching assessments', err);
+  }
+};
+
+
+
+ const viewAssessmentDetails = async (assessmentId) => {
+  if (selectedAssessmentId === assessmentId) {
+    setSelectedAssessmentId(null);
+    setStats({});
+    return;
+  }
+
+  try {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/stats/${assessmentId}`);
+    setStats(res.data);
+    setSelectedAssessmentId(assessmentId);
+  } catch (err) {
+    console.error('Error fetching stats', err);
+  }
+};
+
+
+   const downloadSelectedUsersExcel = async () => {
+  if (selectedUsers.length === 0) {
+    console.log('No users selected');
+    return;
+  }
+
+  console.log('Starting download for users:', selectedUsers);
+  
+  try {
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/assessments/bulk-assessments`, {
+      userIds: selectedUsers,
+    });
+
+    console.log('API Response:', res.data);
+
+    if (!res.data || res.data.length === 0) {
+      console.log('No data received from API');
+      return;
     }
 
-    const viewAssessmentDetails = async (assessmentId) => {
-        try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/stats/${assessmentId}`)
-            console.log('stats', res.data)
-            setStats(res.data);
-            setSelectedAssessmentId(assessmentId);
-        } catch (err) {
-            console.error('Error fetching stats', err);
-        }
-    }
+    const allResponses = [];
+    const behaviourMap = {};
+    const skillMap = {};
 
-    const downloadAssessmentExcel = () => {
-      if (!userAssessments.length) return;
-        
-      const flattened = [];
-      const behaviourMap = {};
-      const skillMap = {};
+    res.data.forEach(({ user, assessments }) => {
+      console.log(`Processing user: ${user.firstName} ${user.lastName}`);
+      console.log(`Assessments count: ${assessments.length}`);
 
-        
-      userAssessments.forEach((assessment) => {
-        const { id: assessmentId, userId, createdAt, Responses } = assessment;
-    
-        Responses.forEach((response) => {
-          const statement = response.Statement;
-          const content = statement?.Content;
-          const behaviour = content?.Behaviour;
-          const skill = behaviour?.Skill;
-        
-          flattened.push({
-            AssessmentID: assessment.displayNumber,
-            UserID: userId,
-            Date: new Date(createdAt).toLocaleDateString(),
-            Value: skill?.name || 'N/A',
-            Behaviour: behaviour?.name || 'N/A',
-            Content: content?.title || 'N/A',
-            Statement: statement?.text || 'N/A',
-            Score: response.score,
-          });
-
-          const behaviourKey = `${assessmentId} - ${behaviour?.name}`;
-          if (!behaviourMap[behaviourKey]) {
-            behaviourMap[behaviourKey] = {
-                AssessmentID: assessment.displayNumber,
-                UserID: userId,
-                Value: skill?.name,
-                Behaviour: behaviour?.name,
-                scores: []
-            }
-          }
-          behaviourMap[behaviourKey].scores.push(response.score);
+      // Sort assessments oldest to newest and assign displayNumber manually
+      assessments
+        .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+        .forEach((assessment, index) => {
+          const displayNumber = index + 1;
+          const { createdAt, Responses, stats } = assessment;
           
-          const skillKey = `${assessmentId} - ${skill?.name}`;
-          if (!skillMap[skillKey]) {
-            skillMap[skillKey] = {
-                AssessmentID: assessment.displayNumber,
-                UserID: userId,
-                Value: skill?.name,
-                scores: []
-            }
+          console.log(`Processing assessment ${displayNumber} for user ${user.id}`);
+          console.log('Assessment data:', { createdAt, responsesCount: Responses?.length, hasStats: !!stats });
+
+          // Process responses
+          if (Responses && Responses.length > 0) {
+            Responses.forEach((response) => {
+              const statement = response.Statement;
+              const content = statement?.Content;
+              const behaviour = content?.Behaviour;
+              const skill = behaviour?.Skill;
+              
+              allResponses.push({
+                User: `${user.firstName} ${user.lastName}`,
+                UserID: user.id,
+                Assessment: `Assessment ${displayNumber}`,
+                Date: new Date(createdAt).toLocaleDateString(),
+                Value: skill?.name || 'N/A',
+                Behaviour: behaviour?.name || 'N/A',
+                Skill: content?.title || 'N/A',
+                Statement: statement?.text || 'N/A',
+                Score: response.score,
+              });
+            });
           }
-          skillMap[skillKey].scores.push(response.score);
+          console.log('Stats object:', stats);
+
+
+          // Process behaviour averages
+          if (stats?.behaviourAverages && stats.behaviourAverages.length > 0) {
+            stats.behaviourAverages.forEach((b) => {
+              const key = `${user.id}-${displayNumber}-${b.behaviourId}`;
+              behaviourMap[key] = {
+                Assessment: `Assessment ${displayNumber}`,
+                User: `${user.firstName} ${user.lastName}`,
+                Date: new Date(createdAt).toLocaleDateString(),
+                Value: b.skillId ? b.behaviourName : 'N/A',
+                Behaviour: b.behaviourName,
+                AverageScore: b.averageScore.toFixed(2),
+                Proficiency: getLevel(b.averageScore),
+              };
+            });
+          }
+
+          // Process skill averages
+          if (stats?.skillAverages && stats.skillAverages.length > 0) {
+            stats.skillAverages.forEach((s) => {
+              const key = `${user.id}-${displayNumber}-${s.skillId}`;
+              skillMap[key] = {
+                Assessment: `Assessment ${displayNumber}`,
+                User: `${user.firstName} ${user.lastName}`,
+                Date: new Date(createdAt).toLocaleDateString(),
+                Value: s.skillName,
+                Description: s.description || 'N/A',
+                AverageScore: s.averageScore.toFixed(2),
+                Proficiency: getLevel(s.averageScore),
+              };
+            });
+          }
         });
-      });
+    });
 
-      const behaviourSheet = Object.values(behaviourMap).map(b => {
-        const avg = b.scores.reduce((a, s) => a + s, 0) / b.scores.length
-        return {
-            AssessmentID: b.AssessmentID,
-            UserID: b.UserID,
-            Value: b.Value,
-            Behaviour: b.Behaviour,
-            AverageScore: avg.toFixed(2),
-            Proficiency: getLevel(avg),
-        }
-      })
+    console.log('Processed data:', {
+      responsesCount: allResponses.length,
+      behavioursCount: Object.keys(behaviourMap).length,
+      skillsCount: Object.keys(skillMap).length
+    });
 
-      const skillSheet = Object.values(skillMap).map(s => {
-        const avg = s.scores.reduce((a, s) => a + s, 0) / s.scores.length
-        return {
-            AssessmentID: s.AssessmentID,
-            UserID: s.UserID,
-            Value: s.Value,
-            AverageScore: avg.toFixed(2),
-            Proficiency: getLevel(avg),
-        }
-      })
+    // Create workbook
+    const workbook = XLSX.utils.book_new();
+    
+    // Add responses sheet
+    const responseSheet = XLSX.utils.json_to_sheet(allResponses);
+    XLSX.utils.book_append_sheet(workbook, responseSheet, 'Assessment Responses');
+    
+    // Add behaviour sheet
+    const behaviourSheet = XLSX.utils.json_to_sheet(Object.values(behaviourMap));
+    XLSX.utils.book_append_sheet(workbook, behaviourSheet, 'Behaviour Proficiency');
+    
+    // Add skill sheet
+    const skillSheet = XLSX.utils.json_to_sheet(Object.values(skillMap));
+    XLSX.utils.book_append_sheet(workbook, skillSheet, 'Skill Proficiency');
+    
+    // Generate and download file
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(blob, `Selected_Assessments_Report_${new Date().toISOString().split('T')[0]}.xlsx`);
+    
+    console.log('Download completed successfully');
+    
+  } catch (err) {
+    console.error('Error downloading selected assessments:', err);
+    console.error('Error details:', err.response?.data);
+  }
+};
 
-      const workbook = XLSX.utils.book_new();
 
-      const detailedSheet = XLSX.utils.json_to_sheet(flattened);
-      XLSX.utils.book_append_sheet(workbook, detailedSheet, 'Assessment Responses');
+    
+    
 
-      const behaviourSummary = XLSX.utils.json_to_sheet(behaviourSheet);
-      XLSX.utils.book_append_sheet(workbook, behaviourSummary, 'Behaviour Proficiency');
+  
+    
+            
+   
+ 
 
-      const skillSummary = XLSX.utils.json_to_sheet(skillSheet);
-      XLSX.utils.book_append_sheet(workbook, skillSummary, 'Value Proficiency');
-
-      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-      const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-      saveAs(blob, `${selectedUser.firstName}_assessment_responses.xlsx`);
-    };
 
     return (
         <div className='container'>
@@ -171,18 +250,65 @@ const ManagerDashboard = () => {
                     onChange={(e) => setSearchFilter(e.target.value)}
                 />
             </div>
+           <button
+  onClick={() => {
+    const pageUserIds = currentUsers.map(u => u.userId);
+    const allSelected = pageUserIds.every(id => selectedUsers.includes(id));
+
+    if (allSelected) {
+      // Uncheck all on page
+      setSelectedUsers(prev => prev.filter(id => !pageUserIds.includes(id)));
+    } else {
+      // Check all on page
+      setSelectedUsers(prev => [...new Set([...prev, ...pageUserIds])]);
+    }
+  }}
+>
+  {currentUsers.every(id => selectedUsers.includes(id)) ? 'Deselect All on Page' : 'Select All on Page'}
+</button>
+
+
             <div className='user-list'>   
-                {filteredUsers.map((user) => (
-                    <div key={user.userId}>
-                        <p>{user.firstName} {user.lastName} - {user.email}</p>
-                        <button onClick={() => handleUserClick(user)}>View</button>
-                    </div>    
-                ))}
-            </div>
-            {selectedUser && (
-                <div className='user-detail'>
-                    <h3>{selectedUser.firstName}'s Assessments</h3>
-                     <button onClick={downloadAssessmentExcel}>📥 Download Assessments as Excel</button>
+                {currentUsers.map((user) => (
+  <div key={user.userId}>
+    <input
+        type="checkbox"
+        checked={selectedUsers.includes(user.userId)}
+        onChange={() => {
+            setSelectedUsers(prev =>
+            prev.includes(user.userId)
+                ? prev.filter(id => id !== user.userId)
+                : [...prev, user.userId]
+            );
+        }}
+        />
+
+        <p>{user.firstName} {user.lastName} - {user.email}</p>
+        <button onClick={() => handleUserClick(user)}>View</button>
+    </div>    
+    ))}
+
+        </div>
+        {selectedUsers.length > 0 && (
+        <button onClick={downloadSelectedUsersExcel}>
+            📥 Download Selected Users' Assessments
+        </button>
+        )}
+
+            <div className='pagination'>
+        <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
+            ← Prev
+        </button>
+        <span> Page {currentPage} of {totalPages} </span>
+        <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
+            Next →
+        </button>
+        </div>
+
+            {selectedViewerUser && (
+                <div className='user-detail' >
+                    <h3>{selectedUsers.firstName}'s Assessments</h3>
+                     <button onClick={downloadSelectedUsersExcel}>📥 Download Assessments as Excel</button>
                     <ul>
                         {userAssessments.map((a) => (
                             <li key={a.id} >
@@ -194,7 +320,7 @@ const ManagerDashboard = () => {
                 </div>    
             )}
             {selectedAssessmentId && stats.behaviourAverages && (
-            <div className='assessment-details'>
+            <div className='assessment-details' >
 
             <h3>Top 3 Behaviours</h3>
             <ul>

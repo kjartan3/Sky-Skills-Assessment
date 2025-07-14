@@ -6,8 +6,10 @@ import {
   Content,
   Behaviour,
   Skill,
+  User
 } from '../models/index.js';
-import requireAuth from '../middleware/requireAuth.js';
+import { generateStats } from '../utils/generateStats.js';
+
 
 const router = express.Router();
 
@@ -20,7 +22,7 @@ router.post('/', async (req, res) => {
       if (!userId) throw new Error("❌ Missing userId in request");
 
       const assessment = await Assessment.create({ userId });
-      console.log("✅ Created Assessment:", assessment); // ✅ Log the returned object
+      console.log("✅ Created Assessment:", assessment); 
 
       const responseData = responses.map((r) => ({
           ...r,
@@ -86,6 +88,91 @@ router.get('/:userId', async (req, res) => {
   }
 });
 
+// POST /bulk-assessments
+router.post('/bulk-assessments', async (req, res) => {
+  const { userIds } = req.body;
 
+  console.log('Bulk assessments request for users:', userIds);
 
+  if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+    return res.status(400).json({ error: 'Invalid userIds provided' });
+  }
+
+  try {
+    const users = await User.findAll({
+      where: { userId: userIds }
+    });
+
+    console.log(`Found ${users.length} users out of ${userIds.length} requested`);
+
+    const results = [];
+
+    for (const user of users) {
+      console.log(`Processing user: ${user.userId} (${user.firstName} ${user.lastName})`);
+
+      const assessments = await Assessment.findAll({
+        where: { userId: user.userId },
+        include: [
+          {
+            model: Response,
+            include: [
+              {
+                model: Statement,
+                include: {
+                  model: Content,
+                  include: {
+                    model: Behaviour,
+                    include: Skill,
+                  },
+                },
+              },
+            ],
+          },
+        ],
+        order: [['createdAt', 'ASC']],
+      });
+
+      console.log(`Found ${assessments.length} assessments for user ${user.userId}`);
+
+      const enrichedAssessments = await Promise.all(
+        assessments.map(async (assessment) => {
+          try {
+            const stats = await generateStats(assessment.id);
+            return {
+              ...assessment.toJSON(),
+              stats,
+            };
+          } catch (error) {
+            console.error(`Error generating stats for assessment ${assessment.id}:`, error.message);
+            return {
+              ...assessment.toJSON(),
+              stats: null,
+            };
+          }
+        })
+      );
+
+      results.push({
+        user: {
+          id: user.id,
+          userId: user.userId,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+        },
+        assessments: enrichedAssessments,
+      });
+    }
+
+    console.log(`Returning data for ${results.length} users`);
+    res.json(results);
+
+  } catch (err) {
+    console.error('Error in bulk fetch:', err);
+    res.status(500).json({
+      error: 'Failed to fetch bulk assessments',
+      details: err.message
+    });
+  }
+});
 export default router;

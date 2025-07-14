@@ -1,8 +1,5 @@
 import { Sequelize } from 'sequelize';
 
-
-
-
 const isTestEnvironment = process.env.NODE_ENV === 'test'; // Check if we're in test environment
 
 const sequelize = new Sequelize({
@@ -11,7 +8,6 @@ const sequelize = new Sequelize({
   logging: process.env.NODE_ENV !== 'test',
 });
 
-// Test the connection
 const testConnection = async () => {
   try {
     await sequelize.authenticate();
