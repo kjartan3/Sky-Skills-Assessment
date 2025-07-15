@@ -57,6 +57,7 @@ router.post('/login/callback',
             firstName: profile.firstName,
             lastName: profile.lastName,
             email: profile.email,
+            orgUnit: profile.orgUnit,
           });
 
           console.log(`✅ New user created: ${userId} - ${profile.firstName} ${profile.lastName}`);
@@ -75,6 +76,7 @@ router.post('/login/callback',
               firstName: profile.firstName,
               lastName: profile.lastName,
               email: profile.email,
+              orgUnit: profile.orgUnit,
             });
             console.log(`🔄 Updated user ${userId} with latest profile data`);
           }

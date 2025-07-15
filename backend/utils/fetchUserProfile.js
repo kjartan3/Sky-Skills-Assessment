@@ -86,13 +86,57 @@ export const fetchUserProfile = async (userId, token) => {
 export const getUserProfile = async (userId) => {
   try {
     const token = await getAccessToken();
-    const profile = await fetchUserProfile(userId, token);
-    return profile;
+
+    // Step 1: Get base user info
+    const userUrl = `https://sky-stg.csod.com/services/api/x/odata/api/views/vw_rpt_user?$filter=user_ref eq '${userId}'&$select=user_id,user_ref,user_name_first,user_name_last,user_email`;
+    const userRes = await axios.get(userUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const base = userRes.data?.value?.[0];
+    if (!base) return null;
+
+    // Step 2: Get OU Info
+    const ouInfoUrl = `https://sky-stg.csod.com/services/api/x/odata/api/views/vw_rpt_user_ou_info?$filter=user_ou_info_user_id eq ${base.user_id}&$select=user_ou_info_user_id,user_ou_id2`;
+    const ouInfoRes = await axios.get(ouInfoUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const ouInfo = ouInfoRes.data?.value?.[0];
+    const ouId = ouInfo?.user_ou_id2;
+
+    // Step 3: Get OU Details
+    let orgUnitTitle = null;
+    if (ouId) {
+      const ouDetailsUrl = `https://sky-stg.csod.com/services/api/x/odata/api/views/vw_rpt_ou?$filter=ou_id eq ${ouId}&$select=title`;
+      const ouDetailsRes = await axios.get(ouDetailsUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      orgUnitTitle = ouDetailsRes.data?.value?.[0]?.title || null;
+    }
+
+    return {
+      userId: base.user_ref,
+      firstName: base.user_name_first,
+      lastName: base.user_name_last,
+      email: base.user_email,
+      orgUnit: orgUnitTitle, // ✅ new field
+    };
   } catch (err) {
-    console.error(`❌ Failed to get complete user profile for ${userId}:`, err.message);
+    console.error(`❌ Failed to fetch full user profile for ${userId}:`, err.message);
     throw err;
   }
 };
+
 
 // Batch function to get multiple user profiles
 export const getUserProfiles = async (userIds) => {
@@ -107,4 +151,63 @@ export const getUserProfiles = async (userIds) => {
     throw err;
   }
 };
+
+export const getUserTest = async (userRef) => {
+  try {
+    const token = await getAccessToken();
+
+    // Step 1: Get user profile using userRef
+    const userUrl = `https://sky-stg.csod.com/services/api/x/odata/api/views/vw_rpt_user?$filter=user_ref eq '${userRef}'&$select=user_id,user_ref,user_name_first,user_name_last,user_email`;
+    const userRes = await axios.get(userUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const user = userRes.data?.value?.[0];
+    if (!user) throw new Error('User not found');
+
+    console.log('✅ Retrieved user:', user);
+
+    // Step 2: Get OU info using user_id
+    const ouInfoUrl = `https://sky-stg.csod.com/services/api/x/odata/api/views/vw_rpt_user_ou_info?$filter=user_ou_info_user_id eq ${user.user_id}&$select=user_ou_info_user_id,user_ou_id2`;
+    const ouRes = await axios.get(ouInfoUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const ouInfo = ouRes.data?.value?.[0];
+    if (!ouInfo) throw new Error('OU info not found');
+
+    console.log('✅ Retrieved OU Info:', ouInfo);
+
+    // Step 3: Get OU details using user_ou_id2
+    const ouDetailsUrl = `https://sky-stg.csod.com/services/api/x/odata/api/views/vw_rpt_ou?$filter=ou_id eq ${ouInfo.user_ou_id2}&$select=ou_id,title,ref,type_id`;
+    const ouDetailsRes = await axios.get(ouDetailsUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const ouDetails = ouDetailsRes.data?.value?.[0];
+    if (!ouDetails) throw new Error('OU details not found');
+
+    console.log('✅ Retrieved OU Details:', ouDetails);
+
+    // Return all three joined together
+    return {
+      user,
+      ouInfo,
+      ouDetails
+    };
+  } catch (err) {
+    console.error('Error fetching user/OU data:', err.message);
+    throw err;
+  }
+};
+
  

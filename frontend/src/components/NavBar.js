@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
+import { allowedUserIds } from './helper/allowedUsers';
 
-
-const Navbar = () => {
+const Navbar = ({ user }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null)
    
@@ -49,7 +49,9 @@ const Navbar = () => {
                         <Link to="/" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Home</Link>
                         <Link to="/assessment" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Assessment</Link>
                         <Link to="/assessmentsummary" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Summary</Link>
-                         
+                         {allowedUserIds.includes(user?.userId) && (
+                        <Link to="/dashboard" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Dashboard</Link>
+                      )}
                         
                        
                     </div>

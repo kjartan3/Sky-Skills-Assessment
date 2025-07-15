@@ -12,7 +12,7 @@ const seedDatabase = async () => {
     console.log('🔄 Dropping existing tables (except Assessments & Responses)...');
 
     // Uncomment the below when first starting new server! 
-    // await sequelize.sync({ force: true });
+    //  await sequelize.sync({ force: true });
     console.log('🔄 Resetting tables…');
     await Statement.drop();
     await Content.drop();

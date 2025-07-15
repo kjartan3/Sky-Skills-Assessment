@@ -28,6 +28,10 @@ const User = sequelize.define("User", {
         type: DataTypes.STRING,
         allowNull: true,
     },  
+    orgUnit: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    }
 });
 
 export default User;
