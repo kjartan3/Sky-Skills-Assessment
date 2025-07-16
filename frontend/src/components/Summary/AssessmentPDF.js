@@ -8,14 +8,14 @@ const styles = StyleSheet.create({
   header: { fontSize: 16, marginVertical: 15, textAlign: "center" },
   subheader: { fontSize: 14, marginVertical: 15, textAlign: "center" },
   paragraph: { fontSize: 11, marginBottom: 10, textAlign: "center" },
-  pinkHeader: { fontSize: 14, color: "hotpink", textAlign: "center", marginVertical: 15 },
+  pinkHeader: { fontSize: 14, color: "FF00A0", textAlign: "center", marginVertical: 15 },
   skillContainer: { marginVertical: 15 },
   skillRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" },
   skillTitle: { fontSize: 12, textAlign: "left" },
   skillLevel: { fontSize: 12, textAlign: "right" },
   progressBarContainer: { width: "100%", backgroundColor: "#ddd", borderRadius: 2, height: 5, marginVertical: 5, marginBottom: 22 },
   filledProgress: { height: 5, backgroundColor: "#007bff", borderRadius: 2 },
-  orangeText: { fontSize: 14, color: "orange", textAlign: "center", marginBottom: 15, marginTop: 20 },
+  orangeText: { fontSize: 14, color: "FF8C00", textAlign: "center", marginBottom: 15, marginTop: 20 },
   behaviourLink: {fontSize: 11, marginBottom: 10, textAlign: "center", textDecoration: "none"}
 });
 

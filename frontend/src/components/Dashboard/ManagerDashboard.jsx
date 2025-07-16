@@ -6,7 +6,8 @@ import { getLevel } from '../helper/getLevel';
 
 import './ManagerDashboard.css';
 import OrgUnitFilter from './OrgUnitFilter';
-import { downloadSelectedUsersExcel } from '../helper/exportExcel';
+import { downloadLatestAssessmentsExcel } from '../helper/exportLatestExcel';
+import { downloadAllAssessmentsExcel } from '../helper/exportAllExcel';
 
 const ManagerDashboard = () => {
    
@@ -184,9 +185,14 @@ const ManagerDashboard = () => {
 
         </div>
         {selectedUsers.length > 0 && (
-        <button onClick={() => downloadSelectedUsersExcel(selectedUsers, getLevel)}>
+            <>
+        <button onClick={() => downloadAllAssessmentsExcel(selectedUsers, getLevel)}>
             📥 Download Selected Users' Assessments
         </button>
+        <button onClick={() => downloadLatestAssessmentsExcel(selectedUsers, getLevel)}>
+                📥 Download Most Recent Assessment as Excel
+        </button>
+        </>
         )}
 
             <div className='pagination'>
@@ -202,9 +208,10 @@ const ManagerDashboard = () => {
             {selectedViewerUser && (
                 <div className='user-detail' >
                     <h3>{selectedViewerUser.firstName}'s Assessments</h3>
-                    <button onClick={() => downloadSelectedUsersExcel([selectedViewerUser.userId], getLevel)}>
-                        Download Assessments as Excel
+                    <button onClick={() => downloadAllAssessmentsExcel([selectedViewerUser.userId], getLevel)}>
+                        Download All Assessments as Excel
                     </button>
+                    
 
                     <ul>
                         {userAssessments.map((a) => (

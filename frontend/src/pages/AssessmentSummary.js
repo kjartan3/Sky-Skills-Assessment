@@ -4,6 +4,7 @@ import axios from 'axios';
 import AssessmentList from '../components/Summary/AssessmentList';
 import SkillsBreakdown from '../components/Summary/SkillsBreakdown';
 import RadarChartContainer from '../components/Summary/RadarChartContainer';
+import ProficiencyKey from '../components/Summary/ProficiencyKey';
 import './AssessmentSummary.css';
 
 const COLORS = [
@@ -143,7 +144,7 @@ const AssessmentSummary = ({ user }) => {
               <option value='6'>Last 6 Months</option>
               <option value='12'>Last 12 Months</option>
             </select>
-
+            
             <AssessmentList
               assessments={displayedAssessments}
               hoveredId={hoveredId}
@@ -154,13 +155,22 @@ const AssessmentSummary = ({ user }) => {
               getContentForBehaviour={getContentForBehaviour}
             />
 
-            <RadarChartContainer 
-              assessments={displayedAssessments}
-              stats={stats}
-              selectedAssessmentId={selectedAssessmentId}
-              COLORS={COLORS}
-            />
+            
           </div>
+
+          
+            <div className="relative flex justify-center">
+  <RadarChartContainer 
+    assessments={displayedAssessments}
+    stats={stats}
+    selectedAssessmentId={selectedAssessmentId}
+    COLORS={COLORS}
+  />
+  
+    <ProficiencyKey />
+  
+</div>
+        
 
           {selectedAssessmentId && (
             <SkillsBreakdown

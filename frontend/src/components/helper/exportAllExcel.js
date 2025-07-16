@@ -2,7 +2,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
 
-export const downloadSelectedUsersExcel = async (selectedUsers, getLevel) =>  
+export const downloadAllAssessmentsExcel = async (selectedUsers, getLevel) =>  
     {
   if (selectedUsers.length === 0) {
     console.log('No users selected');
@@ -120,7 +120,7 @@ export const downloadSelectedUsersExcel = async (selectedUsers, getLevel) =>
     
     // Add skill sheet
     const skillSheet = XLSX.utils.json_to_sheet(Object.values(skillMap));
-    XLSX.utils.book_append_sheet(workbook, skillSheet, 'Skill Proficiency');
+    XLSX.utils.book_append_sheet(workbook, skillSheet, 'Value Proficiency');
     
     // Generate and download file
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });

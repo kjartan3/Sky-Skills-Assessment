@@ -3,7 +3,7 @@ import StatementItem from "./StatementItem";
 const StatementGroup = ({skillName, behaviourName, statements, answers, onAnswerChange, skillColor}) => {
     return (
         <>
-    {skillName && <h2 className="skill-title">{skillName}</h2>}<br></br>
+    {skillName && <h2 className="skill-title" style={{ color: skillColor }}>{skillName}</h2>}<br></br>
     {/* {behaviourName && <h2 className="behaviour-title">{behaviourName}</h2>} */}
     {statements.map((statement) => (
       <StatementItem 
