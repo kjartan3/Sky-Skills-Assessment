@@ -1,1 +1,1 @@
-export const allowedUserIds = ['khj551', 'sms276', "bre896", "dcy15"];
+export const allowedUserIds = ['khj551', 'sms276', "bre896", "dcy15", "DCY15"];

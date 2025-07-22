@@ -40,7 +40,65 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.get('/latest-summary', async (req, res) => {
+  try {
+    const users = await User.findAll();
+    console.log(`🔹 Found ${users.length} users in database.`);
 
+    const summary = [];
+
+    for (const user of users) {
+      try {
+        console.log(`\n📁 Checking user: ${user.userId} (${user.firstName} ${user.lastName})`);
+
+        const latestAssessment = await Assessment.findOne({
+          where: { userId: user.userId },
+          order: [['createdAt', 'DESC']],
+        });
+
+        if (!latestAssessment) {
+          console.log(`⚠️ No assessments found for user ${user.userId}`);
+          continue;
+        }
+
+        console.log(`✅ Latest assessment ID: ${latestAssessment.id}`);
+
+        const stats = await generateStats(latestAssessment.id);
+
+        const hasScores =
+          stats.behaviourAverages.length > 0 ||
+          stats.skillAverages.length > 0 ||
+          stats.contentAverages.length > 0;
+
+        if (!hasScores) {
+          console.log(`⚠️ No response data or averages found for assessment ${latestAssessment.id}`);
+          continue;
+        }
+
+        summary.push({
+          userId: user.userId,
+          orgUnit: user.orgUnit || 'Unknown',
+          behaviourAverages: stats.behaviourAverages,
+          skillAverages: stats.skillAverages,
+          contentAverages: stats.contentAverages,
+        });
+
+        console.log(`📊 Summary added for user ${user.userId}`);
+
+      } catch (innerErr) {
+        console.error(`❌ Error processing user ${user.userId}:`, innerErr.message);
+        continue; // skip this user but continue processing others
+      }
+    }
+
+    console.log(`\n✅ Finished processing. Returning summary for ${summary.length} users.`);
+    res.json(summary);
+
+  } catch (err) {
+    console.error('❌ Summary generation failed:', err.message);
+    res.status(500).json({ error: 'Failed to generate latest summary', details: err.message });
+  }
+});
 
 router.get('/:userId', async (req, res) => {
   const { userId } = req.params;
@@ -176,4 +234,8 @@ router.post('/bulk-assessments', async (req, res) => {
     });
   }
 });
+
+
+
+
 export default router;

@@ -49,7 +49,7 @@ const Navbar = ({ user }) => {
                         <Link to="/" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Home</Link>
                         <Link to="/assessment" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Assessment</Link>
                         <Link to="/assessmentsummary" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Summary</Link>
-                         {allowedUserIds.includes(user?.userId) && (
+                         {allowedUserIds.includes(user?.userId.toLowerCase()) && (
                         <Link to="/dashboard" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Dashboard</Link>
                       )}
                         

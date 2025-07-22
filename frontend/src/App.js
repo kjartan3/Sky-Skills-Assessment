@@ -8,13 +8,16 @@ import Skills from './pages/Skills'
 import Navbar from './components/Navbar';
 import AssessmentOutro from './pages/AssessmentOutro'
 import Dashboard from './pages/Dashboard';
+import ComplianceModal from './components/Compliance/ComplianceModal';
 import { allowedUserIds } from './components/helper/allowedUsers';
+
 
 
 
 const App = () => {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [showComplianceModal, setShowComplianceModal] = useState(false);
 
     useEffect(() => {
       const fetchUserInfo = async () => {
@@ -52,13 +55,28 @@ useEffect(() => {
             // The backend will handle the actual SAML processing
         }
     }, []);
+
+useEffect(() => {
+  const acknowledged = sessionStorage.getItem("dataConsentAcknowledged");
+  if (!acknowledged) setShowComplianceModal(true);
+}, []);
+
+const handleComplianceAcknowledgement = () => {
+  sessionStorage.setItem("dataConsentAcknowledged", "true");
+  setShowComplianceModal(false);
+};
     
     if (isLoading) {
         return <div>Loading authentication...</div>;
     }
 
+
+
     return (
       <Router>
+         {showComplianceModal && (
+            <ComplianceModal onAcknowledge={handleComplianceAcknowledgement} />
+        )}
           <Navbar user={user} />
           <Routes>
           <Route path="/" element={<Home user={user} />} />

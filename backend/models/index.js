@@ -25,4 +25,7 @@ Statement.hasMany(Response, {foreignKey: "statementId"});
 Response.belongsTo(Statement, {foreignKey: "statementId"});
 
 
+
+
+
 export { Statement, Behaviour, Skill, User, Assessment, Response, Content };

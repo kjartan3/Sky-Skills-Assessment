@@ -52,6 +52,7 @@ export const downloadAllAssessmentsExcel = async (selectedUsers, getLevel) =>
               allResponses.push({
                 User: `${user.firstName} ${user.lastName}`,
                 OrgUnit: user.orgUnit || 'N/A', 
+                EmailAddress: user.email || 'N/A',
                 Assessment: `Assessment ${displayNumber}`,
                 Date: new Date(createdAt).toLocaleDateString(),
                 Value: skill?.name || 'N/A',
@@ -59,6 +60,7 @@ export const downloadAllAssessmentsExcel = async (selectedUsers, getLevel) =>
                 Skill: content?.title || 'N/A',
                 Statement: statement?.text || 'N/A',
                 Score: response.score,
+                roficiency: getLevel(response.score),
               });
             });
           }
@@ -72,6 +74,7 @@ export const downloadAllAssessmentsExcel = async (selectedUsers, getLevel) =>
               behaviourMap[key] = {
                 Assessment: `Assessment ${displayNumber}`,
                 User: `${user.firstName} ${user.lastName}`,
+                EmailAddress: user.email || 'N/A',
                 OrgUnit: user.orgUnit || 'N/A', 
                 Date: new Date(createdAt).toLocaleDateString(),
                 Value: b.skillId ? b.behaviourName : 'N/A',
@@ -89,6 +92,7 @@ export const downloadAllAssessmentsExcel = async (selectedUsers, getLevel) =>
               skillMap[key] = {
                 Assessment: `Assessment ${displayNumber}`,
                 User: `${user.firstName} ${user.lastName}`,
+                EmailAddress: user.email || 'N/A',
                 OrgUnit: user.orgUnit || 'N/A', 
                 Date: new Date(createdAt).toLocaleDateString(),
                 Value: s.skillName,

@@ -1,8 +1,9 @@
 // utils/generateStats.js
 import { Response, Content, Statement, Behaviour, Skill } from "../models/index.js";
 
-
 export const generateStats = async (assessmentId) => {
+  console.log('Assessment ID:', assessmentId);
+  
   const responses = await Response.findAll({
     where: { assessmentId },
     include: {
@@ -17,55 +18,83 @@ export const generateStats = async (assessmentId) => {
     },
   });
 
+  console.log('Found responses:', responses.length);
+  console.log('First response:', responses[0] ? {
+    id: responses[0].id,
+    score: responses[0].score,
+    statement: responses[0].Statement ? 'exists' : 'missing',
+    content: responses[0].Statement?.Content ? 'exists' : 'missing',
+    behaviour: responses[0].Statement?.Content?.Behaviour ? 'exists' : 'missing',
+    skill: responses[0].Statement?.Content?.Behaviour?.Skill ? 'exists' : 'missing'
+  } : 'No responses found');
+
   const behaviourScores = {};
   const skillScores = {};
+  const contentScores = {};
 
   responses.forEach(response => {
-    const behaviour = response.Statement?.Content?.Behaviour;
+    const content = response.Statement?.Content;
+    const behaviour = content?.Behaviour;
     const skill = behaviour?.Skill;
 
-    if (!behaviour) return;
-
-    if (!behaviourScores[behaviour.id]) {
-      behaviourScores[behaviour.id] = {
-        behaviourId: behaviour.id,
-        behaviourName: behaviour.name,
-        scores: [],
-      };
+    if (behaviour) {
+      if (!behaviourScores[behaviour.id]) {
+        behaviourScores[behaviour.id] = {
+          behaviourId: behaviour.id,
+          behaviourName: behaviour.name,
+          scores: [],
+        };
+      }
+      behaviourScores[behaviour.id].scores.push(response.score);
     }
-    behaviourScores[behaviour.id].scores.push(response.score);
 
-    if (!skill) return;
-
-    if (!skillScores[skill.id]) {
-      skillScores[skill.id] = {
-        skillId: skill.id,
-        skillName: skill.name,
-        scores: [],
-      };
+    if (skill) {
+      if (!skillScores[skill.id]) {
+        skillScores[skill.id] = {
+          skillId: skill.id,
+          skillName: skill.name,
+          description: skill.description || '',
+          scores: [],
+        };
+      }
+      skillScores[skill.id].scores.push(response.score);
     }
-    skillScores[skill.id].scores.push(response.score);
+
+    if (content) {
+      if (!contentScores[content.id]) {
+        contentScores[content.id] = {
+          contentId: content.id,
+          title: content.title,
+          scores: [],
+        };
+      }
+      contentScores[content.id].scores.push(response.score);
+    }
   });
 
-  const behaviourAverages = Object.values(behaviourScores).map(b => {
-    return {
-      behaviourId: b.behaviourId,
-      behaviourName: b.behaviourName,
-      averageScore: b.scores.reduce((a, s) => a + s, 0) / b.scores.length,
-      skillId: responses.find(
-        r => r.Statement?.Content?.Behaviour?.id === b.behaviourId
-      )?.Statement?.Content?.Behaviour?.Skill?.id,
-    };
-  });
+  const getAvg = (arr) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+
+  const behaviourAverages = Object.values(behaviourScores).map(b => ({
+    behaviourId: b.behaviourId,
+    behaviourName: b.behaviourName,
+    averageScore: getAvg(b.scores),
+    skillId: responses.find(
+      r => r.Statement?.Content?.Behaviour?.id === b.behaviourId
+    )?.Statement?.Content?.Behaviour?.Skill?.id,
+  }));
 
   const skillAverages = Object.values(skillScores).map(s => ({
     skillId: s.skillId,
     skillName: s.skillName,
-    averageScore: s.scores.reduce((a, s) => a + s, 0) / s.scores.length,
-    description: responses.find(
-      r => r.Statement?.Content?.Behaviour?.Skill?.id === s.skillId
-    )?.Statement?.Content?.Behaviour?.Skill?.description || "No description available",
+    description: s.description,
+    averageScore: getAvg(s.scores),
   }));
 
-  return { behaviourAverages, skillAverages };
+  const contentAverages = Object.values(contentScores).map(c => ({
+    contentId: c.contentId,
+    title: c.title,
+    averageScore: getAvg(c.scores),
+  }));
+
+  return { behaviourAverages, skillAverages, contentAverages };
 };
