@@ -70,6 +70,7 @@ button:hover {
 .summary-filter select {
   padding: 8px 12px;
   margin-left: 12px;
+  margin-right: 12px;
   border-radius: 6px;
   font-size: 14px;
 }
@@ -86,4 +87,55 @@ button:hover {
   border-radius: 8px;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
   margin-bottom: 40px;
+}
+
+.filter-panel {
+  display: flex;
+  gap: 70px; /* spacing between filters */
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+  justify-content: center;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 250px;
+}
+
+.filter-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 40px;
+  background-color: #fff;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.user-table-container {
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+
+.user-table th, .user-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  color: #444;
+}
+
+.user-table th {
+  background-color: #f8f8f8;
+  font-weight: 600;
+}
+
+.user-table tr:last-child td {
+  border-bottom: none;
 }

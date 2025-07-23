@@ -51,8 +51,9 @@ export const downloadAllAssessmentsExcel = async (selectedUsers, getLevel) =>
               
               allResponses.push({
                 User: `${user.firstName} ${user.lastName}`,
-                OrgUnit: user.orgUnit || 'N/A', 
                 EmailAddress: user.email || 'N/A',
+                OrgUnit: user.orgUnit || 'N/A', 
+                Band: user.band || "N/A",
                 Assessment: `Assessment ${displayNumber}`,
                 Date: new Date(createdAt).toLocaleDateString(),
                 Value: skill?.name || 'N/A',
@@ -60,7 +61,7 @@ export const downloadAllAssessmentsExcel = async (selectedUsers, getLevel) =>
                 Skill: content?.title || 'N/A',
                 Statement: statement?.text || 'N/A',
                 Score: response.score,
-                roficiency: getLevel(response.score),
+                Proficiency: getLevel(response.score),
               });
             });
           }
@@ -75,7 +76,8 @@ export const downloadAllAssessmentsExcel = async (selectedUsers, getLevel) =>
                 Assessment: `Assessment ${displayNumber}`,
                 User: `${user.firstName} ${user.lastName}`,
                 EmailAddress: user.email || 'N/A',
-                OrgUnit: user.orgUnit || 'N/A', 
+                OrgUnit: user.orgUnit || 'N/A',
+                Band: user.band || "N/A", 
                 Date: new Date(createdAt).toLocaleDateString(),
                 Value: b.skillId ? b.behaviourName : 'N/A',
                 Behaviour: b.behaviourName,
@@ -94,6 +96,7 @@ export const downloadAllAssessmentsExcel = async (selectedUsers, getLevel) =>
                 User: `${user.firstName} ${user.lastName}`,
                 EmailAddress: user.email || 'N/A',
                 OrgUnit: user.orgUnit || 'N/A', 
+                Band: user.band || "N/A", 
                 Date: new Date(createdAt).toLocaleDateString(),
                 Value: s.skillName,
                 Description: s.description || 'N/A',

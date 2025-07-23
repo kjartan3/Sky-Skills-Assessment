@@ -1,6 +1,7 @@
 import React from "react";
 import "./OrgSummary.css";
 
+
 const OrgSummary = ({
   topBehaviours,
   bottomBehaviours,
@@ -22,14 +23,14 @@ const OrgSummary = ({
           <h4>Top 3 Values</h4>
           <ul>
             {topSkills.map((s, i) => (
-              <li key={i}>{s.skillName} ({s.averageScore.toFixed(2)})</li>
+              <p key={i}>{s.skillName} </p>
             ))}
           </ul>
 
           <h4>Bottom 3 Values</h4>
           <ul>
             {bottomSkills.map((s, i) => (
-              <li key={i}>{s.skillName} ({s.averageScore.toFixed(2)})</li>
+              <p key={i}>{s.skillName} </p>
             ))}
           </ul>
         </div>
@@ -37,14 +38,14 @@ const OrgSummary = ({
           <h4>Top 3 Behaviours</h4>
           <ul>
             {topBehaviours.map((b, i) => (
-              <li key={i}>{b.behaviourName} ({b.averageScore.toFixed(2)})</li>
+              <p key={i}>{b.behaviourName}</p>
             ))}
           </ul>
 
           <h4>Bottom 3 Behaviours</h4>
           <ul>
             {bottomBehaviours.map((b, i) => (
-              <li key={i}>{b.behaviourName} ({b.averageScore.toFixed(2)})</li>
+              <p key={i}>{b.behaviourName} </p>
             ))}
           </ul>
         </div>
@@ -55,14 +56,14 @@ const OrgSummary = ({
           <h4>Top 3 Skills</h4>
           <ul>
             {topContent.map((c, i) => (
-              <li key={i}>{c.title} ({c.averageScore.toFixed(2)})</li>
+              <p key={i}>{c.title} </p>
             ))}
           </ul>
 
           <h4>Bottom 3 Skills</h4>
           <ul>
             {bottomContent.map((c, i) => (
-              <li key={i}>{c.title} ({c.averageScore.toFixed(2)})</li>
+              <p key={i}>{c.title} </p>
             ))}
           </ul>
         </div>

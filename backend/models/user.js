@@ -31,7 +31,11 @@ const User = sequelize.define("User", {
     orgUnit: {
         type: DataTypes.STRING,
         allowNull: true,
-    }
+    },
+    band: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
 });
 
 export default User;

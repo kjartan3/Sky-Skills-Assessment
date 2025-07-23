@@ -1,6 +1,6 @@
 import express from 'express';
 import { User } from '../models/index.js';
-import { getUserTest } from '../utils/fetchUserProfile.js';
+
 import { Sequelize, Op } from 'sequelize';
 
 
@@ -72,19 +72,5 @@ router.get('/by-org', async (req, res) => {
   }
 });
 
-router.get("/test", async (req, res) => {
-  const userId = req.query.userId;
-
-  if (!userId) {
-    return res.status(400).json({ error: "Missing userId in query" });
-  }
-
-  try {
-    const userData = await getUserTest(userId);
-    res.json(userData);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to fetch user data", details: err.message });
-  }
-});
 
 export default router;

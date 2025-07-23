@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Select from 'react-select'
 
 import './ManagerDashboard.css';
 import OrgSummary from './OrgSummary';
@@ -11,10 +12,17 @@ const ManagerDashboard = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [searchFilter, setSearchFilter] = useState('');
-  const [selectedOrgUnit, setSelectedOrgUnit] = useState('');
+  const [summaryData, setSummaryData] = useState([]);
+
+  const [selectedOrgUnit, setSelectedOrgUnit] = useState([]);
   const [orgUnits, setOrgUnits] = useState([]);
   const [activeOrgUnit, setActiveOrgUnit] = useState('All');
-  const [summaryData, setSummaryData] = useState([]);
+
+  
+
+  const [selectedBand, setSelectedBand] = useState([]);
+  const [bands, setBands] = useState([]);
+
 
   const [top3Behaviours, setTop3Behaviours] = useState([]);
   const [bottom3Behaviours, setBottom3Behaviours] = useState([]);
@@ -34,6 +42,10 @@ const ManagerDashboard = () => {
 
         const uniqueUnits = [...new Set(res.data.map(u => u.orgUnit).filter(Boolean))];
         setOrgUnits(uniqueUnits.sort());
+
+        const uniqueBands = [...new Set(res.data.map(u => u.band).filter(Boolean))];
+        setBands(uniqueBands.sort());
+
       } catch (err) {
         console.error('Error fetching users:', err);
       }
@@ -85,9 +97,14 @@ const ManagerDashboard = () => {
       user.orgUnit?.toLowerCase().includes(searchFilter.toLowerCase())
     );
 
-    const matchesOrg = selectedOrgUnit ? user.orgUnit === selectedOrgUnit : true;
+    const matchesOrg = selectedOrgUnit.length === 0 || selectedOrgUnit.includes(user.orgUnit);
+    const matchesBand = selectedBand.length === 0 || selectedBand.includes(user.band);
 
-    return matchesSearch && matchesOrg;
+    
+    return matchesSearch && matchesOrg && matchesBand;
+
+
+    
   });
 
   const indexOfLastUser = currentPage * usersPerPage;
@@ -98,84 +115,6 @@ const ManagerDashboard = () => {
   return (
     <div className='container'>
       <h2 className='dashboard-header'>Reporting Dashboard</h2>
-
-      {/* 🔎 User List Filter */}
-      <div className="summary-filter">
-        <label htmlFor="userOrgUnitSelect"><strong>User List:</strong> Filter by Org Unit</label>
-        <select
-          id="userOrgUnitSelect"
-          value={selectedOrgUnit}
-          onChange={(e) => setSelectedOrgUnit(e.target.value)}
-        >
-          <option value="">All Units</option>
-          {orgUnits.map(unit => (
-            <option key={unit} value={unit}>{unit}</option>
-          ))}
-        </select>
-      </div>
-
-      <input 
-        type='text' 
-        placeholder='Search by name or email or org unit' 
-        value={searchFilter} 
-        onChange={(e) => setSearchFilter(e.target.value)}
-      />
-
-      <button
-        onClick={() => {
-          const pageUserIds = currentUsers.map(u => u.userId);
-          const allSelected = pageUserIds.every(id => selectedUsers.includes(id));
-          setSelectedUsers(prev =>
-            allSelected
-              ? prev.filter(id => !pageUserIds.includes(id))
-              : [...new Set([...prev, ...pageUserIds])]
-          );
-        }}
-      >
-        {currentUsers.every(id => selectedUsers.includes(id))
-          ? 'Deselect All on Page'
-          : 'Select All on Page'}
-      </button>
-
-      <div className='user-list'>
-        {currentUsers.map(user => (
-          <div key={user.userId}>
-            <input
-              type="checkbox"
-              checked={selectedUsers.includes(user.userId)}
-              onChange={() =>
-                setSelectedUsers(prev =>
-                  prev.includes(user.userId)
-                    ? prev.filter(id => id !== user.userId)
-                    : [...prev, user.userId]
-                )
-              }
-            />
-            <p>{user.firstName} {user.lastName} - {user.email} - {user.orgUnit}</p>
-          </div>
-        ))}
-      </div>
-
-      {selectedUsers.length > 0 && (
-        <div className="download-actions">
-          <button onClick={() => downloadAllAssessmentsExcel(selectedUsers, getLevel)}>
-            📥 Download All Assessments
-          </button>
-          <button onClick={() => downloadLatestAssessmentsExcel(selectedUsers, getLevel)}>
-            📥 Download Most Recent Assessment
-          </button>
-        </div>
-      )}
-
-      <div className='pagination'>
-        <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
-          ← Prev
-        </button>
-        <span>Page {currentPage} of {totalPages}</span>
-        <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
-          Next →
-        </button>
-      </div>
 
       {/* 📊 Summary Filter */}
       <div className="summary-filter">
@@ -201,6 +140,117 @@ const ManagerDashboard = () => {
         bottomContent={bottom3Content}
         selectedOrgUnit={activeOrgUnit}
       />
+
+      <div className="filter-panel">
+  <div className="filter-group">
+    <label><strong>Filter by Org Unit</strong></label>
+    <Select
+      isMulti
+      options={orgUnits.map(u => ({ label: u, value: u }))}
+      value={orgUnits
+        .filter(u => selectedOrgUnit.includes(u))
+        .map(u => ({ label: u, value: u }))}
+      onChange={(selected) => setSelectedOrgUnit(selected.map(opt => opt.value))}
+      placeholder="Select Org Units"
+    />
+  </div>
+
+  <div className="filter-group">
+    <label><strong>Filter by Band</strong></label>
+    <Select
+      isMulti
+      options={bands.map(b => ({ label: b, value: b }))}
+      value={bands
+        .filter(b => selectedBand.includes(b))
+        .map(b => ({ label: b, value: b }))}
+      onChange={(selected) => setSelectedBand(selected.map(opt => opt.value))}
+      placeholder="Select Bands"
+    />
+  </div>
+</div>
+
+
+      <input 
+        type='text' 
+        placeholder='Search by name or email or org unit' 
+        value={searchFilter} 
+        onChange={(e) => setSearchFilter(e.target.value)}
+      />
+
+      <button
+        onClick={() => {
+          const pageUserIds = currentUsers.map(u => u.userId);
+          const allSelected = pageUserIds.every(id => selectedUsers.includes(id));
+          setSelectedUsers(prev =>
+            allSelected
+              ? prev.filter(id => !pageUserIds.includes(id))
+              : [...new Set([...prev, ...pageUserIds])]
+          );
+        }}
+      >
+        {currentUsers.every(id => selectedUsers.includes(id))
+          ? 'Deselect All on Page'
+          : 'Select All on Page'}
+      </button>
+    <div className="user-table-container">
+     <table className="user-table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Org Unit</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    {currentUsers.map(user => (
+      <tr key={user.userId}>
+        <td>
+          <input
+            type="checkbox"
+            checked={selectedUsers.includes(user.userId)}
+            onChange={() =>
+              setSelectedUsers(prev =>
+                prev.includes(user.userId)
+                  ? prev.filter(id => id !== user.userId)
+                  : [...prev, user.userId]
+              )
+            }
+          />
+        </td>
+        <td>{user.firstName} {user.lastName}</td>
+        <td>{user.email}</td>
+        <td>{user.orgUnit}</td>
+        
+      </tr>
+    ))}
+  </tbody>
+</table>
+</div>
+
+      {selectedUsers.length > 0 && (
+        <div className="download-actions">
+          <button onClick={() => downloadAllAssessmentsExcel(selectedUsers, getLevel)}>
+            📥 Download All Historic Assessments
+          </button>
+          <button onClick={() => downloadLatestAssessmentsExcel(selectedUsers, getLevel)}>
+            📥 Download Current Assessment
+          </button>
+        </div>
+      )}
+
+      <div className='pagination'>
+        <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
+          ← Prev
+        </button>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
+          Next →
+        </button>
+      </div>
+
+      
     </div>
   );
 };

@@ -218,6 +218,7 @@ router.post('/bulk-assessments', async (req, res) => {
           lastName: user.lastName,
           email: user.email,
           orgUnit: user.orgUnit,
+          band: user.band,
         },
         assessments: enrichedAssessments,
       });
