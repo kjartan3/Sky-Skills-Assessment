@@ -12,18 +12,18 @@ const seedDatabase = async () => {
     console.log('🔄 Dropping existing tables (except Assessments & Responses)...');
 
     // Uncomment the below when first starting new server! 
-     await sequelize.sync({ force: true });
-    // console.log('🔄 Resetting tables…');
-    // await Statement.drop();
-    // await Content.drop();
-    // await Behaviour.drop();
-    // await Skill.drop();
+    //  await sequelize.sync({ force: true });
+    console.log('🔄 Resetting tables…');
+    await Statement.drop();
+    await Content.drop();
+    await Behaviour.drop();
+    await Skill.drop();
 
-    // Resync models
-    // await Skill.sync();
-    // await Behaviour.sync();
-    // await Content.sync();
-    // await Statement.sync();
+    Resync models
+    await Skill.sync();
+    await Behaviour.sync();
+    await Content.sync();
+    await Statement.sync();
 
     console.log('🌱 Seeding data…');
     // Create Skills in the database
@@ -252,9 +252,9 @@ await Promise.all([
     description: 'Understanding how artificial intelligence works, its capabilities and limitations...',
     behaviourId: 8,
     learningLinks: {
-      Beginner: '',
-      Intermediate: '',
-      Advanced: '',
+      Beginner: 'https://sky.edcast.com/journey/ai-literacy-build',
+      Intermediate: 'https://sky.edcast.com/journey/ai-literacy-intermediate-take',
+      Advanced: 'https://sky.edcast.com/journey/ai-literacy-advanced-in-depth-tech',
     },
   },
   {
@@ -478,50 +478,50 @@ await Promise.all(
    
 
 
-    const monthsAgo = (months) => {
-      const date = new Date();
-      date.setMonth(date.getMonth() - months);
-      return date;
-    }
+    // const monthsAgo = (months) => {
+    //   const date = new Date();
+    //   date.setMonth(date.getMonth() - months);
+    //   return date;
+    // }
 
-    await User.upsert({ userId: 'khj551', firstName: 'Kjartan', lastName: 'Heimisson', email: 'kjartan.heimisson@sky.uk' });
-    // await User.upsert({ userId: 'bre896' });
+    // await User.upsert({ userId: 'khj551', firstName: 'Kjartan', lastName: 'Heimisson', email: 'kjartan.heimisson@sky.uk' });
+    // // await User.upsert({ userId: 'bre896' });
  
-    const assessments = await Assessment.bulkCreate([
-      { userId: 'khj551', createdAt: monthsAgo(11), updatedAt: new Date()}, 
-      { userId: 'khj551', createdAt: monthsAgo(2), updatedAt: new Date()}, 
-      { userId: 'khj551', createdAt: monthsAgo(5), updatedAt: new Date()},
-      // { userId: 'bre896', createdAt: monthsAgo(11), updatedAt: new Date()}, 
-      // { userId: 'bre896', createdAt: monthsAgo(2), updatedAt: new Date()}, 
-      // { userId: 'bre896', createdAt: monthsAgo(5), updatedAt: new Date()},  
-    ],
-    { returning: true }
-    );
+    // const assessments = await Assessment.bulkCreate([
+    //   { userId: 'khj551', createdAt: monthsAgo(11), updatedAt: new Date()}, 
+    //   { userId: 'khj551', createdAt: monthsAgo(2), updatedAt: new Date()}, 
+    //   { userId: 'khj551', createdAt: monthsAgo(5), updatedAt: new Date()},
+    //   // { userId: 'bre896', createdAt: monthsAgo(11), updatedAt: new Date()}, 
+    //   // { userId: 'bre896', createdAt: monthsAgo(2), updatedAt: new Date()}, 
+    //   // { userId: 'bre896', createdAt: monthsAgo(5), updatedAt: new Date()},  
+    // ],
+    // { returning: true }
+    // );
  
-    // Get all the statements to generate responses
-    const allStatements = await Statement.findAll();
+    // // Get all the statements to generate responses
+    // const allStatements = await Statement.findAll();
  
-    // Create responses with random scores (1–5) for each statement
-    const responses = allStatements.flatMap((statement) => [
-      {
-        assessmentId : assessments[0].id,
-        statementId: statement.id,
-        score: Math.floor(Math.random() * 4) + 1,
-      },
-      {
-        assessmentId : assessments[1].id,
-        statementId: statement.id,
-        score: Math.floor(Math.random() * 4) + 1,
-      },
-      {
-        assessmentId : assessments[2].id,
-        statementId: statement.id,
-        score: Math.floor(Math.random() * 4) + 1,
-      },
-    ]);
+    // // Create responses with random scores (1–5) for each statement
+    // const responses = allStatements.flatMap((statement) => [
+    //   {
+    //     assessmentId : assessments[0].id,
+    //     statementId: statement.id,
+    //     score: Math.floor(Math.random() * 4) + 1,
+    //   },
+    //   {
+    //     assessmentId : assessments[1].id,
+    //     statementId: statement.id,
+    //     score: Math.floor(Math.random() * 4) + 1,
+    //   },
+    //   {
+    //     assessmentId : assessments[2].id,
+    //     statementId: statement.id,
+    //     score: Math.floor(Math.random() * 4) + 1,
+    //   },
+    // ]);
 
-    // Insert Responses into the database
-    await Response.bulkCreate(responses);
+    // // Insert Responses into the database
+    // await Response.bulkCreate(responses);
 
 
     console.log('Database seeded successfully!');

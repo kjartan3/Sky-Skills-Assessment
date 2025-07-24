@@ -1,18 +1,14 @@
 .proficiency-container {
-  margin-right: 5px;
-  position: absolute;
-  top: 250px;
-  right: 250px;
- 
-  padding: 16px;
- 
-  z-index: 5;
+  padding: 10px 40px;
+  width: 180px relative;
 }
 
 .proficiency-header {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: 550;
+  margin-bottom: 1.5rem; /* Slightly closer to the rows */
+  line-height: 1.4;
+  text-align: left;
 }
 
 .proficiency-row {
@@ -22,9 +18,10 @@
   margin-bottom: 8px;
 }
 
+
 .proficiency-label {
   margin: 0;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .tooltip-wrapper {

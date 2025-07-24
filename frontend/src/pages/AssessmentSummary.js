@@ -57,7 +57,12 @@ const AssessmentSummary = ({ user }) => {
           statsByAssessmentId[a.id] = statsResponses[i].data;
         });
         setStats(statsByAssessmentId);
-        setSelectedAssessmentId(prevId => prevId && statsByAssessmentId[prevId] ? prevId : res.data[0].id);
+        if (res.data.length > 0) {
+          setSelectedAssessmentId(prevId => prevId && statsByAssessmentId[prevId] ? prevId : res.data[0].id);
+        } else {
+          setSelectedAssessmentId(null);
+        }
+        
 
       
       } catch (err) {
@@ -134,42 +139,49 @@ const AssessmentSummary = ({ user }) => {
         </div>
       ) : (
         <>
-          <div className="chart-with-list">
-            <select
-              value={selectedTimeFrame}
-              onChange={handleTimeFrameChange}
-            >
-              <option value='latest'>Latest</option>
-              <option value='3'>Last 3 Months</option>
-              <option value='6'>Last 6 Months</option>
-              <option value='12'>Last 12 Months</option>
-            </select>
-            
-            <AssessmentList
-              assessments={displayedAssessments}
-              hoveredId={hoveredId}
-              setHoveredId={setHoveredId}
-              setSelectedAssessmentId={setSelectedAssessmentId}
-              COLORS={COLORS}
-              stats={stats}
-              getContentForBehaviour={getContentForBehaviour}
-            />
 
-            
+          {/* if there are any issues with the styling on summary page - this is where it may come from */}
+
+          <div className="chart-with-list flex flex-row flex-wrap gap-8 px-8 py-4 items-start">
+          
+            <div className="flex flex-col gap-4 max-w-md w-full">
+              <select
+                value={selectedTimeFrame}
+                onChange={handleTimeFrameChange}
+                className="p-2 border rounded"
+              >
+                <option value="latest">Latest</option>
+                <option value="3">Last 3 Months</option>
+                <option value="6">Last 6 Months</option>
+                <option value="12">Last 12 Months</option>
+              </select>
+
+              <AssessmentList
+                assessments={displayedAssessments}
+                hoveredId={hoveredId}
+                setHoveredId={setHoveredId}
+                setSelectedAssessmentId={setSelectedAssessmentId}
+                COLORS={COLORS}
+                stats={stats}
+                getContentForBehaviour={getContentForBehaviour}
+              />
+            </div>
+
+            <div className="chart-section" style={{ flex: '1 1 400px', minWidth: '300px' }}>
+              <RadarChartContainer 
+                assessments={displayedAssessments}
+                stats={stats}
+                selectedAssessmentId={selectedAssessmentId}
+                COLORS={COLORS}
+              />
+            </div>
+
+            <div className="w-[280px] flex-shrink-0">
+              <ProficiencyKey />
+            </div>
           </div>
 
-          
-            <div className="relative flex justify-center">
-  <RadarChartContainer 
-    assessments={displayedAssessments}
-    stats={stats}
-    selectedAssessmentId={selectedAssessmentId}
-    COLORS={COLORS}
-  />
-  
-    <ProficiencyKey />
-  
-</div>
+      
         
 
           {selectedAssessmentId && (
@@ -180,6 +192,7 @@ const AssessmentSummary = ({ user }) => {
               expandedSkillId={expandedSkillId}
               setExpandedSkillId={setExpandedSkillId}
               getContentForBehaviour={getContentForBehaviour}
+              assessmentIndex={assessments.findIndex((a) => a.id === selectedAssessmentId)}
             />
           )}
         </>

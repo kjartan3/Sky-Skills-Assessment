@@ -3,7 +3,12 @@ import AssessmentPDF from "./AssessmentPDF";
 
 const AssessmentList = ({ assessments,hoveredId, setHoveredId, setSelectedAssessmentId, COLORS, stats, getContentForBehaviour }) => (
   <div className="side-list">
-    {assessments.map((assessment, index) => (
+    
+    {assessments.map((assessment, index) => {
+      const displayNumber = index + 1;
+      
+      return (
+        
       <div
         key={assessment.id}
         className="assessment-list-item"
@@ -18,7 +23,7 @@ const AssessmentList = ({ assessments,hoveredId, setHoveredId, setSelectedAssess
         }}
       >
         <div style={{ marginBottom: "12px" }}>
-          <strong>Assessment</strong>
+          <strong>Assessment #{displayNumber}</strong>
           <br />
           <small>{new Date(assessment.createdAt).toLocaleDateString()}</small>
         </div>
@@ -42,7 +47,7 @@ const AssessmentList = ({ assessments,hoveredId, setHoveredId, setSelectedAssess
           {({ loading }) => (loading ? "Generating PDF..." : "Download")}
         </PDFDownloadLink>
       </div>
-    ))}
+    )})}
   </div>
 );
 

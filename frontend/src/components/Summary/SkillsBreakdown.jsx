@@ -9,6 +9,7 @@ const SkillsBreakdown = ({
   expandedSkillId,
   setExpandedSkillId,
   getContentForBehaviour,
+  assessmentIndex,
 }) => {
   const [expandedBehaviourId, setExpandedBehaviourId] = useState(null);
 
@@ -21,7 +22,7 @@ const SkillsBreakdown = ({
 
   return (
     <div className="assessment">
-      <h3 className="assessment-title">Assessment</h3>
+      <h3 className="assessment-title">Assessment #{assessmentIndex + 1}</h3>
       <p style={{ marginTop: "-10px", color: "#777", fontSize: "14px" }}>
         Taken on {new Date(assessment.createdAt).toLocaleDateString()}
       </p>

@@ -42,7 +42,9 @@ body {
   .chart-container {
     width: 100%;
     height: 440px;
-    margin: 20px 0;
+    margin: 40px 5px;
+    
+
   }
   
   /* Skills breakdown grid */
@@ -140,16 +142,19 @@ body {
   }
 
   .chart-with-list {
-  display: flex;
-  gap: 2rem;
-  align-items: flex-start;
-}
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    flex-wrap: wrap; /* Important for responsiveness */
+  }
+
 
 .side-list {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
   min-width: 180px;
+  margin-top: 20px;
 }
 
 .assessment-list-item {

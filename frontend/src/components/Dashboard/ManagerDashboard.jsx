@@ -26,12 +26,13 @@ const ManagerDashboard = () => {
 
   const [top3Behaviours, setTop3Behaviours] = useState([]);
   const [bottom3Behaviours, setBottom3Behaviours] = useState([]);
-  const [top3Skills, setTop3Skills] = useState([]);
-  const [bottom3Skills, setBottom3Skills] = useState([]);
+
+  const [skillsSummary, setSkillsSummary] = useState([]);
+
   const [top3Content, setTop3Content] = useState([]);
   const [bottom3Content, setBottom3Content] = useState([]);
 
-  const usersPerPage = 10;
+  const usersPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -64,30 +65,75 @@ const ManagerDashboard = () => {
     fetchSummary();
   }, []);
 
-  useEffect(() => {
-    if (!summaryData.length) return;
+ useEffect(() => {
+  if (!summaryData.length) return;
+  const filteredSummary = activeOrgUnit === "All"
+    ? summaryData
+    : summaryData.filter(user => user.orgUnit === activeOrgUnit);
+  const behaviours = [];
+  const skills = [];
+  const content = [];
+  filteredSummary.forEach(({ behaviourAverages, skillAverages, contentAverages }) => {
+    behaviours.push(...behaviourAverages);
+    skills.push(...skillAverages);
+    content.push(...contentAverages);
+  });
+  // ✅ Deduplicate & average skills
+  const skillMap = new Map();
+  skills.forEach(skill => {
+    const key = skill.skillName;
+    if (!skillMap.has(key)) {
+      skillMap.set(key, { ...skill, totalScore: skill.averageScore, count: 1 });
+    } else {
+      const existing = skillMap.get(key);
+      skillMap.set(key, {
+        ...existing,
+        totalScore: existing.totalScore + skill.averageScore,
+        count: existing.count + 1
+      });
+    }
+  });
+  const averagedSkills = Array.from(skillMap.values()).map(s => ({
+    skillName: s.skillName,
+    averageScore: s.totalScore / s.count
+  }));
+  const sortedSkills = averagedSkills.sort((a, b) => b.averageScore - a.averageScore);
+  setSkillsSummary(sortedSkills);
+  // ✅ Deduplicate content
+  const contentMap = new Map();
+  content.forEach(c => {
+    if (!contentMap.has(c.title)) {
+      contentMap.set(c.title, c);
+    } else {
+      const existing = contentMap.get(c.title);
+      contentMap.set(c.title, {
+        ...existing,
+        averageScore: Math.max(existing.averageScore, c.averageScore)
+      });
+    }
+  });
+  const dedupedContent = Array.from(contentMap.values());
+  setTop3Content([...dedupedContent].sort((a, b) => b.averageScore - a.averageScore).slice(0, 3));
+  setBottom3Content([...dedupedContent].sort((a, b) => a.averageScore - b.averageScore).slice(0, 3));
+  // ✅ Deduplicate behaviours
+  const behaviourMap = new Map();
+  behaviours.forEach(b => {
+    if (!behaviourMap.has(b.behaviourName)) {
+      behaviourMap.set(b.behaviourName, b);
+    } else {
+      const existing = behaviourMap.get(b.behaviourName);
+      behaviourMap.set(b.behaviourName, {
+        ...existing,
+        averageScore: Math.max(existing.averageScore, b.averageScore)
+      });
+    }
+  });
+  const dedupedBehaviours = Array.from(behaviourMap.values());
+  setTop3Behaviours([...dedupedBehaviours].sort((a, b) => b.averageScore - a.averageScore).slice(0, 3));
+  setBottom3Behaviours([...dedupedBehaviours].sort((a, b) => a.averageScore - b.averageScore).slice(0, 3));
+}, [activeOrgUnit, summaryData]);
 
-    const filteredSummary = activeOrgUnit === "All"
-      ? summaryData
-      : summaryData.filter(user => user.orgUnit === activeOrgUnit);
-
-    const behaviours = [];
-    const skills = [];
-    const content = [];
-
-    filteredSummary.forEach(({ behaviourAverages, skillAverages, contentAverages }) => {
-      behaviours.push(...behaviourAverages);
-      skills.push(...skillAverages);
-      content.push(...contentAverages);
-    });
-
-    setTop3Behaviours([...behaviours].sort((a, b) => b.averageScore - a.averageScore).slice(0, 3));
-    setBottom3Behaviours([...behaviours].sort((a, b) => a.averageScore - b.averageScore).slice(0, 3));
-    setTop3Skills([...skills].sort((a, b) => b.averageScore - a.averageScore).slice(0, 3));
-    setBottom3Skills([...skills].sort((a, b) => a.averageScore - b.averageScore).slice(0, 3));
-    setTop3Content([...content].sort((a, b) => b.averageScore - a.averageScore).slice(0, 3));
-    setBottom3Content([...content].sort((a, b) => a.averageScore - b.averageScore).slice(0, 3));
-  }, [activeOrgUnit, summaryData]);
+  
 
   const filteredUsers = allUsers.filter(user => {
     const matchesSearch = (
@@ -134,8 +180,7 @@ const ManagerDashboard = () => {
       <OrgSummary
         topBehaviours={top3Behaviours}
         bottomBehaviours={bottom3Behaviours}
-        topSkills={top3Skills}
-        bottomSkills={bottom3Skills}
+        skills={skillsSummary}
         topContent={top3Content}
         bottomContent={bottom3Content}
         selectedOrgUnit={activeOrgUnit}
