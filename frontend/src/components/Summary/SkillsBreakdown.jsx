@@ -10,15 +10,11 @@ const SkillsBreakdown = ({
   setExpandedSkillId,
   getContentForBehaviour,
   assessmentIndex,
+  skillColors
 }) => {
   const [expandedBehaviourId, setExpandedBehaviourId] = useState(null);
 
-// const skillDescriptions = {
-//   Welcoming: "We are inclusive, collaborative and respectful, creating a sense of belonging and opportunity for everyone.",
-//   Creative: "We are ambitious and innovative, challenging the status quo to raise the bar on quality for customers.",
-//   Simplifying: "We bring clarity, cut through complexity and remove obstacles.",
-//   "Doing the right thing": "We are fair and act with integrity, each one of us taking responsibility.",
-// };
+
 
   return (
     <div className="assessment">
@@ -54,7 +50,7 @@ const SkillsBreakdown = ({
                 display: shouldHide ? "none" : "block", // 👈 hide non-expanded cards
               }}
             >
-            <h3 className="skill-name" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h3 className="skill-name"  style={{ display: "flex", justifyContent: "space-between", alignItems: "center", color: skillColors[s.skillName] }}>
              <div style={{ display: "flex", flexDirection: "column" }}>
               <span>{s.skillName}</span>
               <span className="skill-level">{getLevel(s.averageScore)}</span> {/* ✅ Stays below the title */}

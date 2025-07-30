@@ -8,6 +8,7 @@ import ProficiencyKey from '../components/Summary/ProficiencyKey';
 import './AssessmentSummary.css';
 import Select from 'react-select';
 import AssessmentOverview from '../components/Summary/AssessmentOverview';
+import { skillColors } from '../components/helper/skillColors';
 
 const COLORS = [
   '#007bff',
@@ -168,10 +169,24 @@ const AssessmentSummary = ({ user }) => {
         <>
 
           {/* if there are any issues with the styling on summary page - this is where it may come from */}
-
+           
           <div className="chart-with-list flex flex-row flex-wrap gap-8 px-8 py-4 items-start">
-          
+           <div className='info-text'>
+          <p>Here's how you're showing up against our four core values - Welcoming, Creative, Simplifying and Doing the Right Thing. 
+            Take a moment to celebrate your strengths and spot the areas where you can grow even further. 
+          <br/> <br/>
+            Not sure what the proficiency levels mean? 
+            Hover over the 'i' icon for a clear breakdown of what it looks like to be a Beginner, Intermediate or Advanced level 
+          <br/> <br/>   
+            Curious to dive deeper into your self-assessment? 
+            Click the 'Download as PDF' button against the relevant assessment to view and save your results. Inside, you'll find personalised learning pathways on Sky Learn - designed to help you take the next step in your development journey. 
+          <br/> <br/>
+            Looking to track your progress over time? 
+            Use the filter drop-down below to compare your previous assessments and reflect on how far you've come. 
+            </p>
+            </div>
             <div className="flex flex-col gap-4 max-w-md w-full">
+              
 
               <Select
                 options={options}
@@ -198,6 +213,7 @@ const AssessmentSummary = ({ user }) => {
                 stats={stats}
                 selectedAssessmentId={selectedAssessmentId}
                 COLORS={COLORS}
+                skillColors={skillColors}
               />
             </div>
 
@@ -222,6 +238,7 @@ const AssessmentSummary = ({ user }) => {
               setExpandedSkillId={setExpandedSkillId}
               getContentForBehaviour={getContentForBehaviour}
               assessmentIndex={assessments.findIndex((a) => a.id === selectedAssessmentId)}
+              skillColors={skillColors}
             />
           )}
         </>

@@ -5,6 +5,7 @@ import ProgressBar from "../components/Assessment/ProgressBar";
 import StatementGroup from "../components/Assessment/StatementGroup";
 import NavigationButtons from "../components/Assessment/NavigationButtons";
 import AssessmentIntro from "../components/Assessment/AssessmentIntro";
+import { skillColors } from "../components/helper/skillColors";
 
 import "./Assessment.css";
 
@@ -18,12 +19,7 @@ const Assessment = ({ user }) => {
   
   const statementsPerPage = 6;
 
-  const skillColors = {
-    Welcoming: "#FF8C00",
-    Creative: "#FF00A0",
-    Simplifying: "#8C28FF",
-    "Doing the right thing": "#19A0FF"
-  };
+  
 
   useEffect(() => {
     const fetchStatements = async () => {

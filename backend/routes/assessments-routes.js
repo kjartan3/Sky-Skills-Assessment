@@ -10,6 +10,9 @@ import {
 } from '../models/index.js';
 import { generateStats } from '../utils/generateStats.js';
 import { generateOrgStats } from '../utils/generateOrgStats.js';
+import { Op } from 'sequelize';
+
+
 
 
 
@@ -105,13 +108,26 @@ router.get('/latest-summary', async (req, res) => {
 
 router.get('/org-summary', async (req, res) => {
   try {
-    const { orgUnit } = req.query;
+    const { orgUnit, band } = req.query;
 
-    // Step 1: Get all users (or filter by orgUnit)
-    const userFilter = orgUnit ? { orgUnit } : {};
+    // Dynamic filter logic
+    const userFilter = {};
+    if (orgUnit) {
+  const unitsArray = orgUnit.split(",").filter(Boolean);
+  if (unitsArray.length > 0) userFilter.orgUnit = { [Op.in]: unitsArray };
+}
+if (band) {
+  const bandsArray = band.split(",").filter(Boolean);
+  if (bandsArray.length > 0) userFilter.band = { [Op.in]: bandsArray };
+}
+
     const users = await User.findAll({ where: userFilter });
 
-    // Step 2: Get each user's most recent assessment
+    // Get available orgUnits and bands from filtered users
+    const availableOrgUnits = [...new Set(users.map(u => u.orgUnit))];
+    const availableBands = [...new Set(users.map(u => u.band))].sort();
+
+    // Continue with summary aggregation
     const assessments = await Promise.all(
       users.map(user =>
         Assessment.findOne({
@@ -124,32 +140,27 @@ router.get('/org-summary', async (req, res) => {
     const validAssessments = assessments.filter(a => a?.id);
     const assessmentIds = validAssessments.map(a => a.id);
 
-    if (assessmentIds.length === 0) {
-      return res.json({
-        behaviourAverages: [],
-        skillAverages: [],
-        contentAverages: []
-      });
-    }
-
-    // Step 3: Generate org-level averages
     const {
       orgBehaviourAverages,
       orgSkillAverages,
       orgContentAverages
-    } = await generateOrgStats(assessmentIds);
+    } = assessmentIds.length > 0
+      ? await generateOrgStats(assessmentIds)
+      : { orgBehaviourAverages: [], orgSkillAverages: [], orgContentAverages: [] };
 
     res.json({
       behaviourAverages: orgBehaviourAverages,
       skillAverages: orgSkillAverages,
-      contentAverages: orgContentAverages
+      contentAverages: orgContentAverages,
+      availableOrgUnits,
+      availableBands
     });
-
   } catch (err) {
     console.error("❌ Error generating org summary:", err.message);
     res.status(500).json({ error: "Summary generation failed", details: err.message });
   }
 });
+
 
 router.get("/assessment-summary/:assessmentId", async (req, res) => {
   try {

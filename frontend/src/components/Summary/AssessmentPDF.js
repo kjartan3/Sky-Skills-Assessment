@@ -1,6 +1,8 @@
 import React from "react";
 import { Document, Page, Text, Link, View, StyleSheet,Image } from "@react-pdf/renderer";
 import { getLevel } from "../helper/getLevel";
+import { skillColors } from "../helper/skillColors";
+
 
 const styles = StyleSheet.create({
   page: { padding: 70, paddingVertical: 55 },
@@ -20,12 +22,7 @@ const styles = StyleSheet.create({
   headerImage: { width: '100%', height: 80, objectFit: 'cover', marginBottom: 30 },
 });
 
-const skillColors = {
-  Welcoming: "#FF8C00",
-  Creative: "#FF00A0",
-  Simplifying: "#8C28FF",
-  "Doing the right thing": "#19A0FF"
-};
+
 
 const AssessmentPDF = ({ assessmentId, stats, assessment, getContentForBehaviour }) => (
   <Document>

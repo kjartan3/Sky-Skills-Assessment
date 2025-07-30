@@ -11,7 +11,7 @@ import { getLevel } from '../helper/getLevel';
 
 
 
-const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS }) => {
+const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS, skillColors }) => {
   const selectedAssessmentStats = selectedAssessmentId ? stats[selectedAssessmentId]?.skillAverages : [];
 
   const allSkills = Array.from(
@@ -68,11 +68,11 @@ const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS 
                 <text x={newX} y={newY} textAnchor="middle" fill="#333" fontSize={13}>
                   {isLongSkill ? (
                     <>
-                      <tspan x={newX} dy="-5" fontSize="16" fontWeight="bold">Doing the</tspan>
-                      <tspan x={newX} dy="17" fontSize="16" fontWeight="bold">right thing</tspan>
+                      <tspan x={newX} dy="-5" fontSize="16" fontWeight="bold" fill='#19A0FF'>Doing the</tspan>
+                      <tspan x={newX} dy="17" fontSize="16" fontWeight="bold" fill='#19A0FF'>right thing</tspan>
                     </>
                   ) : (
-                    <tspan x={newX} dy="0" fontSize="16" fontWeight="bold">{skillName}</tspan>
+                    <tspan x={newX} dy="0" fontSize="16" fontWeight="bold"  fill={skillColors[skillName] || "#333"}>{skillName}</tspan>
                   )}
                   {level && (
                     <tspan x={newX} dy="22" fontWeight="normal" fontStyle="italic">({level})</tspan>

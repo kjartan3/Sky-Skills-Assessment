@@ -16,11 +16,27 @@ const ManagerDashboard = () => {
 
   const [selectedOrgUnit, setSelectedOrgUnit] = useState([]);
   const [orgUnits, setOrgUnits] = useState([]);
-  const [activeOrgUnit, setActiveOrgUnit] = useState('All');
-
+  const [activeOrgUnit, setActiveOrgUnit] = useState([]);
+  const [activeBand, setActiveBand] = useState([])
 
   const [selectedBand, setSelectedBand] = useState([]);
   const [bands, setBands] = useState([]);
+
+  const orgUnitOptions = [
+    
+    ...orgUnits.map(unit => ({ value: unit, label: unit }))
+  ];
+
+  const bandOptions = [
+  
+   ...bands.slice().sort().map(b => ({ value: b, label: b }))
+    
+    
+];
+
+
+  const [filteredBandOptions, setFilteredBandOptions] = useState(bandOptions);
+  const [filteredOrgUnitOptions, setFilteredOrgUnitOptions] = useState(orgUnitOptions);
 
 
   const [top3Behaviours, setTop3Behaviours] = useState([]);
@@ -42,9 +58,12 @@ const ManagerDashboard = () => {
 
         const uniqueUnits = [...new Set(res.data.map(u => u.orgUnit).filter(Boolean))].sort();
         setOrgUnits(uniqueUnits);
+        setFilteredOrgUnitOptions(uniqueUnits.map(unit => ({ value: unit, label: unit })));
 
         const uniqueBands = [...new Set(res.data.map(u => u.band).filter(Boolean))].sort();
         setBands(uniqueBands);
+        setFilteredBandOptions(uniqueBands.map(b => ({ value: b, label: b })));
+
       } catch (err) {
         console.error('Error fetching users:', err);
       }
@@ -54,22 +73,31 @@ const ManagerDashboard = () => {
   }, []);
 
  
-const handleOrgUnitChange = async (orgUnit) => {
-    setActiveOrgUnit(orgUnit);
+const handleBandChange = (selectedValues) => {
+  setActiveBand(selectedValues);
+};
+const handleOrgUnitChange = (selectedValues) => {
+  setActiveOrgUnit(selectedValues);
+};
 
-    try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/assessments/org-summary`, {
-        params: orgUnit === "All" ? {} : { orgUnit }
-      });
-      setSummaryData(res.data);
-    } catch (err) {
-      console.error("Error fetching summary data:", err);
-    }
-  };
+const fetchSummary = async (orgUnitsSelected, bandsSelected) => {
+  const params = {};
 
-  useEffect(() => {
-    handleOrgUnitChange("All");
-  }, []);
+  if (orgUnitsSelected.length > 0) {
+    params.orgUnit = orgUnitsSelected.join(",");
+  }
+
+  if (bandsSelected.length > 0) {
+    params.band = bandsSelected.join(",");
+  }
+
+  const res = await axios.get(`${process.env.REACT_APP_API_URL}/assessments/org-summary`, { params });
+
+  setSummaryData(res.data);
+
+
+};
+
 
   // 📊 Process summary data
   useEffect(() => {
@@ -82,21 +110,29 @@ const handleOrgUnitChange = async (orgUnit) => {
   // 🟩 Sort descending for Top 3
     const sortedBehaviours = [...behaviourAverages].sort((a, b) => b.averageScore - a.averageScore);
     setTop3Behaviours(sortedBehaviours.slice(0, 3));
-  
+
     // 🟥 Sort ascending for Bottom 3 — worst first!
     const bottomBehaviours = [...behaviourAverages].sort((a, b) => a.averageScore - b.averageScore);
     setBottom3Behaviours(bottomBehaviours.slice(0, 3));
-  
+
     setSkillsSummary([...skillAverages].sort((a, b) => b.averageScore - a.averageScore));
-  
+
     const sortedContent = [...contentAverages].sort((a, b) => b.averageScore - a.averageScore);
     setTop3Content(sortedContent.slice(0, 3));
-  
+
     const bottomContent = [...contentAverages].sort((a, b) => a.averageScore - b.averageScore);
     setBottom3Content(bottomContent.slice(0, 3));
   }, [summaryData]);
 
- 
+useEffect(() => {
+  fetchSummary([], []);
+}, []);
+
+useEffect(() => {
+  fetchSummary(activeOrgUnit, activeBand);
+}, [activeOrgUnit, activeBand]);
+
+  
 useEffect(() => {
     setCurrentPage(1);
   }, [searchFilter, selectedOrgUnit, selectedBand]);
@@ -124,10 +160,7 @@ useEffect(() => {
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
-  const orgUnitOptions = [
-    { value: 'All', label: 'All Units' },
-    ...orgUnits.map(unit => ({ value: unit, label: unit }))
-  ];
+  
 
   return (
     <div className='container'>
@@ -135,23 +168,46 @@ useEffect(() => {
 
       {/* 📊 Summary Filter */}
       <div className="summary-filter">
-        <label htmlFor="summaryOrgUnitSelect"><strong>Summary Insights:</strong> Filter by Org Unit</label>
-        {/* <select
-          id="summaryOrgUnitSelect"
-          value={activeOrgUnit}
-          onChange={(e) => handleOrgUnitChange(e.target.value)}
-        >
-          <option value="All">All Units</option>
-          {orgUnits.map(unit => (
-            <option key={unit} value={unit}>{unit}</option>
-          ))}
-        </select> */}
+        <label htmlFor="summaryOrgUnitSelect"><strong>Summary Insights:</strong> Filter by Org Unit or by Band</label>
+        
 
         <Select
-          options={orgUnitOptions}
-          value={orgUnitOptions.find(opt => opt.value === activeOrgUnit)}
-          onChange={(selectedOption) => handleOrgUnitChange(selectedOption.value)}
+          isMulti
+          options={filteredOrgUnitOptions}
+          value={filteredOrgUnitOptions.filter(opt => activeOrgUnit.includes(opt.value))}
+          onChange={(selectedOptions) => 
+            handleOrgUnitChange(selectedOptions.map(opt => opt.value))}
           placeholder="Select Org Unit"
+          styles={{
+            control: (base) => ({
+              ...base,
+              padding: '3px',
+              marginLeft: '14px',
+              marginRight: '14px',
+              borderRadius: '3px',
+              fontSize: '14px',
+              minWidth: '250px',
+            
+            }),
+            singleValue: (base) => ({
+              ...base,
+              fontSize: '14px',
+            }),
+            placeholder: (base) => ({
+              ...base,
+              fontSize: '16px',
+              color: 'hsl(0, 0%, 20%)',
+            }),
+          }}
+        />
+        <Select
+          isMulti
+          options={filteredBandOptions}
+          value={filteredBandOptions.filter(opt => activeBand.includes(opt.value))}
+          onChange={(selectedOptions) =>
+            handleBandChange(selectedOptions.map(opt => opt.value))
+          }
+          placeholder="Select Band"
           styles={{
             control: (base) => ({
               ...base,
@@ -184,6 +240,7 @@ useEffect(() => {
         topContent={top3Content}
         bottomContent={bottom3Content}
         selectedOrgUnit={activeOrgUnit}
+        selectedBand={activeBand}
       />
 
       <div className="filter-panel">

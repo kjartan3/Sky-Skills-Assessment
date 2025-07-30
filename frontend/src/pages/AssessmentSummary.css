@@ -237,6 +237,7 @@ body {
   color: #333;
   cursor: pointer;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  
 }
 
 .chart-with-list select:focus {
@@ -269,3 +270,16 @@ body {
 }
 
 
+.info-text {
+  margin-left: 175px;
+  margin-right: 175px;
+  margin-bottom: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  
+}
+.info-text p {
+  font-size: 14px;
+}
