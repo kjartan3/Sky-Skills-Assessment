@@ -1,1 +1,3 @@
-export const allowedUserIds = ['khj551', 'sms276', "bre896", "dcy15", "DCY15"];
+export const allowedUserIds = ['khj551', 'sms276', "dcy15"];
+
+export const allowedUserEmails = ["bartholomew.rayson@sky.uk", "anna.johnston@sky.uk"]

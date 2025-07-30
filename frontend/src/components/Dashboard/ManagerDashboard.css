@@ -53,7 +53,6 @@ button {
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s ease;
-  
 }
 
 button:hover {
@@ -63,8 +62,14 @@ button:hover {
 
 /* Summary filter dropdown */
 .summary-filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 20px;
-  
+}
+
+.summary-filter label {
+  font-size: 14px;
 }
 
 .summary-filter select {

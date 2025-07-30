@@ -22,7 +22,7 @@ const OrgSummary = ({
           <h4>Values</h4>
           <ol>
             {skills.map((s, i) => (
-                <li key={i}>{s.skillName}</li>
+                <li key={i}>{s.name}</li>
               ))
             }
           </ol>
@@ -31,14 +31,14 @@ const OrgSummary = ({
           <h4>Top 3 Behaviours</h4>
           <ul>
             {topBehaviours.map((b, i) => (
-              <p key={i}>{b.behaviourName}</p>
+              <p key={i}>{b.name} </p>
             ))}
           </ul>
 
           <h4>Bottom 3 Behaviours</h4>
           <ul>
             {bottomBehaviours.map((b, i) => (
-              <p key={i}>{b.behaviourName}</p>
+              <p key={i}>{b.name} </p>
             ))}
           </ul>
         </div>
@@ -49,14 +49,14 @@ const OrgSummary = ({
           <h4>Top 3 Skills</h4>
           <ul>
             {topContent.map((c, i) => (
-              <p key={i}>{c.title}</p>
+              <p key={i}>{c.name} </p>
             ))}
           </ul>
 
           <h4>Bottom 3 Skills</h4>
           <ul>
             {bottomContent.map((c, i) => (
-              <p key={i}>{c.title}</p>
+              <p key={i}>{c.name} </p>
             ))}
           </ul>
         </div>

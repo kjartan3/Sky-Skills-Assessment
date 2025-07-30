@@ -9,7 +9,7 @@ import Navbar from './components/Navbar';
 import AssessmentOutro from './pages/AssessmentOutro'
 import Dashboard from './pages/Dashboard';
 import ComplianceModal from './components/Compliance/ComplianceModal';
-import { allowedUserIds } from './components/helper/allowedUsers';
+import { allowedUserEmails, allowedUserIds } from './components/helper/allowedUsers';
 
 
 
@@ -31,7 +31,9 @@ const App = () => {
               
               if (response.ok) {
                   const userData = await response.json();
+                  console.log("Fetched user:", userData);
                   setUser(userData);
+                  
               } else {
                   // Clear user state if unauthorized
                   setUser(null);
@@ -71,6 +73,12 @@ const handleComplianceAcknowledgement = () => {
     }
 
 
+const isAllowedUser =
+  allowedUserIds.includes(user?.userId.toLowerCase()) ||
+  allowedUserEmails.includes(user?.email?.toLowerCase().trim());
+
+
+
 
     return (
       <Router>
@@ -102,16 +110,16 @@ const handleComplianceAcknowledgement = () => {
               {/* Add a catch-all SAML callback route */}
               <Route path="/auth/login/callback" element={<Navigate to="/" />} />
               <Route path="/assessmentoutro" element={<AssessmentOutro  />} />
-              <Route
+             <Route
                 path="/dashboard"
                 element={
-                    allowedUserIds.includes(user?.userId) ? (
-                    <Dashboard user={user} />
-                    ) : (
-                    <Navigate to="/" />
-                    )
-                }
-                />
+                isAllowedUser ? (
+             <Dashboard user={user} />
+                ) : (
+             <Navigate to="/" />
+            )
+            }
+        />
           </Routes>
       </Router>
   );

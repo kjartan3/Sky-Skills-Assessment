@@ -19,7 +19,7 @@ const seedDatabase = async () => {
     await Behaviour.drop();
     await Skill.drop();
 
-    Resync models
+    // Resync models
     await Skill.sync();
     await Behaviour.sync();
     await Content.sync();
@@ -381,15 +381,15 @@ const statementsData = [
     guidanceText: 'Assess how you work with others to achieve shared goals. Consider how you contribute, include others, and build helpful relationships.',
   },
   {
-    text: 'I am comfortable with failure, I see it as a learning experience.',
+    text: 'I am comfortable with mistakes, I see it as a learning experience.',
     guidanceText: 'Reflect on how you view challenges as opportunities. Think about how you learn from setbacks, adapt plans, and stay resilient.',
   },
   {
-    text: "I continuously seek feedback from others on how I can do my job even better. I don't just wait for the end of the year.",
+    text: "I continuously seek feedback from others on how I can do my job even better (I don't just wait for the end of the year).",
     guidanceText: 'Reflect on how you give and receive feedback. Consider how you identify strengths, reflect on challenges, and communicate constructively.',
   },
   {
-    text: 'I ask great questions to understand other points of view.',
+    text: 'I ask curious questions to understand other points of view.',
     guidanceText: 'Explore your desire to learn and understand more. Reflect on how you ask open questions and approach new challenges with a positive mindset.',
   },
   {
@@ -401,19 +401,19 @@ const statementsData = [
     guidanceText: 'Assess how well you adapt in fast-paced situations. Think about how you manage reactions, balance workloads, and plan flexibly.',
   },
   {
-    text: 'I innovate by improving ways of working, processes or products that add value.',
+    text: 'I innovate by improving ways of working, processes or products to add value.',
     guidanceText: 'Reflect on how you create and implement new ideas. Consider how you identify opportunities, stay curious, and foster creativity in others.',
   },
   {
-    text: 'I manage my energy levels through the day to keep my resilience through times of change.',
+    text: 'I keep my resilience through times of change.',
     guidanceText: 'Reflect on how you take ownership of your energy and wellbeing throughout the day, and how you use intentional actions to stay focused, grounded and adaptable. ',
   },
   {
-    text: 'I communicate complex big topics in a way that resonates with others.',
+    text: 'I communicate complex topics in a way that resonates with others.',
     guidanceText: "Consider how you organise your thoughts, listen actively, respond to others' ideas and engage your audience effectively.",
   },
   {
-    text: "I prioritise what I work on (and my team*) by asking myself 'does this add the most value?'",
+    text: "I prioritise what I work on (and my team) by asking myself 'what matters most?'",
     guidanceText: 'Reflect on how you focus on what matters most. Think about how you manage resources, order tasks, and plan strategically.',
   },
   {
@@ -421,7 +421,7 @@ const statementsData = [
     guidanceText: 'Think about how you contribute to an inclusive and supportive environment. Consider how you express yourself, support others, and handle sensitive topics.',
   },
   {
-    text: 'When I have a new idea, I effectively tell stories by analysing multiple sources of data to bring it to life.',
+    text: 'When I have a new idea, I analyse multiple sources of data to bring it to life.',
     guidanceText: 'Think about how you analyse information and challenge assumptions. Reflect on how you seek different perspectives and use questions to deepen understanding.',
   },
   {
@@ -429,7 +429,7 @@ const statementsData = [
     guidanceText: 'Reflect on how actively you explore and apply AI tools to streamline your daily work. Think about how you make informed choices about when and how to use AI.',
   },
   {
-    text: "I seek opporunities to constantly look at 'how we can make things even better and simplified'.",
+    text: "I am constantly looking for opportunities to simplify my work'.",
     guidanceText: 'Assess how you seek and implement improvements. Consider how you generate ideas, challenge assumptions, and use feedback to evolve your work',
   },
   {
@@ -457,7 +457,7 @@ const statementsData = [
     guidanceText: 'Think about how you engage in meaningful dialogue. Reflect on how you ask questions, adapt your communication, and negotiate effectively.',
   },
   {
-    text: 'I manage my day-to-day distractions, to give my full attention to others - both face to face and/or virtual.',
+    text: 'I give my full attention to others - both face to face and/or virtual.',
     guidanceText: 'Assess how well you pay attention and understand others. Consider how you actively listen, and recognise influence in conversations.',
   },
 ];

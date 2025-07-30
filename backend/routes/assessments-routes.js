@@ -9,6 +9,8 @@ import {
   User
 } from '../models/index.js';
 import { generateStats } from '../utils/generateStats.js';
+import { generateOrgStats } from '../utils/generateOrgStats.js';
+
 
 
 const router = express.Router();
@@ -99,6 +101,74 @@ router.get('/latest-summary', async (req, res) => {
     res.status(500).json({ error: 'Failed to generate latest summary', details: err.message });
   }
 });
+
+
+router.get('/org-summary', async (req, res) => {
+  try {
+    const { orgUnit } = req.query;
+
+    // Step 1: Get all users (or filter by orgUnit)
+    const userFilter = orgUnit ? { orgUnit } : {};
+    const users = await User.findAll({ where: userFilter });
+
+    // Step 2: Get each user's most recent assessment
+    const assessments = await Promise.all(
+      users.map(user =>
+        Assessment.findOne({
+          where: { userId: user.userId },
+          order: [['createdAt', 'DESC']],
+        })
+      )
+    );
+
+    const validAssessments = assessments.filter(a => a?.id);
+    const assessmentIds = validAssessments.map(a => a.id);
+
+    if (assessmentIds.length === 0) {
+      return res.json({
+        behaviourAverages: [],
+        skillAverages: [],
+        contentAverages: []
+      });
+    }
+
+    // Step 3: Generate org-level averages
+    const {
+      orgBehaviourAverages,
+      orgSkillAverages,
+      orgContentAverages
+    } = await generateOrgStats(assessmentIds);
+
+    res.json({
+      behaviourAverages: orgBehaviourAverages,
+      skillAverages: orgSkillAverages,
+      contentAverages: orgContentAverages
+    });
+
+  } catch (err) {
+    console.error("❌ Error generating org summary:", err.message);
+    res.status(500).json({ error: "Summary generation failed", details: err.message });
+  }
+});
+
+router.get("/assessment-summary/:assessmentId", async (req, res) => {
+  try {
+    const { assessmentId } = req.params;
+    const {
+      behaviourAverages,
+      skillAverages,
+      contentAverages
+    } = await generateStats(assessmentId); // ← your original working function
+
+    res.json({ behaviourAverages, skillAverages, contentAverages });
+  } catch (err) {
+    console.error("Error generating assessment summary:", err.message);
+    res.status(500).json({ error: "Assessment summary failed", details: err.message });
+  }
+});
+
+
+
 
 router.get('/:userId', async (req, res) => {
   const { userId } = req.params;

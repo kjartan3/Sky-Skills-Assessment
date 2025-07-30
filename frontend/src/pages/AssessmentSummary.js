@@ -6,6 +6,8 @@ import SkillsBreakdown from '../components/Summary/SkillsBreakdown';
 import RadarChartContainer from '../components/Summary/RadarChartContainer';
 import ProficiencyKey from '../components/Summary/ProficiencyKey';
 import './AssessmentSummary.css';
+import Select from 'react-select';
+import AssessmentOverview from '../components/Summary/AssessmentOverview';
 
 const COLORS = [
   '#007bff',
@@ -26,6 +28,8 @@ const AssessmentSummary = ({ user }) => {
   const [selectedAssessmentId, setSelectedAssessmentId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedTimeFrame, setSelectedTimeFrame] = useState('latest');
+
+  
 
   useEffect(() => {
     const fetchAssessments = async () => {
@@ -58,7 +62,9 @@ const AssessmentSummary = ({ user }) => {
         });
         setStats(statsByAssessmentId);
         if (res.data.length > 0) {
+
           setSelectedAssessmentId(prevId => prevId && statsByAssessmentId[prevId] ? prevId : res.data[0].id);
+
         } else {
           setSelectedAssessmentId(null);
         }
@@ -74,6 +80,8 @@ const AssessmentSummary = ({ user }) => {
 
     fetchAssessments();
   }, [user]);
+
+  
 
   const filterAssessmentsByTime = () => {
     if (!assessments || assessments.length === 0) {
@@ -93,16 +101,17 @@ const AssessmentSummary = ({ user }) => {
   
   const displayedAssessments = filterAssessmentsByTime();
   
-  // const displayedAssessments = showAll ? assessments : assessments.slice(0, 3);
+ 
   
-  const handleTimeFrameChange = (e) => {
-    const value = e.target.value;
+  const handleTimeFrameChange = (selectedOption) => {
+    const value = selectedOption?.value;
     setSelectedTimeFrame(value);
-  
+
     if (value === "latest") {
       setSelectedAssessmentId(assessments[0]?.id);
     }
   };
+
   
   const getContentForBehaviour = (behaviourId) => {
     const assessmentObj = assessments.find(a => a.id === selectedAssessmentId);
@@ -117,12 +126,30 @@ const AssessmentSummary = ({ user }) => {
     return Object.values(contentsMap);
   };
 
+  const options = [
+    { value: 'latest', label: 'Current Result' },
+    { value: '3', label: 'Last 3 Months' },
+    { value: '6', label: 'Last 6 Months' },
+    { value: '12', label: 'Last 12 Months' }
+  ];
+
+  const getLabel = (value) => {
+    switch (value) {
+      case 'latest': return 'Current Result';
+      case '3': return 'Last 3 Months';
+      case '6': return 'Last 6 Months';
+      case '12': return 'Last 12 Months';
+      default: return '';
+    }
+  };
+
+
   return (
   loading ? (
     <div className='loading-container'>Loading assessment summary...</div>
   ) : (
     <div className="assessment-summary-container">
-      <h2 className="summary-title">Assessment Summary</h2>
+      <h2 className="summary-title">Sky Skills Assessment Summary</h2>
 
       {assessments.length === 0 ? (
         <div className='intermission-content'>
@@ -145,16 +172,14 @@ const AssessmentSummary = ({ user }) => {
           <div className="chart-with-list flex flex-row flex-wrap gap-8 px-8 py-4 items-start">
           
             <div className="flex flex-col gap-4 max-w-md w-full">
-              <select
-                value={selectedTimeFrame}
+
+              <Select
+                options={options}
+                value={{ value: selectedTimeFrame, label: getLabel(selectedTimeFrame) }}
                 onChange={handleTimeFrameChange}
-                className="p-2 border rounded"
-              >
-                <option value="latest">Latest</option>
-                <option value="3">Last 3 Months</option>
-                <option value="6">Last 6 Months</option>
-                <option value="12">Last 12 Months</option>
-              </select>
+                placeholder="Select Time Frame"
+              />
+
 
               <AssessmentList
                 assessments={displayedAssessments}
@@ -181,8 +206,12 @@ const AssessmentSummary = ({ user }) => {
             </div>
           </div>
 
-      
-        
+          <div>
+          <AssessmentOverview 
+          selectedAssessmentId={selectedAssessmentId}
+          assessmentIndex={assessments.findIndex((a) => a.id === selectedAssessmentId)}
+          />
+          </div>
 
           {selectedAssessmentId && (
             <SkillsBreakdown

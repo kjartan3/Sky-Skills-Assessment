@@ -18,7 +18,6 @@ const ManagerDashboard = () => {
   const [orgUnits, setOrgUnits] = useState([]);
   const [activeOrgUnit, setActiveOrgUnit] = useState('All');
 
-  
 
   const [selectedBand, setSelectedBand] = useState([]);
   const [bands, setBands] = useState([]);
@@ -41,99 +40,66 @@ const ManagerDashboard = () => {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/users`);
         setAllUsers(res.data);
 
-        const uniqueUnits = [...new Set(res.data.map(u => u.orgUnit).filter(Boolean))];
-        setOrgUnits(uniqueUnits.sort());
+        const uniqueUnits = [...new Set(res.data.map(u => u.orgUnit).filter(Boolean))].sort();
+        setOrgUnits(uniqueUnits);
 
-        const uniqueBands = [...new Set(res.data.map(u => u.band).filter(Boolean))];
-        setBands(uniqueBands.sort());
-
+        const uniqueBands = [...new Set(res.data.map(u => u.band).filter(Boolean))].sort();
+        setBands(uniqueBands);
       } catch (err) {
         console.error('Error fetching users:', err);
       }
     };
 
-    const fetchSummary = async () => {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/assessments/latest-summary`);
-        setSummaryData(res.data);
-      } catch (err) {
-        console.error('Error fetching summary data:', err);
-      }
-    };
-
     fetchUsers();
-    fetchSummary();
   }, []);
 
- useEffect(() => {
-  if (!summaryData.length) return;
-  const filteredSummary = activeOrgUnit === "All"
-    ? summaryData
-    : summaryData.filter(user => user.orgUnit === activeOrgUnit);
-  const behaviours = [];
-  const skills = [];
-  const content = [];
-  filteredSummary.forEach(({ behaviourAverages, skillAverages, contentAverages }) => {
-    behaviours.push(...behaviourAverages);
-    skills.push(...skillAverages);
-    content.push(...contentAverages);
-  });
-  // ✅ Deduplicate & average skills
-  const skillMap = new Map();
-  skills.forEach(skill => {
-    const key = skill.skillName;
-    if (!skillMap.has(key)) {
-      skillMap.set(key, { ...skill, totalScore: skill.averageScore, count: 1 });
-    } else {
-      const existing = skillMap.get(key);
-      skillMap.set(key, {
-        ...existing,
-        totalScore: existing.totalScore + skill.averageScore,
-        count: existing.count + 1
-      });
-    }
-  });
-  const averagedSkills = Array.from(skillMap.values()).map(s => ({
-    skillName: s.skillName,
-    averageScore: s.totalScore / s.count
-  }));
-  const sortedSkills = averagedSkills.sort((a, b) => b.averageScore - a.averageScore);
-  setSkillsSummary(sortedSkills);
-  // ✅ Deduplicate content
-  const contentMap = new Map();
-  content.forEach(c => {
-    if (!contentMap.has(c.title)) {
-      contentMap.set(c.title, c);
-    } else {
-      const existing = contentMap.get(c.title);
-      contentMap.set(c.title, {
-        ...existing,
-        averageScore: Math.max(existing.averageScore, c.averageScore)
-      });
-    }
-  });
-  const dedupedContent = Array.from(contentMap.values());
-  setTop3Content([...dedupedContent].sort((a, b) => b.averageScore - a.averageScore).slice(0, 3));
-  setBottom3Content([...dedupedContent].sort((a, b) => a.averageScore - b.averageScore).slice(0, 3));
-  // ✅ Deduplicate behaviours
-  const behaviourMap = new Map();
-  behaviours.forEach(b => {
-    if (!behaviourMap.has(b.behaviourName)) {
-      behaviourMap.set(b.behaviourName, b);
-    } else {
-      const existing = behaviourMap.get(b.behaviourName);
-      behaviourMap.set(b.behaviourName, {
-        ...existing,
-        averageScore: Math.max(existing.averageScore, b.averageScore)
-      });
-    }
-  });
-  const dedupedBehaviours = Array.from(behaviourMap.values());
-  setTop3Behaviours([...dedupedBehaviours].sort((a, b) => b.averageScore - a.averageScore).slice(0, 3));
-  setBottom3Behaviours([...dedupedBehaviours].sort((a, b) => a.averageScore - b.averageScore).slice(0, 3));
-}, [activeOrgUnit, summaryData]);
+ 
+const handleOrgUnitChange = async (orgUnit) => {
+    setActiveOrgUnit(orgUnit);
 
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/assessments/org-summary`, {
+        params: orgUnit === "All" ? {} : { orgUnit }
+      });
+      setSummaryData(res.data);
+    } catch (err) {
+      console.error("Error fetching summary data:", err);
+    }
+  };
+
+  useEffect(() => {
+    handleOrgUnitChange("All");
+  }, []);
+
+  // 📊 Process summary data
+  useEffect(() => {
+  const {
+    behaviourAverages = [],
+    skillAverages = [],
+    contentAverages = []
+  } = summaryData;
+
+  // 🟩 Sort descending for Top 3
+    const sortedBehaviours = [...behaviourAverages].sort((a, b) => b.averageScore - a.averageScore);
+    setTop3Behaviours(sortedBehaviours.slice(0, 3));
   
+    // 🟥 Sort ascending for Bottom 3 — worst first!
+    const bottomBehaviours = [...behaviourAverages].sort((a, b) => a.averageScore - b.averageScore);
+    setBottom3Behaviours(bottomBehaviours.slice(0, 3));
+  
+    setSkillsSummary([...skillAverages].sort((a, b) => b.averageScore - a.averageScore));
+  
+    const sortedContent = [...contentAverages].sort((a, b) => b.averageScore - a.averageScore);
+    setTop3Content(sortedContent.slice(0, 3));
+  
+    const bottomContent = [...contentAverages].sort((a, b) => a.averageScore - b.averageScore);
+    setBottom3Content(bottomContent.slice(0, 3));
+  }, [summaryData]);
+
+ 
+useEffect(() => {
+    setCurrentPage(1);
+  }, [searchFilter, selectedOrgUnit, selectedBand]);
 
   const filteredUsers = allUsers.filter(user => {
     const matchesSearch = (
@@ -158,6 +124,11 @@ const ManagerDashboard = () => {
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
+  const orgUnitOptions = [
+    { value: 'All', label: 'All Units' },
+    ...orgUnits.map(unit => ({ value: unit, label: unit }))
+  ];
+
   return (
     <div className='container'>
       <h2 className='dashboard-header'>Reporting Dashboard</h2>
@@ -165,16 +136,45 @@ const ManagerDashboard = () => {
       {/* 📊 Summary Filter */}
       <div className="summary-filter">
         <label htmlFor="summaryOrgUnitSelect"><strong>Summary Insights:</strong> Filter by Org Unit</label>
-        <select
+        {/* <select
           id="summaryOrgUnitSelect"
           value={activeOrgUnit}
-          onChange={(e) => setActiveOrgUnit(e.target.value)}
+          onChange={(e) => handleOrgUnitChange(e.target.value)}
         >
           <option value="All">All Units</option>
           {orgUnits.map(unit => (
             <option key={unit} value={unit}>{unit}</option>
           ))}
-        </select>
+        </select> */}
+
+        <Select
+          options={orgUnitOptions}
+          value={orgUnitOptions.find(opt => opt.value === activeOrgUnit)}
+          onChange={(selectedOption) => handleOrgUnitChange(selectedOption.value)}
+          placeholder="Select Org Unit"
+          styles={{
+            control: (base) => ({
+              ...base,
+              padding: '3px',
+              marginLeft: '14px',
+              marginRight: '14px',
+              borderRadius: '3px',
+              fontSize: '14px',
+              minWidth: '250px',
+            
+            }),
+            singleValue: (base) => ({
+              ...base,
+              fontSize: '14px',
+            }),
+            placeholder: (base) => ({
+              ...base,
+              fontSize: '16px',
+              color: 'hsl(0, 0%, 20%)',
+            }),
+          }}
+        />
+
       </div>
 
       <OrgSummary
@@ -187,32 +187,32 @@ const ManagerDashboard = () => {
       />
 
       <div className="filter-panel">
-  <div className="filter-group">
-    <label><strong>Filter by Org Unit</strong></label>
-    <Select
-      isMulti
-      options={orgUnits.map(u => ({ label: u, value: u }))}
-      value={orgUnits
-        .filter(u => selectedOrgUnit.includes(u))
-        .map(u => ({ label: u, value: u }))}
-      onChange={(selected) => setSelectedOrgUnit(selected.map(opt => opt.value))}
-      placeholder="Select Org Units"
-    />
-  </div>
-
-  <div className="filter-group">
-    <label><strong>Filter by Band</strong></label>
-    <Select
-      isMulti
-      options={bands.map(b => ({ label: b, value: b }))}
-      value={bands
-        .filter(b => selectedBand.includes(b))
-        .map(b => ({ label: b, value: b }))}
-      onChange={(selected) => setSelectedBand(selected.map(opt => opt.value))}
-      placeholder="Select Bands"
-    />
-  </div>
-</div>
+        <div className="filter-group">
+          <label><strong>Filter by Org Unit</strong></label>
+          <Select
+            isMulti
+            options={orgUnits.map(u => ({ label: u, value: u }))}
+            value={orgUnits
+              .filter(u => selectedOrgUnit.includes(u))
+              .map(u => ({ label: u, value: u }))}
+            onChange={(selected) => setSelectedOrgUnit(selected.map(opt => opt.value))}
+            placeholder="Select Org Units"
+          />
+        </div>
+            
+        <div className="filter-group">
+          <label><strong>Filter by Band</strong></label>
+          <Select
+            isMulti
+            options={bands.map(b => ({ label: b, value: b }))}
+            value={bands
+              .filter(b => selectedBand.includes(b))
+              .map(b => ({ label: b, value: b }))}
+            onChange={(selected) => setSelectedBand(selected.map(opt => opt.value))}
+            placeholder="Select Bands"
+          />
+        </div>
+      </div>
 
 
       <input 
@@ -224,55 +224,54 @@ const ManagerDashboard = () => {
 
       <button
         onClick={() => {
-          const pageUserIds = currentUsers.map(u => u.userId);
-          const allSelected = pageUserIds.every(id => selectedUsers.includes(id));
-          setSelectedUsers(prev =>
-            allSelected
-              ? prev.filter(id => !pageUserIds.includes(id))
-              : [...new Set([...prev, ...pageUserIds])]
-          );
+          const filteredUserIds = filteredUsers.map(u => u.userId);
+          const allSelected = filteredUserIds.every(id => selectedUsers.includes(id));
+        
+          setSelectedUsers(allSelected ? [] : filteredUserIds);
         }}
       >
-        {currentUsers.every(id => selectedUsers.includes(id))
-          ? 'Deselect All on Page'
-          : 'Select All on Page'}
+        {filteredUsers.every(user => selectedUsers.includes(user.userId))
+          ? 'Deselect All'
+          : 'Select All'}
       </button>
-    <div className="user-table-container">
-     <table className="user-table">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Org Unit</th>
-      
-    </tr>
-  </thead>
-  <tbody>
-    {currentUsers.map(user => (
-      <tr key={user.userId}>
-        <td>
-          <input
-            type="checkbox"
-            checked={selectedUsers.includes(user.userId)}
-            onChange={() =>
-              setSelectedUsers(prev =>
-                prev.includes(user.userId)
-                  ? prev.filter(id => id !== user.userId)
-                  : [...prev, user.userId]
-              )
-            }
-          />
-        </td>
-        <td>{user.firstName} {user.lastName}</td>
-        <td>{user.email}</td>
-        <td>{user.orgUnit}</td>
-        
-      </tr>
-    ))}
-  </tbody>
-</table>
-</div>
+
+
+      <div className="user-table-container">
+       <table className="user-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Org Unit</th>
+          
+          </tr>
+        </thead>
+        <tbody>
+          {currentUsers.map(user => (
+            <tr key={user.userId}>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={selectedUsers.includes(user.userId)}
+                  onChange={() =>
+                    setSelectedUsers(prev =>
+                      prev.includes(user.userId)
+                        ? prev.filter(id => id !== user.userId)
+                        : [...prev, user.userId]
+                    )
+                  }
+                />
+              </td>
+              <td>{user.firstName} {user.lastName}</td>
+              <td>{user.email}</td>
+              <td>{user.orgUnit}</td>
+                
+            </tr>
+          ))}
+        </tbody>
+        </table>
+      </div>
 
       {selectedUsers.length > 0 && (
         <div className="download-actions">
@@ -286,11 +285,11 @@ const ManagerDashboard = () => {
       )}
 
       <div className='pagination'>
-        <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
+        <button style={{ marginRight: '50px' }} onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
           ← Prev
         </button>
         <span>Page {currentPage} of {totalPages}</span>
-        <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
+        <button style={{ marginLeft: '50px' }} onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
           Next →
         </button>
       </div>

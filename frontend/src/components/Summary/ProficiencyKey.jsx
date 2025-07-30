@@ -4,11 +4,11 @@ import "./ProficiencyKey.css";
 
 const definitions = {
   Beginner:
-    "You have a basic awareness of the skill, including a limited understanding of its importance and how it's applied in practice. You may demonstrate this skill some of the time or require guidance and support to perform tasks related to this skill effectively.",
+  "You are new to this skill or have a foundational awareness of its purpose and practical application. You may demonstrate the skill occasionally or typically require guidance and support to apply it effectively in relevant tasks. ",
   Intermediate:
     "You have a solid understanding of the skill, recognise its value and can apply it effectively in your own work most of the time. You are also able to guide others in using the skill, demonstrating leadership in its practical application within your team or area of influence.",
   Advanced:
-    "You have deep expertise in the skill, with a clear understanding of its strategic importance to the business. You consistently apply it with confidence in your own work and effectively champion its adoption across teams, departments or the broader organisation to drive strategic and measurable impact.",
+    "You have expertise in the skill, with a clear understanding of its strategic importance to the business. You consistently apply it with confidence in your own work and effectively champion its adoption across teams, departments or the broader organisation to drive strategic and measurable impact.",
 };
 
 const ProficiencyKey = () => {

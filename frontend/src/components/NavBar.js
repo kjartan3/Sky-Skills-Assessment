@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-import { allowedUserIds } from './helper/allowedUsers';
+import { allowedUserEmails, allowedUserIds } from './helper/allowedUsers';
 
 const Navbar = ({ user }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -31,7 +31,9 @@ const Navbar = ({ user }) => {
         return () => document.removeEventListener('click', handleClickOutside);
       }, [dropdownOpen]);
 
-    
+    const isAllowedUser =
+  allowedUserIds.includes(user?.userId?.toLowerCase()) ||
+  allowedUserEmails.includes(user?.email?.toLowerCase().trim());
     
     return (
         <nav className="navbar">
@@ -49,9 +51,9 @@ const Navbar = ({ user }) => {
                         <Link to="/" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Home</Link>
                         <Link to="/assessment" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Assessment</Link>
                         <Link to="/assessmentsummary" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Summary</Link>
-                         {allowedUserIds.includes(user?.userId.toLowerCase()) && (
+                         {isAllowedUser && (
                         <Link to="/dashboard" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Dashboard</Link>
-                      )}
+                        )}
                         
                        
                     </div>

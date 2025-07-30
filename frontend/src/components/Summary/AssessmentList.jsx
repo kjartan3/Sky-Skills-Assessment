@@ -44,7 +44,7 @@ const AssessmentList = ({ assessments,hoveredId, setHoveredId, setSelectedAssess
             textDecoration: "none",
           }}
         >
-          {({ loading }) => (loading ? "Generating PDF..." : "Download")}
+          {({ loading }) => (loading ? "Generating PDF..." : "Download as PDF")}
         </PDFDownloadLink>
       </div>
     )})}

@@ -6,6 +6,8 @@ import TitleVideo from '../components/TitleVideo.js';
 
     const Home = ({ user }) => {
         useEffect(() => {
+            
+
             if (!user || !user.userId) {
                 console.log("No valid user data found, redirecting to SSO...");
                 window.location.href = `${process.env.REACT_APP_API_URL}/auth/login?returnTo=${window.location.origin}`;

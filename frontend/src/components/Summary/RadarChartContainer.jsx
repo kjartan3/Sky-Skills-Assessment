@@ -103,8 +103,8 @@ const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS 
                 dataKey={a.id}
                 stroke={color}
                 fill={color}
-                fillOpacity={isSelected ? 1 : 0.02}
-                strokeOpacity={isSelected ? 1 : 0.2}
+                fillOpacity={isSelected ? 1 : 0.2}
+                strokeOpacity={isSelected ? 1 : 0.1}
               />
             );
           })}
