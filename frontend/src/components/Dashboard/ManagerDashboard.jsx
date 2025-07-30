@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Select from 'react-select'
-
 import './ManagerDashboard.css';
 import OrgSummary from './OrgSummary';
 import { downloadLatestAssessmentsExcel } from '../helper/exportLatestExcel';
 import { downloadAllAssessmentsExcel } from '../helper/exportAllExcel';
+import { downloadOrgSummaryExcel } from '../helper/exportOrgSummaryExcel';
 import { getLevel } from '../helper/getLevel';
 
 const ManagerDashboard = () => {
@@ -233,7 +233,7 @@ useEffect(() => {
 
       </div>
 
-      <OrgSummary
+      {/* <OrgSummary
         topBehaviours={top3Behaviours}
         bottomBehaviours={bottom3Behaviours}
         skills={skillsSummary}
@@ -241,7 +241,39 @@ useEffect(() => {
         bottomContent={bottom3Content}
         selectedOrgUnit={activeOrgUnit}
         selectedBand={activeBand}
+      /> */}
+
+      <OrgSummary
+        topBehaviours={top3Behaviours}
+        bottomBehaviours={bottom3Behaviours}
+        topContent={top3Content}
+        bottomContent={bottom3Content}
+        skills={skillsSummary}
+        selectedOrgUnit={activeOrgUnit.join(', ') || 'All'}
+        selectedBand={activeBand.join(', ') || 'All'}
       />
+
+      {summaryData?.behaviourAverages?.length > 0 && (
+        <div className="download-actions">
+          <button
+            onClick={() =>
+              downloadOrgSummaryExcel({
+                skills: skillsSummary,
+                topBehaviours: top3Behaviours,
+                bottomBehaviours: bottom3Behaviours,
+                topContent: top3Content,
+                bottomContent: bottom3Content,
+                selectedOrgUnit: activeOrgUnit.join(', ') || 'All',
+                selectedBand: activeBand.join(', ') || 'All'
+              })
+            }
+            className="download-button"
+          >
+            📥 Download Org Summary as Excel
+          </button>
+        </div>
+      )}
+
 
       <div className="filter-panel">
         <div className="filter-group">
