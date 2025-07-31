@@ -36,7 +36,23 @@ const AssessmentOverview = ({ selectedAssessmentId, assessmentIndex }) => {
 
   return (
     <div className="assessment-overview-container">
-      <h3>Assessment #{assessmentIndex + 1} Overview</h3>
+      <h3 className="blue-text">Assessment {assessmentIndex + 1} - Your Personal Insights Summary</h3>
+      <br />
+      <div className="snapshot-text">
+        <div className="intro-text">
+          <p>
+            Discover how you're bringing our values to life, with a clear view of how you're showing up - ranked from 1 (your strongest alignment) to 4 (where there's room to grow). You'll also find:
+          </p>
+        </div>
+
+        <ul className="centered-list">
+          <li><b className="blue-text">Top 3 Strengths:</b> the behaviours and skills consistently demonstrated with impact</li>
+          <li><b className="blue-text">Top 3 Growth Opportunities:</b> the behaviours and skills that will benefit from targeted learning and development</li>
+        </ul>
+      </div>
+
+
+      <br />
 
       <div className="summary-block">
         <div>
@@ -49,14 +65,14 @@ const AssessmentOverview = ({ selectedAssessmentId, assessmentIndex }) => {
         </div>
 
         <div>
-          <h4>Top 3 Behaviours</h4>
+          <h4>Strengths (Behaviours)</h4>
           <ul>
             {top3Behaviours.map((b, i) => (
               <li key={i}>{b.behaviourName}</li>
             ))}
           </ul>
 
-          <h4>Bottom 3 Behaviours</h4>
+          <h4>Growth Opportunities (Behaviours) </h4>
           <ul>
             {bottom3Behaviours.map((b, i) => (
               <li key={i}>{b.behaviourName}</li>
@@ -65,14 +81,14 @@ const AssessmentOverview = ({ selectedAssessmentId, assessmentIndex }) => {
         </div>
 
         <div>
-          <h4>Top 3 Skills</h4>
+          <h4>Strengths (Skills) </h4>
           <ul>
             {top3Content.map((c, i) => (
               <li key={i}>{c.title}</li>
             ))}
           </ul>
 
-          <h4>Bottom 3 Skills</h4>
+          <h4>Growth Opportunties (Skills)</h4>
           <ul>
             {bottom3Content.map((c, i) => (
               <li key={i}>{c.title}</li>

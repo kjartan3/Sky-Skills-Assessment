@@ -150,7 +150,7 @@ const AssessmentSummary = ({ user }) => {
     <div className='loading-container'>Loading assessment summary...</div>
   ) : (
     <div className="assessment-summary-container">
-      <h2 className="summary-title">Sky Skills Assessment Summary</h2>
+      <h1 className="summary-title">Sky Skills Assessment Summary</h1>
 
       {assessments.length === 0 ? (
         <div className='intermission-content'>
@@ -173,15 +173,15 @@ const AssessmentSummary = ({ user }) => {
           <div className="chart-with-list flex flex-row flex-wrap gap-8 px-8 py-4 items-start">
            <div className='info-text'>
           <p>Here's how you're showing up against our four core values - Welcoming, Creative, Simplifying and Doing the Right Thing. 
-            Take a moment to celebrate your strengths and spot the areas where you can grow even further. 
+            <br/> <br/>Take a moment to celebrate your strengths and spot the areas where you can grow even further. 
           <br/> <br/>
-            Not sure what the proficiency levels mean? 
+            <b className='blue-text'>Not sure what the proficiency levels mean? </b> 
             Hover over the 'i' icon for a clear breakdown of what it looks like to be a Beginner, Intermediate or Advanced level 
           <br/> <br/>   
-            Curious to dive deeper into your self-assessment? 
+            <b className='blue-text'>Curious to dive deeper into your self-assessment? </b>
             Click the 'Download as PDF' button against the relevant assessment to view and save your results. Inside, you'll find personalised learning pathways on Sky Learn - designed to help you take the next step in your development journey. 
           <br/> <br/>
-            Looking to track your progress over time? 
+            <b className='blue-text'>Looking to track your progress over time? </b> 
             Use the filter drop-down below to compare your previous assessments and reflect on how far you've come. 
             </p>
             </div>

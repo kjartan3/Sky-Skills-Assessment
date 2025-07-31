@@ -13,8 +13,8 @@ const OrgSummary = ({
 }) => {
   return (
     <div className="org-summary-container">
-      <h3>
-        📊 Organisational Summary
+      <h3 className="blue-text">
+      Organisational Summary
         {selectedOrgUnit !== "All" && ` — ${selectedOrgUnit}`}
         {selectedBand !== 'All' && ` - ${selectedBand}`}
       </h3>
@@ -30,14 +30,14 @@ const OrgSummary = ({
           </ol>
         </div>
         <div>
-          <h4>Top 3 Behaviours</h4>
+          <h4>Strengths (Behaviours)</h4>
           <ul>
             {topBehaviours.map((b, i) => (
               <li key={i}>{b.name} </li>
             ))}
           </ul>
 
-          <h4>Bottom 3 Behaviours</h4>
+          <h4>Growth Opportunities (Behaviours) </h4>
           <ul>
             {bottomBehaviours.map((b, i) => (
               <li key={i}>{b.name} </li>
@@ -48,14 +48,14 @@ const OrgSummary = ({
        
 
         <div>
-          <h4>Top 3 Skills</h4>
+          <h4>Strengths (Skills)</h4>
           <ul>
             {topContent.map((c, i) => (
               <li key={i}>{c.name} </li>
             ))}
           </ul>
 
-          <h4>Bottom 3 Skills</h4>
+          <h4>Growth Opportunties (Skills)</h4>
           <ul>
             {bottomContent.map((c, i) => (
               <li key={i}>{c.name} </li>

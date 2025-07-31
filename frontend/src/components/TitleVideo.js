@@ -25,14 +25,14 @@ const TitleVideo = () => {
 
                 <div className="box">
                     <h2>Assessment</h2>
-                    <p className="helper-text">Click 'Start' to launch your self-assessment</p>
+                    <p className="helper-text">Click <strong>Start</strong> to launch your self-assessment</p>
                     
                     <Link to="/assessment" className="btn">Start</Link>
                 </div>
 
                 <div className="box">
                     <h2>Summary</h2>
-                    <p className="helper-text">Click 'View' to view your summary results</p>
+                    <p className="helper-text">Click <strong>View</strong> to view your summary results</p>
                     
                     <Link to="/assessmentsummary" className="btn">View</Link>
                 </div>

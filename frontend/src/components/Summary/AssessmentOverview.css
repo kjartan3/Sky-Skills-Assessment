@@ -35,3 +35,26 @@
 ul { 
     list-style-type: none;
 }
+
+.snapshot-text {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.intro-text {
+  text-align: left;
+  display: inline-block;
+  max-width: 100%;   
+}
+
+.centered-list {
+  list-style-position: inside;
+  display: inline-block;
+  text-align: left;
+  margin: 0 auto;
+  padding-left: 0;
+}
+
+.centered-list li {
+  margin-bottom: 8px;
+}

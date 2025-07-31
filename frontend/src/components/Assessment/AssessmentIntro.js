@@ -13,10 +13,10 @@ const AssessmentIntro = ({ onStart }) => {
             <br />
             <p>As you assess yourself, please keep the following in mind: </p>
             <ul>
-              <li><b>Be honest and reflective:</b> this is a tool for your development, not a test. The more accurately you assess yourself, the more useful your insights will be.</li>
-              <li><b>Think about real examples:</b> consider how often and how confidently you demonstrate each skill in your day-to-day work or life.</li>
-              <li><b>Use the guidance statements:</b> these are there to help you interpret each skill in context and understand what good looks like.</li>
-              <li><b>Consider your environment:</b> some skills may be easier or harder to demonstrate depending on your role, team, or experience. That’s okay—this is about where you are now, not where you think you should be.</li>
+              <li><b className="blue-text">Be honest and reflective</b><b>:</b> this is a tool for your development, not a test. The more accurately you assess yourself, the more useful your insights will be.</li>
+              <li><b className="blue-text">Think about real examples</b><b>:</b> consider how often and how confidently you demonstrate each skill in your day-to-day work or life.</li>
+              <li><b className="blue-text">Use the guidance statements</b><b>:</b> these are there to help you interpret each skill in context and understand what good looks like.</li>
+              <li><b className="blue-text">Consider your environment</b><b>:</b> some skills may be easier or harder to demonstrate depending on your role, team, or experience. That’s okay—this is about where you are now, not where you think you should be.</li>
             </ul>
             <br />
             <p>   

@@ -89,8 +89,9 @@ body {
   
   .skill-level {
     font-size: 14px;
-    color: #007bff;
-    font-weight: 600;
+    color: #2b2b2b;
+    font-weight: 525;
+    font-style: italic;
   }
 
   .accordion-item {

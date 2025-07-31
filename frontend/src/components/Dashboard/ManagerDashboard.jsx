@@ -164,7 +164,7 @@ useEffect(() => {
 
   return (
     <div className='container'>
-      <h2 className='dashboard-header'>Reporting Dashboard</h2>
+      <h1 className='dashboard-header'>Reporting Dashboard</h1>
 
       {/* 📊 Summary Filter */}
       <div className="summary-filter">
