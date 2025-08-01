@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./AssessmentOverview.css";
 
-const AssessmentOverview = ({ selectedAssessmentId, assessmentIndex }) => {
+const AssessmentOverview = ({ selectedAssessmentId, assessmentIndex, assessment }) => {
   const [summaryData, setSummaryData] = useState(null);
 
   useEffect(() => {
@@ -36,7 +36,8 @@ const AssessmentOverview = ({ selectedAssessmentId, assessmentIndex }) => {
 
   return (
     <div className="assessment-overview-container">
-      <h3 className="blue-text">Assessment {assessmentIndex + 1} - Your Personal Insights Summary</h3>
+      <h3 className="blue-text">Your Personal Insights Summary</h3>
+      <h3 className="blue-text" style={{fontSize: "14px", color: "#007bff", fontWeight: 'normal'}}>Assessment {assessmentIndex + 1} taken on {new Date(assessment.createdAt).toLocaleDateString()}</h3>
       <br />
       <div className="snapshot-text">
         <div className="intro-text">
@@ -57,7 +58,7 @@ const AssessmentOverview = ({ selectedAssessmentId, assessmentIndex }) => {
       <div className="summary-block">
         <div>
           <h4>Values</h4>
-          <ol>
+          <ol style={{listStylePosition: "inside", paddingLeft: "1em", marginLeft: "0"}}>
             {sortedSkills.map((s, i) => (
               <li key={i}>{s.skillName}</li>
             ))}

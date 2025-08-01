@@ -176,7 +176,7 @@ const AssessmentSummary = ({ user }) => {
             <br/> <br/>Take a moment to celebrate your strengths and spot the areas where you can grow even further. 
           <br/> <br/>
             <b className='blue-text'>Not sure what the proficiency levels mean? </b> 
-            Hover over the 'i' icon for a clear breakdown of what it looks like to be a Beginner, Intermediate or Advanced level 
+            Hover over the <strong>'i'</strong> icon for a clear breakdown of what it looks like to be a Beginner, Intermediate or Advanced level 
           <br/> <br/>   
             <b className='blue-text'>Curious to dive deeper into your self-assessment? </b>
             Click the 'Download as PDF' button against the relevant assessment to view and save your results. Inside, you'll find personalised learning pathways on Sky Learn - designed to help you take the next step in your development journey. 
@@ -226,6 +226,7 @@ const AssessmentSummary = ({ user }) => {
           <AssessmentOverview 
           selectedAssessmentId={selectedAssessmentId}
           assessmentIndex={assessments.findIndex((a) => a.id === selectedAssessmentId)}
+          assessment={assessments.find((a) => a.id === selectedAssessmentId)}
           />
           </div>
 

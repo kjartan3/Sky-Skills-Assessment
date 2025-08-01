@@ -26,7 +26,7 @@ const SkillsBreakdown = ({
       <p>
         This is your space to explore the Sky Skills values, behaviours and skills and access your recommended learning to keep progressing with purpose.<br /><br />
  
-        Want to keep a copy of your insights? Simply scroll up to the graph area and tap the 'Download as PDF' button to save your results.<br /><br />
+        <span className="blue-text">Want a copy of your insights?</span> Simply scroll up to the graph area and tap the 'Download as PDF' button to save your results.<br /><br />
  
         <b className="blue-text">Start exploring, unlock your full potential and never stop learning</b>
       </p>

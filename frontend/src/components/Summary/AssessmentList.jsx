@@ -39,6 +39,7 @@ const AssessmentList = ({ assessments,hoveredId, setHoveredId, setSelectedAssess
             cursor: "pointer",
             backgroundColor: "#007bff",
             color: "#fff",
+            fontWeight: 'strong',
             border: "none",
             borderRadius: "4px",
             textDecoration: "none",
