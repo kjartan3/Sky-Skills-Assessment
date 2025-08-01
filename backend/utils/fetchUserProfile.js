@@ -17,7 +17,7 @@ export const getAccessToken = async () => {
     console.log("Secret loaded:", !!process.env.CSOD_CLIENT_SECRET);
     
     const res = await axios.post(
-      'https://sky-stg.csod.com/services/api/oauth2/token',
+      'https://sky.csod.com/services/api/oauth2/token',
       data,
       {
         headers: {
@@ -44,7 +44,7 @@ export const getAccessToken = async () => {
 
 export const fetchUserProfile = async (userId, token) => {
   try {
-    const url = `https://sky-stg.csod.com/services/api/x/odata/api/views/vw_rpt_user?$select=user_ref,user_name_first,user_name_last,user_email&$filter=user_ref eq '${userId}'`;
+    const url = `https://sky.csod.com/services/api/x/odata/api/views/vw_rpt_user?$select=user_ref,user_name_first,user_name_last,user_email&$filter=user_ref eq '${userId}'`;
     
     console.log(`🔍 Fetching user profile for userId: ${userId}`);
     
@@ -88,7 +88,7 @@ export const getUserProfile = async (userId) => {
     const token = await getAccessToken();
 
     // Step 1: Get base user info
-    const userUrl = `https://sky-stg.csod.com/services/api/x/odata/api/views/vw_rpt_user?$filter=user_ref eq '${userId}'&$select=user_id,user_ref,user_name_first,user_name_last,user_email`;
+    const userUrl = `https://sky.csod.com/services/api/x/odata/api/views/vw_rpt_user?$filter=user_ref eq '${userId}'&$select=user_id,user_ref,user_name_first,user_name_last,user_email`;
     const userRes = await axios.get(userUrl, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -100,7 +100,7 @@ export const getUserProfile = async (userId) => {
     if (!base) return null;
 
     // Step 2: Get OU Info
-    const ouInfoUrl = `https://sky-stg.csod.com/services/api/x/odata/api/views/vw_rpt_user_ou_info?$filter=user_ou_info_user_id eq ${base.user_id}&$select=user_ou_info_user_id,user_ou_id2,user_ou_id8`;
+    const ouInfoUrl = `https://sky.csod.com/services/api/x/odata/api/views/vw_rpt_user_ou_info?$filter=user_ou_info_user_id eq ${base.user_id}&$select=user_ou_info_user_id,user_ou_id2,user_ou_id8`;
     const ouInfoRes = await axios.get(ouInfoUrl, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -117,7 +117,7 @@ export const getUserProfile = async (userId) => {
     let orgUnitTitle = null;
     let bandTitle = null;
     if (ouId) {
-      const ouDetailsUrl = `https://sky-stg.csod.com/services/api/x/odata/api/views/vw_rpt_ou?$filter=ou_id eq ${ouId}&$select=title`;
+      const ouDetailsUrl = `https://sky.csod.com/services/api/x/odata/api/views/vw_rpt_ou?$filter=ou_id eq ${ouId}&$select=title`;
       const ouDetailsRes = await axios.get(ouDetailsUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -127,7 +127,7 @@ export const getUserProfile = async (userId) => {
       orgUnitTitle = ouDetailsRes.data?.value?.[0]?.title || null;
     }
 
-    const bandDetailsUrl = `https://sky-stg.csod.com/services/api/x/odata/api/views/vw_rpt_ou?$filter=ou_id eq ${bandId}`;
+    const bandDetailsUrl = `https://sky.csod.com/services/api/x/odata/api/views/vw_rpt_ou?$filter=ou_id eq ${bandId}`;
     const bandDetailsRes = await axios.get(bandDetailsUrl, {
         headers: {
           Authorization: `Bearer ${token}`,

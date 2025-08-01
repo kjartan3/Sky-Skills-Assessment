@@ -15,6 +15,11 @@ h1 {
   color: #007bff !important;
 }
 
+.blue-text-small {
+  color: #007bff !important;
+  font-weight: normal;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

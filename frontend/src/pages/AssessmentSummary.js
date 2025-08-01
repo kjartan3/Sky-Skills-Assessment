@@ -172,16 +172,16 @@ const AssessmentSummary = ({ user }) => {
            
           <div className="chart-with-list flex flex-row flex-wrap gap-8 px-8 py-4 items-start">
            <div className='info-text'>
-          <p>Here's how you're showing up against our four core values - Welcoming, Creative, Simplifying and Doing the Right Thing. 
+          <p>Here's how you're showing up against our four core values - <b>Welcoming</b>, <b>Creative</b>, <b>Simplifying</b> and <b>Doing the Right Thing</b>. 
             <br/> <br/>Take a moment to celebrate your strengths and spot the areas where you can grow even further. 
           <br/> <br/>
-            <b className='blue-text'>Not sure what the proficiency levels mean? </b> 
-            Hover over the 'i' icon for a clear breakdown of what it looks like to be a Beginner, Intermediate or Advanced level 
+            <b className='blue-text-small'>Not sure what the proficiency levels mean? </b><br />
+            Hover over the <b>'i'</b> icon for a clear breakdown of what it means to be a <b>Beginner</b>, <b>Intermediate</b> or <b>Advanced</b> level.
           <br/> <br/>   
-            <b className='blue-text'>Curious to dive deeper into your self-assessment? </b>
+            <b className='blue-text-small'>Curious to dive deeper into your self-assessment? </b><br />
             Click the 'Download as PDF' button against the relevant assessment to view and save your results. Inside, you'll find personalised learning pathways on Sky Learn - designed to help you take the next step in your development journey. 
           <br/> <br/>
-            <b className='blue-text'>Looking to track your progress over time? </b> 
+            <b className='blue-text-small'>Looking to track your progress over time? </b><br />
             Use the filter drop-down below to compare your previous assessments and reflect on how far you've come. 
             </p>
             </div>

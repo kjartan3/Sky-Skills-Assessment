@@ -9,7 +9,7 @@ const TitleVideo = () => {
                 
                 <div className="title-video-iframe-wrapper">
                 <iframe
-                    src="https://share.synthesia.io/embeds/videos/fb5fee31-511e-4234-9d92-f50b9c4b5e05"
+                    src="https://share.synthesia.io/embeds/videos/298ad6d9-79da-4676-ba66-9a100a106f8e"
                     loading="lazy"
                     title="Synthesia video player"
                     allowFullScreen

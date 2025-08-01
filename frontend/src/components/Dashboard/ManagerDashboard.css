@@ -139,6 +139,7 @@ button:hover {
 .user-table th {
   background-color: #f8f8f8;
   font-weight: 600;
+  color: #007BFF;
 }
 
 .user-table tr:last-child td {

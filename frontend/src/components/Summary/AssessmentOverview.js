@@ -36,7 +36,8 @@ const AssessmentOverview = ({ selectedAssessmentId, assessmentIndex }) => {
 
   return (
     <div className="assessment-overview-container">
-      <h3 className="blue-text">Assessment {assessmentIndex + 1} - Your Personal Insights Summary</h3>
+      <h3 className="blue-text">Your Personal Insights Summary</h3>
+      <h4 className="blue-text">Assessment {assessmentIndex + 1}</h4>
       <br />
       <div className="snapshot-text">
         <div className="intro-text">
@@ -46,8 +47,8 @@ const AssessmentOverview = ({ selectedAssessmentId, assessmentIndex }) => {
         </div>
 
         <ul className="centered-list">
-          <li><b className="blue-text">Top 3 Strengths:</b> the behaviours and skills consistently demonstrated with impact</li>
-          <li><b className="blue-text">Top 3 Growth Opportunities:</b> the behaviours and skills that will benefit from targeted learning and development</li>
+          <li><b className="blue-text-small">Top Three Strengths:</b> the behaviours and skills consistently demonstrated with impact</li>
+          <li><b className="blue-text-small">Top Three Growth Opportunities:</b> the behaviours and skills that will benefit from targeted learning and development</li>
         </ul>
       </div>
 
@@ -57,7 +58,7 @@ const AssessmentOverview = ({ selectedAssessmentId, assessmentIndex }) => {
       <div className="summary-block">
         <div>
           <h4>Values</h4>
-          <ol>
+          <ol style={{ textAlign: 'left' }}>
             {sortedSkills.map((s, i) => (
               <li key={i}>{s.skillName}</li>
             ))}

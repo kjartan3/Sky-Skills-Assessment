@@ -5,12 +5,13 @@ const StatementGroup = ({ skillName, behaviourName, statements, answers, onAnswe
     <>
       {skillName && <h2 className="skill-title" style={{ color: skillColor }}>{skillName}</h2>}
 
-      <div className="statement-group-container">
+      <div className="statement-group-wrapper">
         <p className="statement-group-text">
-          Need a bit more context?<br /> Just hover over the <strong>'i'</strong> icon next to each statement for helpful tips to guide your answers.
+          <b className="blue-text-small">Need a bit more context?</b><br />
+          Just hover over the <strong>'i'</strong> icon next to each statement for helpful tips to guide your answers.
         </p>
 
-        <div style={{ flex: 1 }}>
+        <div className="statement-items">
           {statements.map((statement) => (
             <StatementItem
               key={statement.id}

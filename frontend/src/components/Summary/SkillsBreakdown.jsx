@@ -18,17 +18,20 @@ const SkillsBreakdown = ({
 
   return (
     <div className="assessment">
-      <h3 className="blue-text">Assessment {assessmentIndex + 1} - Welcome to Your Personalised Development Hub</h3>
-      <p style={{ marginTop: "-10px", fontSize: "14px", color: "#007bff" }}>
-        Taken on {new Date(assessment.createdAt).toLocaleDateString()}
-      </p>
+        <h3 className="blue-text">Assessment {assessmentIndex + 1}</h3>
+        <p style={{ marginTop: "-10px", fontSize: "14px", color: "#007bff" }}>
+         Taken on {new Date(assessment.createdAt).toLocaleDateString()}
+        </p>
+      <br />
+      <h3 className="blue-text">Your Personalised Development Hub</h3>
       <br />
       <p>
         This is your space to explore the Sky Skills values, behaviours and skills and access your recommended learning to keep progressing with purpose.<br /><br />
  
-        Want to keep a copy of your insights? Simply scroll up to the graph area and tap the 'Download as PDF' button to save your results.<br /><br />
- 
-        <b className="blue-text">Start exploring, unlock your full potential and never stop learning</b>
+        <b className="blue-text-small">Want to keep a copy of your insights?</b> Simply scroll up to the graph area and tap the <b>'Download as PDF'</b> button to save your results.<br /><br />
+      </p>
+      <p style={{ fontSize: '16px', color: "#007bff" }}>
+        Start exploring, unlock your full potential and never stop learning
       </p>
 
       <div className="skills-breakdown">

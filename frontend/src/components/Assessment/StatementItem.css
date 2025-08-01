@@ -50,22 +50,22 @@
     padding-top: 6px;
 }
 
-.statement-group-container {
+.statement-group-wrapper {
   display: flex;
-  flex-direction: column;     /* Stack items vertically */
-  align-items: flex-start;    /* Align everything to the left */
-  gap: 40px;                  /* Space between info text and statements */
-  margin-top: 40px;
-  margin-bottom: 40px;
+  flex-direction: column;
+  align-items: flex-start; /* Ensures left alignment */
 }
 
+
 .statement-group-text {
-  font-size: 0.95rem;
-  color: #555;
-  font-style: italic;
-  flex-shrink: 0;
-  min-width: 250px;
-  max-width: 650px;
-  margin-left: 80px;
-  
+  text-align: left;
+  margin: 0;
+  padding: 30px;
+  margin-left: 50px;
+  margin-bottom: 15px;
+  align-self: flex-start; /* Ensures it doesn't center itself */
+  font-size: 15px;
 }
+
+
+
