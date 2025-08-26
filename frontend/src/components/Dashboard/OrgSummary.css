@@ -1,5 +1,6 @@
 .org-summary-container {
   margin-top: 2rem;
+  margin-bottom: 2rem !important;
   margin-right: 40px;
   margin-left: 40px;
   padding: 1rem 100px;
@@ -38,3 +39,14 @@
 ul { 
   list-style-type: none;
 }
+
+.centered-list-org {
+  list-style-position: inside;
+  display: inline-block;
+  /* text-align: left; */
+  margin: 0 auto;
+  padding-left: 0;
+  margin-bottom: 20px;
+  margin-top: 30px;
+}
+

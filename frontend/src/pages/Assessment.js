@@ -64,6 +64,9 @@ const Assessment = ({ user }) => {
       );
 
       if (res.status === 201) {
+        sessionStorage.removeItem('statements')
+        sessionStorage.removeItem('answers')
+
         navigate("/assessmentoutro");
       } else {
         throw new Error("Failed to create assessment.");

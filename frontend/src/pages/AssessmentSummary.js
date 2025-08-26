@@ -170,7 +170,7 @@ const AssessmentSummary = ({ user }) => {
 
           {/* if there are any issues with the styling on summary page - this is where it may come from */}
            
-          <div className="chart-with-list flex flex-row flex-wrap gap-8 px-8 py-4 items-start">
+          
            <div className='info-text'>
           <p>Here's how you're showing up against our four core values - <b>Welcoming</b>, <b>Creative</b>, <b>Simplifying</b> and <b>Doing the Right Thing</b>. 
             <br/> <br/>Take a moment to celebrate your strengths and spot the areas where you can grow even further. 
@@ -179,13 +179,14 @@ const AssessmentSummary = ({ user }) => {
             Hover over the <b>'i'</b> icon for a clear breakdown of what it means to be a <b>Beginner</b>, <b>Intermediate</b> or <b>Advanced</b> level.
           <br/> <br/>   
             <b className='blue-text-small'>Curious to dive deeper into your self-assessment? </b><br />
-            Click the 'Download as PDF' button against the relevant assessment to view and save your results. Inside, you'll find personalised learning pathways on Sky Learn - designed to help you take the next step in your development journey. 
+            Click the <b>'Download as PDF'</b> button against the relevant assessment to view and save your results. Inside, you'll find personalised learning pathways on Sky Learn - designed to help you take the next step in your development journey. 
           <br/> <br/>
             <b className='blue-text-small'>Looking to track your progress over time? </b><br />
             Use the filter drop-down below to compare your previous assessments and reflect on how far you've come. 
             </p>
             </div>
-            <div className="flex flex-col gap-4 max-w-md w-full">
+            <div className='summary-grid'>
+            <div className="chart-left">
               
 
               <Select
@@ -206,8 +207,11 @@ const AssessmentSummary = ({ user }) => {
                 getContentForBehaviour={getContentForBehaviour}
               />
             </div>
+            <div className="chart-right">
+              <ProficiencyKey />
+            </div>
 
-            <div className="chart-section" style={{ flex: '1 1 400px', minWidth: '300px' }}>
+            <div className="chart-center">
               <RadarChartContainer 
                 assessments={displayedAssessments}
                 stats={stats}
@@ -217,15 +221,15 @@ const AssessmentSummary = ({ user }) => {
               />
             </div>
 
-            <div className="w-[280px] flex-shrink-0">
-              <ProficiencyKey />
             </div>
-          </div>
+          
 
           <div>
           <AssessmentOverview 
           selectedAssessmentId={selectedAssessmentId}
           assessmentIndex={assessments.findIndex((a) => a.id === selectedAssessmentId)}
+          assessment={assessments.find((a) => a.id === selectedAssessmentId)}
+          
           />
           </div>
 

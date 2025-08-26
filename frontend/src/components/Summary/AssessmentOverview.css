@@ -1,39 +1,114 @@
+/* ===== Container styling ===== */
 .assessment-overview-container {
   margin-top: 2rem;
-  
   margin-bottom: 2rem;
   padding: 1rem 100px;
-  
   background: #fdfdfd;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.summary-block {
+/* ===== Summary Two Column Layout ===== */
+.summary-block-two-column {
   display: flex;
   gap: 2rem;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  align-items: flex-start;
+  margin: 0 auto 2rem auto; /* center horizontally, keep bottom margin */
+  flex-wrap: wrap;
+  max-width: 80%;
+  width: 100%; /* ensure it can shrink/grow responsively */
 }
 
-.summary-block h4 {
-  margin-bottom: 0.5rem;
+
+/* ===== Left Column: Values Section ===== */
+.values-section {
+  flex: 1;
+  border-collapse: collapse;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  height: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
 }
 
-.summary-block ul,
-.summary-block ol {
-  padding-left: 1rem;
-}
-
-.assessment-block {
-  background: #ffffff;
+.values-header {
+  background-color: rgba(0, 0, 0, 0.05); /* darker grey like <th> */
   padding: 1rem;
-  border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  min-width: 200px;
+  font-weight: 600;
+  font-size: 1rem;
+  
 }
-ul { 
-    list-style-type: none;
+
+.values-list {
+  background-color: rgba(0, 0, 0, 0.001); /* light grey like table body */
+}
+
+.value-item {
+  padding: 1.18rem 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  
+}
+
+.value-item:last-child {
+  border-bottom: none;
+}
+
+
+/* ===== Right Column: Skills/Behaviours Table ===== */
+.summary-table-section {
+  flex: 2;
+  min-width: 300px;
+}
+
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+}
+
+.summary-table th,
+.summary-table td {
+  padding: 1rem;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.summary-table th {
+  background-color: rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+}
+
+.summary-table ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  list-style-type: disc;
+}
+
+.summary-table li {
+  margin-bottom: 6px;
+}
+
+/* ===== Other Utility Classes ===== */
+.assessment-header {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 12px;
+  text-align: center;
+}
+
+.assessment-date {
+  margin: 0;
+  font-size: 14px;
+  color: #007bff;
+  font-weight: 400;
 }
 
 .snapshot-text {
@@ -42,19 +117,40 @@ ul {
 }
 
 .intro-text {
-  text-align: left;
+  text-align: center;
   display: inline-block;
-  max-width: 100%;   
+  width: 110%;
+  max-width: none;
+  margin-left: -5%;
 }
 
 .centered-list {
   list-style-position: inside;
   display: inline-block;
-  /* text-align: left; */
   margin: 0 auto;
   padding-left: 0;
+  padding-top: 10px;
 }
 
 .centered-list li {
   margin-bottom: 8px;
 }
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  .summary-block-two-column {
+    flex-direction: column;
+  }
+
+  .values-section,
+  .summary-table-section {
+    width: 100%;
+  }
+}
+

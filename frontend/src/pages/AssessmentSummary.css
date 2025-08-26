@@ -31,22 +31,25 @@ body {
     text-align: center;
 
   }
-  
-  /* Assessment title */
-  .assessment h4 {
-    font-size: 24px;
-    color: #007bff;
-    margin-bottom: 10px;
-  }
-  
-  /* Chart container */
-  .chart-container {
-    width: 100%;
-    height: 440px;
-    margin: 40px 5px;
-    
 
-  }
+
+  .assessment-header {
+  display: flex;
+  justify-content: center;   /* Center horizontally */
+  align-items: baseline;     /* Align text nicely */
+  gap: 12px;                 /* Space between h3 and p */
+  text-align: center;        /* Optional: helps with nested text alignment */
+}
+
+.assessment-date {
+  margin: 0;
+  font-size: 15px;
+  color: #007bff;
+  font-weight: 400;
+}
+
+  
+  
   
   /* Skills breakdown grid */
   .skills-breakdown {
@@ -57,18 +60,7 @@ body {
     text-align: left;
     padding: 20px 20px;
   }
-  
-  @media (max-width: 1024px) {
-    .skills-breakdown {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  
-  @media (max-width: 600px) {
-    .skills-breakdown {
-      grid-template-columns: 1fr;
-    }
-  }
+
   
   /* Individual skill card */
   .skill-card {
@@ -95,12 +87,23 @@ body {
     font-style: italic;
   }
 
-  .accordion-item {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 18px;
-    overflow: hidden;
 
+
+ .accordian-item {
+  flex: 1 1 30%;
+  min-width: 200px;
+  max-width: 33%;
+  box-sizing: border-box;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+
+  .accordian-item.expanded {
+    width: 100%; /* ensure it doesn't shrink when expanded */
   }
    
   .accordion-header {
@@ -143,12 +146,124 @@ body {
     color: #000000;
   }
 
-  .chart-with-list {
-    display: flex;
-    gap: 2rem;
-    align-items: flex-start;
-    flex-wrap: wrap; /* Important for responsiveness */
+  
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr; /* dropdown | chart | key */
+  grid-template-areas: "left center right";
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.5rem;
+  align-items: start;
+}
+
+.chart-left {
+  grid-area: left;
+  max-width: 200px;
+}
+
+.chart-center {
+  grid-area: center;
+  width: 100%;
+  min-width: 300px; /* stop it collapsing */
+  height: 100%;     /* allow full height in grid cell */
+  align-items: center;
+  justify-content: center;
+}
+
+
+.chart-container {
+  width: 100%;
+  height: 500px;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  max-width: 600px;
+}
+
+.chart-right {
+  grid-area: right;
+  display: flex;
+  justify-content: flex-start; /* so it hugs the left of its column */
+  align-items: flex-start;
+}
+
+ 
+
+@media (max-width: 768px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "left"
+      "right"
+      "center";
   }
+
+  .chart-right {
+    justify-content: right;
+  }
+
+
+  
+}
+
+
+@media (max-width: 1024px) {
+  
+  .summary-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "left right"
+      "center center";
+  }
+ 
+  .skills-breakdown {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .behaviour-name {
+    font-size: 12px !important;
+  }
+
+  .accordion-content p {
+    font-size: 12px;
+  }
+
+  
+  
+ .accordian-content-title {
+    font-size: 13px !important;
+  }
+
+  .content-level {
+    font-size: 12px;
+    padding-left: 4px;
+  }
+
+  .behaviour-title-line {
+    gap: 6px;
+  }
+
+  .accordion-content a {
+    font-size: 12px;
+  }
+
+  .accordian-item.expanded {
+    width: 30%;
+    display: flex;
+  }
+
+}
+
+@media (max-width: 600px) {
+  
+    .skills-breakdown {
+      grid-template-columns: 1fr;
+    }
+}
+
 
 
 .side-list {
@@ -182,14 +297,15 @@ body {
   font-size: 14px;
 }
 
-.behaviour-breakdown {
-  margin-top: 12px;
-  padding-left: 10px;
-  font-size: 14px;
-  color: #444;
-  width: 60%;
 
+.behaviour-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
+  width: auto;
 }
+
 
 .expanded-content {
   display: flex;
@@ -207,29 +323,46 @@ body {
 .behaviour-title-line {
   display: flex;
   align-items: center;
-  gap: 6px; /* Space between name and level */
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+  flex-wrap: wrap; /* allow wrapping */
 }
 
 .behaviour-name {
   font-weight: bold;
+  /* font-size: 12px; */
 }
 
-.behaviour-level {
+/* .behaviour-level {
   font-weight: normal;
   font-style: italic;
   color: #555;
   font-size: 14px;
   padding-left: 13px;
-  
-}
+} */
+
 .content-level {
-  font-weight: normal;
-  font-style: italic;
-  color: #555;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding-left: 6px; /* keep your padding */
   font-size: 14px;
-  padding-left:6px;
-  
+  color: #555;
 }
+
+.accordian-content-title {
+  font-size: 16px;
+  display: block; /* NOT flex */
+  margin: 0;      /* remove margins that add extra space */
+  padding: 0;
+  white-space: normal; /* allow wrapping */
+  width: auto;    /* allow natural width */
+}
+
+.accordian-content-title > * {
+  flex: unset;           /* stop forcing icon to stretch right */
+}
+
 .chart-with-list select {
   padding: 0.5rem 1rem;
   border: 2px solid #0072C6; /* Sky blue or your brand color */

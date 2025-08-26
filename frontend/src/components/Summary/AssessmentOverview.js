@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./AssessmentOverview.css";
 
-const AssessmentOverview = ({ selectedAssessmentId, assessmentIndex }) => {
+const AssessmentOverview = ({ selectedAssessmentId, assessmentIndex, assessment }) => {
   const [summaryData, setSummaryData] = useState(null);
 
   useEffect(() => {
@@ -37,16 +37,33 @@ const AssessmentOverview = ({ selectedAssessmentId, assessmentIndex }) => {
   return (
     <div className="assessment-overview-container">
       <h3 className="blue-text">Your Personal Insights Summary</h3>
-      <h4 className="blue-text">Assessment {assessmentIndex + 1}</h4>
+      <div className="assessment-header">
+        <h4 className="blue-text-small">Assessment {assessmentIndex + 1}</h4>
+        <p className="assessment-date">
+           -&nbsp;&nbsp; Taken on {new Date(assessment.createdAt).toLocaleDateString()}
+        </p>
+      </div>
       <br />
       <div className="snapshot-text">
         <div className="intro-text">
           <p>
-            Discover how you're bringing our values to life, with a clear view of how you're showing up - ranked from 1 (your strongest alignment) to 4 (where there's room to grow). You'll also find:
+            Here's your personalised summary of your top strengths and opportunities for growth. 
           </p>
+          <br />
+          <p>
+            In this section you'll discover: 
+          </p>
+          
         </div>
 
+        {/* <p>
+          <b className="blue-text-small">How you're showing up against our values:</b> ranked from 1 (your most strongest value) to 4 (where there's room to grow). 
+        </p> */}
+
         <ul className="centered-list">
+          <p>
+            <b className="blue-text-small">How you're showing up against our values:</b> ranked from 1 (your most strongest value) to 4 (where there's room to grow). 
+          </p>
           <li><b className="blue-text-small">Top Three Strengths:</b> the behaviours and skills consistently demonstrated with impact</li>
           <li><b className="blue-text-small">Top Three Growth Opportunities:</b> the behaviours and skills that will benefit from targeted learning and development</li>
         </ul>
@@ -55,46 +72,66 @@ const AssessmentOverview = ({ selectedAssessmentId, assessmentIndex }) => {
 
       <br />
 
-      <div className="summary-block">
-        <div>
-          <h4>Values</h4>
-          <ol style={{ textAlign: 'left' }}>
+      <div className="summary-block-two-column">
+        {/* Left side - Values */}
+        <div className="values-section">
+          <div className="values-header">Values</div>
+          <div className="values-list">
             {sortedSkills.map((s, i) => (
-              <li key={i}>{s.skillName}</li>
+              <div className="value-item" key={i}>
+                <span className="value-rank">{i + 1}.</span> {s.skillName}
+              </div>
             ))}
-          </ol>
+          </div>
         </div>
-
-        <div>
-          <h4>Strengths (Behaviours)</h4>
-          <ul>
-            {top3Behaviours.map((b, i) => (
-              <li key={i}>{b.behaviourName}</li>
-            ))}
-          </ul>
-
-          <h4>Growth Opportunities (Behaviours) </h4>
-          <ul>
-            {bottom3Behaviours.map((b, i) => (
-              <li key={i}>{b.behaviourName}</li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <h4>Strengths (Skills) </h4>
-          <ul>
-            {top3Content.map((c, i) => (
-              <li key={i}>{c.title}</li>
-            ))}
-          </ul>
-
-          <h4>Growth Opportunties (Skills)</h4>
-          <ul>
-            {bottom3Content.map((c, i) => (
-              <li key={i}>{c.title}</li>
-            ))}
-          </ul>
+          
+        {/* Right side - Table */}
+        <div className="summary-table-section">
+          <table className="summary-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Strengths</th>
+                <th>Growth Opportunities</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Behaviours</strong></td>
+                <td>
+                  <ul>
+                    {top3Behaviours.map((b, i) => (
+                      <li key={i}>{b.behaviourName}</li>
+                    ))}
+                  </ul>
+                </td>
+                <td>
+                  <ul>
+                    {bottom3Behaviours.map((b, i) => (
+                      <li key={i}>{b.behaviourName}</li>
+                    ))}
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Skills</strong></td>
+                <td>
+                  <ul>
+                    {top3Content.map((c, i) => (
+                      <li key={i}>{c.title}</li>
+                    ))}
+                  </ul>
+                </td>
+                <td>
+                  <ul>
+                    {bottom3Content.map((c, i) => (
+                      <li key={i}>{c.title}</li>
+                    ))}
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

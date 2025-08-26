@@ -34,13 +34,13 @@ const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS,
 
   return (
     <div className="chart-container">
-      <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="100%" aspect={1}>
         <RadarChart
           cx="50%"
           cy="50%"
-          outerRadius={120}
+          outerRadius="70%"
           data={chartData}
-          margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+          margin={{ top: 10, right: 40, bottom: 100, left: 40 }}
         >
           <PolarGrid />
           
@@ -102,10 +102,12 @@ const RadarChartContainer = ({ assessments, stats, selectedAssessmentId, COLORS,
                 name={`Assessment ${a.id}`}
                 dataKey={a.id}
                 stroke={color}
-                fill={color}
-                fillOpacity={isSelected ? 1 : 0.2}
-                strokeOpacity={isSelected ? 1 : 0.1}
+                strokeWidth={4} // Thicker lines
+                strokeOpacity={isSelected ? 1 : 0.3} // Selected = solid, others = faded
+                fill="none"     // Removes fill
+                isAnimationActive={false}
               />
+
             );
           })}
         </RadarChart>

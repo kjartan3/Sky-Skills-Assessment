@@ -82,6 +82,7 @@ const AssessmentPDF = ({ assessmentId, stats, assessment, getContentForBehaviour
               <Text style={styles.skillTitle}>{skill.skillName}</Text>
               <Text style={styles.skillLevel}>{getLevel(skill.averageScore)}</Text>
             </View>
+            
 
             {/* Progress Bar */}
             <View style={styles.progressBarContainer}>

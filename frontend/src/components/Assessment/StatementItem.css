@@ -1,18 +1,35 @@
-.statement-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* Container holding the entire statement item */
+.statement-container {
+  width: 100%;
+  padding: 0 60px;
+  margin-bottom: 40px;
+  box-sizing: border-box;
 }
 
-.statement-text {
-  margin: 0;
-  flex: 1;
+.statement-style.statement-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  /* NO flex-wrap here to prevent buttons breaking */
+}
+
+.text-with-tooltip {
+  display: flex;
+  align-items: center;     /* vertical center icon + text */
+  gap: 8px;
+  flex-grow: 1;
+  min-width: 0;            /* allow text to shrink */
+}
+
+.statement-group-text {
+  text-align: left;
+  margin: 60px;
 }
 
 .tooltip-wrapper {
-  position: relative;
+  flex-shrink: 0;         
   display: inline-block;
-  cursor: pointer;
 }
 
 .tooltip-text {
@@ -29,43 +46,67 @@
   transition: opacity 0.2s ease-in-out;
   font-size: 0.85rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Tooltip appears above the icon */
-.tooltip-text.top {
-  bottom: 125%; /* Push it above the icon */
+  bottom: 125%; /* position above icon */
   left: 50%;
   transform: translateX(-50%);
   margin-bottom: 6px;
 }
 
-/* Show tooltip on hover */
 .tooltip-wrapper:hover .tooltip-text {
   visibility: visible;
   opacity: 1;
 }
 
-.info-icon {
-    padding-right: 10px;
-    padding-top: 6px;
-}
-
-.statement-group-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Ensures left alignment */
-}
-
-
-.statement-group-text {
-  text-align: left;
+.statement-text {
   margin: 0;
-  padding: 30px;
-  margin-left: 50px;
-  margin-bottom: 15px;
-  align-self: flex-start; /* Ensures it doesn't center itself */
-  font-size: 15px;
+  white-space: normal;     /* allow wrapping */
+  overflow-wrap: break-word;
+  word-break: break-word;
+  flex-shrink: 1;          /* allow shrinking */
+  min-width: 0;            /* needed for flexbox text wrapping */
+  text-align: left !important;
+  font-size: 17px;
+  padding-right: 4rem;
 }
+
+.radio-container {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;          /* prevent buttons shrinking or breaking line */
+  min-width: 200px;        /* adjust as needed */
+  justify-content: flex-end;
+}
+
+/* Style radio labels like buttons */
+.radio-container label {
+  display: inline-block;
+  background-color: #e9ecef;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
+  border: 2px solid transparent;
+  text-align: center;
+}
+
+/* Hover effect on labels */
+.radio-container label:hover {
+  background-color: #d6d8db;
+}
+
+/* Hide the default radio inputs */
+input[type="radio"] {
+  display: none;
+}
+
+/* Style the checked radio label */
+input[type="radio"]:checked + label {
+  cursor: default;
+  /* You can add border or shadow here if you want */
+}
+
+
 
 
 

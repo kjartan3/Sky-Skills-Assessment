@@ -12,18 +12,18 @@ const seedDatabase = async () => {
     console.log('🔄 Dropping existing tables (except Assessments & Responses)...');
 
     // Uncomment the below when first starting new server! 
-     await sequelize.sync({ force: true });
+    //  await sequelize.sync({ force: true });
     console.log('🔄 Resetting tables…');
-    // await Statement.drop();
-    // await Content.drop();
-    // await Behaviour.drop();
-    // await Skill.drop();
+    await Statement.drop();
+    await Content.drop();
+    await Behaviour.drop();
+    await Skill.drop();
 
-    // // Resync models
-    // await Skill.sync();
-    // await Behaviour.sync();
-    // await Content.sync();
-    // await Statement.sync();
+    // Resync models
+    await Skill.sync();
+    await Behaviour.sync();
+    await Content.sync();
+    await Statement.sync();
 
     console.log('🌱 Seeding data…');
     // Create Skills in the database
@@ -84,7 +84,7 @@ await Promise.all([
         {
     id: 1,
     title: 'Emotional Intelligence',
-    description: 'Emotional intelligence is about recognising, understanding, and managing our own emotions and the emotions of others...',
+    description: 'Emotional intelligence is about recognising, understanding, and managing our own emotions and the emotions of others',
     behaviourId: 1,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/emotional-intelligence-beginners',
@@ -95,7 +95,7 @@ await Promise.all([
   {
     id: 2,
     title: 'Building Trust',
-    description: 'Building trust is about creating and maintaining reliable and honest relationships...',
+    description: 'Building trust is about creating and maintaining reliable and honest relationships',
     behaviourId: 1,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/building-trust-building-trust',
@@ -106,7 +106,7 @@ await Promise.all([
   {
     id: 3,
     title: 'Our Sky Story',
-    description: "Our Sky story is about what we stand for as a company, and where we’re going...",
+    description: "Our Sky story is about what we stand for as a company, and where we’re going",
     behaviourId: 2,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/journey/our-sky-story-our',
@@ -117,7 +117,7 @@ await Promise.all([
   {
     id: 4,
     title: 'Collaboration',
-    description: 'Collaboration is about working collectively, influencing others...',
+    description: 'Collaboration is about working collectively, influencing others',
     behaviourId: 2,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/collaboration',
@@ -128,7 +128,7 @@ await Promise.all([
   {
     id: 5,
     title: 'Growth Mindset',
-    description: 'Growth mindset is about approaching obstacles and setbacks as opportunities for development...',
+    description: 'Growth mindset is about approaching obstacles and setbacks as opportunities for development',
     behaviourId: 3,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/growth-mindset-beginners',
@@ -139,7 +139,7 @@ await Promise.all([
   {
     id: 6,
     title: 'Feedback',
-    description: 'Feedback is about providing the right balance of challenge and support...',
+    description: 'Feedback is about providing the right balance of challenge and support',
     behaviourId: 3,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/feedback-beginner',
@@ -150,7 +150,7 @@ await Promise.all([
   {
     id: 7,
     title: 'Curiosity',
-    description: 'Curiosity is all about having a hunger to know more about something and to learn about the world around you...',
+    description: 'Curiosity is all about having a hunger to know more about something and to learn about the world around you',
     behaviourId: 4,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/digital-curiosity-beginner',
@@ -161,7 +161,7 @@ await Promise.all([
   {
     id: 8,
     title: 'Disruptive Thinking',
-    description: 'Disruptive thinking is about challenging the status quo and thinking creatively...',
+    description: 'Disruptive thinking is about challenging the status quo and thinking creatively',
     behaviourId: 4,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/disruptive-thinking-beginner-disruptive',
@@ -172,7 +172,7 @@ await Promise.all([
   {
     id: 9,
     title: 'Agile Thinking',
-    description: 'Agile thinking is about being able to adopt our thinking and thrive in a fast-paced environment...',
+    description: 'Agile thinking is about being able to adopt our thinking and thrive in a fast-paced environment',
     behaviourId: 5,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/agile-thinking-beginner',
@@ -183,7 +183,7 @@ await Promise.all([
   {
     id: 10,
     title: 'Innovation',
-    description: 'Innovation is about creating and implementing new ideas, processes, or products that add value...',
+    description: 'Innovation is about creating and implementing new ideas, processes, or products that add value',
     behaviourId: 5,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/innovative-thinking',
@@ -194,7 +194,7 @@ await Promise.all([
   {
     id: 11,
     title: 'Adaptability',
-    description: 'Navigating change with resilience by staying flexible, learning from challenges...',
+    description: 'Navigating change with resilience by staying flexible, learning from challenges',
     behaviourId: 6,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/change-management',
@@ -205,7 +205,7 @@ await Promise.all([
   {
     id: 12,
     title: 'Communication',
-    description: 'Communication is about expressing and receiving information, ideas, and feelings effectively...',
+    description: 'Communication is about expressing and receiving information, ideas, and feelings effectively',
     behaviourId: 6,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/communication-for-beginners',
@@ -216,7 +216,7 @@ await Promise.all([
   {
     id: 13,
     title: 'Prioritisation',
-    description: 'Prioritisation is about identifying the things that have the greatest impact...',
+    description: 'Prioritisation is about identifying the things that have the greatest impact',
     behaviourId: 7,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/prioritisation',
@@ -227,7 +227,7 @@ await Promise.all([
   {
     id: 14,
     title: 'Customer Focus',
-    description: 'Customer focus is about understanding your role in creating an inclusive culture...',
+    description: 'Customer focus is about understanding your role in creating an inclusive culture',
     behaviourId: 7,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/customer-focus-beginner',
@@ -238,7 +238,7 @@ await Promise.all([
   {
     id: 15,
     title: 'Critical Thinking',
-    description: 'Critical thinking is all about analysing and interrogating information to form a judgement...',
+    description: 'Critical thinking is all about analysing and interrogating information to form a judgement',
     behaviourId: 8,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/critical-thinking',
@@ -249,7 +249,7 @@ await Promise.all([
   {
     id: 16,
     title: 'AI Literacy',
-    description: 'Understanding how artificial intelligence works, its capabilities and limitations...',
+    description: 'Understanding how artificial intelligence works, its capabilities and limitations',
     behaviourId: 8,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/journey/ai-literacy-build',
@@ -260,7 +260,7 @@ await Promise.all([
   {
     id: 17,
     title: 'Continuous Improvement',
-    description: 'Continuous Improvement is about consistently seeking ways to enhance processes...',
+    description: 'Continuous Improvement is about consistently seeking ways to enhance processes',
     behaviourId: 9,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/continuous-improvement-beginner-continuous',
@@ -271,7 +271,7 @@ await Promise.all([
   {
     id: 18,
     title: 'Data Fluency',
-    description: 'Data fluency is all about how we turn data into stories by identifying and interpreting patterns...',
+    description: 'Data fluency is all about how we turn data into stories by identifying and interpreting patterns',
     behaviourId: 9,
     learningLinks: {
       Beginner: 'https://sky.edcast.com/pathways/data-fluency-beginner',
@@ -291,7 +291,7 @@ await Promise.all([
   },
   {
     id: 20,
-    title: 'Empowering',
+    title: 'Empowering Others',
     description: 'Empowering others is about creating an environment that enables autonomy to thrive. Whether it’s learning how to delegate effectively or how to inspire others',
     behaviourId: 10,
     learningLinks: {

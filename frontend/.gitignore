@@ -19,6 +19,10 @@
 .env.production.local
 .env
 
+# SSL 
+ssl*/
+wp-0024618*
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

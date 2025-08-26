@@ -75,10 +75,17 @@ app.use('/metadata', samlMetaDataRoutes);
 app.use('/pdf', pdfRoutes);
 app.use('/content', contentRoutes);
 
+// const options = {
+//   key: fs.readFileSync("ssl/server.key"),
+//   cert: fs.readFileSync("ssl/server.crt"),
+// };
+
 const options = {
-  key: fs.readFileSync("ssl/server.key"),
-  cert: fs.readFileSync("ssl/server.crt"),
-};
+  key: fs.readFileSync("ssl3/wp-0024618.key"),
+  cert: fs.readFileSync("ssl3/fullchain.crt"),
+}
+
+
 
 app.get('/metadata', (req, res) => {
   try {

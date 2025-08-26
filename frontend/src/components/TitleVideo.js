@@ -7,15 +7,19 @@ const TitleVideo = () => {
         <div className="title-video-wrapper">
             <div className="title-video-container">
                 
-                <div className="title-video-iframe-wrapper">
-                <iframe
-                    src="https://share.synthesia.io/embeds/videos/298ad6d9-79da-4676-ba66-9a100a106f8e"
+                <div className="title-video-wrapper">
+                <video
+                    src="/videos/IntroVideo.mp4"
                     loading="lazy"
                     title="Synthesia video player"
                     allowFullScreen
                     allow="encrypted-media; fullscreen;"
-                    className="title-video-iframe"
-                ></iframe>
+
+                    controls
+                    autoPlay={false}
+                    playsInline
+                    className="title-video"
+                ></video>
 
                 
 

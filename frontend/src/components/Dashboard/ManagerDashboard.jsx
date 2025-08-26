@@ -47,7 +47,7 @@ const ManagerDashboard = () => {
   const [top3Content, setTop3Content] = useState([]);
   const [bottom3Content, setBottom3Content] = useState([]);
 
-  const usersPerPage = 5;
+  const usersPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -233,15 +233,7 @@ useEffect(() => {
 
       </div>
 
-      {/* <OrgSummary
-        topBehaviours={top3Behaviours}
-        bottomBehaviours={bottom3Behaviours}
-        skills={skillsSummary}
-        topContent={top3Content}
-        bottomContent={bottom3Content}
-        selectedOrgUnit={activeOrgUnit}
-        selectedBand={activeBand}
-      /> */}
+      
 
       <OrgSummary
         topBehaviours={top3Behaviours}
@@ -360,7 +352,13 @@ useEffect(() => {
           ))}
         </tbody>
         </table>
+
+        <p className='user-numbers'>
+          {selectedUsers.length} / {filteredUsers.length} Selected
+        </p>
       </div>
+
+      
 
       {selectedUsers.length > 0 && (
         <div className="download-actions">
@@ -373,6 +371,7 @@ useEffect(() => {
         </div>
       )}
 
+
       <div className='pagination'>
         <button style={{ marginRight: '50px' }} onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
           ← Prev
@@ -382,7 +381,6 @@ useEffect(() => {
           Next →
         </button>
       </div>
-
       
     </div>
   );
