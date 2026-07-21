@@ -39,7 +39,7 @@ const AssessmentPDF = ({ assessmentId, stats, assessment, getContentForBehaviour
 
       <Text style={styles.orangeText}>Not sure where to begin?</Text>
       <Text style={styles.paragraph}>
-        We’ve got you covered! This summary breaks down the results of your self-assessment and reveals your top three behavioural strengths, pinpoints areas to grow, dives deeper into your skillset and delivers personalised learning recommendations from the Sky Skills channel on Sky Learn.
+        We’ve got you covered! This summary breaks down the results of your self-reflection and reveals your top three behavioural strengths, pinpoints areas to grow, dives deeper into your skillset and delivers personalised learning recommendations from the Sky Skills channel on Sky Learn.
       </Text>
 
       <Text style={styles.pinkHeader}>A Closer Look At You: Your Strength and Development Insights</Text>

@@ -150,12 +150,12 @@ const AssessmentSummary = ({ user }) => {
     <div className='loading-container'>Loading assessment summary...</div>
   ) : (
     <div className="assessment-summary-container">
-      <h1 className="summary-title">Sky Skills Assessment Summary</h1>
+      <h1 className="summary-title">Sky Skills Reflection Summary</h1>
 
       {assessments.length === 0 ? (
         <div className='intermission-content'>
           <br />
-          <p>You have not completed an assessment yet.</p>
+          <p>You have not completed a reflection yet.</p>
           <p>Once you have completed one, your progress and insights will appear here.</p>
           <br />
           <button
@@ -178,11 +178,11 @@ const AssessmentSummary = ({ user }) => {
             <b className='blue-text-small'>Not sure what the proficiency levels mean? </b><br />
             Hover over the <b>'i'</b> icon for a clear breakdown of what it means to be a <b>Beginner</b>, <b>Intermediate</b> or <b>Advanced</b> level.
           <br/> <br/>   
-            <b className='blue-text-small'>Curious to dive deeper into your self-assessment? </b><br />
-            Click the <b>'Download as PDF'</b> button against the relevant assessment to view and save your results. Inside, you'll find personalised learning pathways on Sky Learn - designed to help you take the next step in your development journey. 
+            <b className='blue-text-small'>Curious to dive deeper into your self-reflection? </b><br />
+            Click the <b>'Download as PDF'</b> button against the relevant reflection to view and save your results. Inside, you'll find personalised learning pathways on Sky Learn - designed to help you take the next step in your development journey. 
           <br/> <br/>
             <b className='blue-text-small'>Looking to track your progress over time? </b><br />
-            Use the filter drop-down below to compare your previous assessments and reflect on how far you've come. 
+            Use the filter drop-down below to compare your previous reflections and reflect on how far you've come. 
             </p>
             </div>
             <div className='summary-grid'>

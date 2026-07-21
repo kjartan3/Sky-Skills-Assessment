@@ -4,7 +4,7 @@ const isTestEnvironment = process.env.NODE_ENV === 'test'; // Check if we're in 
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: isTestEnvironment ? './test-database.sqlite' : './database.sqlite', // Use separate databases for test and production
+  storage: isTestEnvironment ? './test-database.sqlite' : './database.sqlite',
   logging: process.env.NODE_ENV !== 'test',
 });
 

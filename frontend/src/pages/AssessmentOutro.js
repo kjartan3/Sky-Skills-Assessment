@@ -10,7 +10,7 @@ const AssessmentOutro = () => {
         <h1>You're All Done!</h1>
         <br />
         <p>
-          You've completed the Sky Skills Self-Assessment. Well done for taking the time to reflect on your strengths and development areas.
+          You've completed the Sky Skills Self-Reflection. Well done for taking the time to reflect on your strengths and development areas.
         </p>
         <br />
         <p>
@@ -22,7 +22,7 @@ const AssessmentOutro = () => {
         </p>
         <br />
         <p>
-          Click below to view your assessment summary and take the next step in your development.
+          Click below to view your reflection summary and take the next step in your development.
         </p>
         <br />
         <button className="start-button" onClick={() => navigate("/assessmentsummary")}>

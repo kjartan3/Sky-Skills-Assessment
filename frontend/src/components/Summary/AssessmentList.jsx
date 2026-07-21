@@ -23,7 +23,7 @@ const AssessmentList = ({ assessments,hoveredId, setHoveredId, setSelectedAssess
         }}
       >
         <div style={{ marginBottom: "12px" }}>
-          <strong>Assessment #{displayNumber}</strong>
+          <strong>Reflection #{displayNumber}</strong>
           <br />
           <small>{new Date(assessment.createdAt).toLocaleDateString()}</small>
         </div>
@@ -31,7 +31,7 @@ const AssessmentList = ({ assessments,hoveredId, setHoveredId, setSelectedAssess
         {/* PDF Download Button */}
         <PDFDownloadLink
           document={<AssessmentPDF assessmentId={assessment.id} stats={stats[assessment.id]} assessment={assessment} getContentForBehaviour={getContentForBehaviour} />}
-          fileName={`assessment_${assessment.id}.pdf`}
+          fileName={`reflection_${assessment.id}.pdf`}
           style={{
             marginTop: "10px",
             padding: "5px 10px",

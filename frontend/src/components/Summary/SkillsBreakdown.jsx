@@ -17,7 +17,7 @@ const SkillsBreakdown = ({
     <div className="assessment">
       <h3 className="blue-text">Your Personalised Development Hub</h3>
       <div className="assessment-header">
-        <h4 className="blue-text-small">Assessment {assessmentIndex + 1}</h4>
+        <h4 className="blue-text-small">Reflection {assessmentIndex + 1}</h4>
         <p className="assessment-date">
           -&nbsp;&nbsp; Taken on {new Date(assessment.createdAt).toLocaleDateString()}
         </p>

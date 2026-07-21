@@ -39,7 +39,7 @@ const Navbar = ({ user }) => {
         <nav className="navbar">
             
             <Link to="/" className="logo"><img src="/icons/sky-learn-logo.jpeg" className="logo-img" alt="Assessment" />
-            <h4 className="logo-title">Sky Skills Assessment</h4>
+            <h4 className="logo-title">Sky Skills Reflection</h4>
             </Link>
             
             <div className="dropdown" ref={dropdownRef}>
@@ -49,7 +49,7 @@ const Navbar = ({ user }) => {
                 {dropdownOpen && (
                     <div className="dropdown-menu">
                         <Link to="/" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Home</Link>
-                        <Link to="/assessment" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Assessment</Link>
+                        <Link to="/assessment" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Reflection</Link>
                         <Link to="/assessmentsummary" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Summary</Link>
                          {isAllowedUser && (
                         <Link to="/dashboard" className="dropdown-item" onClick={() => setDropdownOpen(false)}>Dashboard</Link>

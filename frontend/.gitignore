@@ -18,6 +18,7 @@
 .env.test.local
 .env.production.local
 .env
+/src/components/helper/allowedUsers.js
 
 # SSL 
 ssl*/

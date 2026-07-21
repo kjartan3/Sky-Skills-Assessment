@@ -365,7 +365,7 @@ await Promise.all(
 
 const statementsData = [
   {
-    text: 'I actively invite others to speak that have yet to share their opinions.',
+    text: 'I support others to thrive in a group by actively inviting them to share their opinions.',
     guidanceText: 'Reflect on how you understand and manage emotions. Think about how you notice reactions, communicate sensitively, and lead with empathy.',
   },
   {
@@ -373,23 +373,23 @@ const statementsData = [
     guidanceText: 'Evaluate how you build honest and reliable relationships. Consider how you support others, stay accountable, and understand how others perceive you.',
   },
   {
-    text: "I consider Sky's priorities and products in my every day work",
+    text: "I consider Sky's priorities and products in my every day work.",
     guidanceText: 'Think about how your work aligns with Sky’s bigger picture. Reflect on how you involve others, understand systems, and plan strategically across teams.',
   },
   {
-    text: 'I collaborate effectively by considering how different personalities might respond to how I communicate.',
+    text: 'I work with others to adapt my communication depending on audience reactions.',
     guidanceText: 'Assess how you work with others to achieve shared goals. Consider how you contribute, include others, and build helpful relationships.',
   },
   {
-    text: 'I am comfortable with mistakes, I see it as a learning experience.',
+    text: 'When things go wrong, I reflect and learn from them.',
     guidanceText: 'Reflect on how you view challenges as opportunities. Think about how you learn from setbacks, adapt plans, and stay resilient.',
   },
   {
-    text: "I continuously seek feedback from others on how I can do my job even better (I don't just wait for the end of the year).",
+    text: "I continuously seek feedback from a range of people on how I can do my job even better.",
     guidanceText: 'Reflect on how you give and receive feedback. Consider how you identify strengths, reflect on challenges, and communicate constructively.',
   },
   {
-    text: 'I ask curious questions to understand other points of view.',
+    text: 'I ask open questions to understand other points of view.',
     guidanceText: 'Explore your desire to learn and understand more. Reflect on how you ask open questions and approach new challenges with a positive mindset.',
   },
   {
@@ -401,19 +401,19 @@ const statementsData = [
     guidanceText: 'Assess how well you adapt in fast-paced situations. Think about how you manage reactions, balance workloads, and plan flexibly.',
   },
   {
-    text: 'I innovate by improving ways of working, processes or products to add value.',
+    text: 'I identify opportunities for innovation.',
     guidanceText: 'Reflect on how you create and implement new ideas. Consider how you identify opportunities, stay curious, and foster creativity in others.',
   },
   {
-    text: 'I keep my resilience through times of change.',
+    text: 'I look for opportunities when faced with challenges in times of change.',
     guidanceText: 'Reflect on how you take ownership of your energy and wellbeing throughout the day, and how you use intentional actions to stay focused, grounded and adaptable. ',
   },
   {
-    text: 'I communicate complex topics in a way that resonates with others.',
+    text: 'I adapt my communication to what my audience already know, and make sure to choose appropriate language that resonates with them.',
     guidanceText: "Consider how you organise your thoughts, listen actively, respond to others' ideas and engage your audience effectively.",
   },
   {
-    text: "I prioritise what I work on (and my team) by asking myself 'what matters most?'",
+    text: "I order and prioritise my tasks to achieve goals.",
     guidanceText: 'Reflect on how you focus on what matters most. Think about how you manage resources, order tasks, and plan strategically.',
   },
   {
@@ -421,7 +421,7 @@ const statementsData = [
     guidanceText: 'Think about how you contribute to an inclusive and supportive environment. Consider how you express yourself, support others, and handle sensitive topics.',
   },
   {
-    text: 'When I have a new idea, I analyse multiple sources of data to bring it to life.',
+    text: 'When I have a new idea, I research to build my understanding.',
     guidanceText: 'Think about how you analyse information and challenge assumptions. Reflect on how you seek different perspectives and use questions to deepen understanding.',
   },
   {
@@ -433,11 +433,11 @@ const statementsData = [
     guidanceText: 'Assess how you seek and implement improvements. Consider how you generate ideas, challenge assumptions, and use feedback to evolve your work',
   },
   {
-    text: 'I focus on what matters by using data and not just my gut feeling.',
+    text: 'I question my own ideas using data to improve them.',
     guidanceText: 'Think about how you interpret data to tell meaningful stories. Reflect on how you find information, recognise patterns, and adapt plans using insights.',
   },
   {
-    text: "I hold myself (and my team*) to account by doing what I'll say I'll do.",
+    text: "I take responsibility for completing my tasks.",
     guidanceText: 'Think about how you take ownership of your actions. Reflect on how you complete tasks, stay accountable, and involve others in achieving goals.',
   },
   {
@@ -445,19 +445,19 @@ const statementsData = [
     guidanceText: 'Assess how you enable others to thrive. Consider how you support, motivate, and inspire people to take initiative and grow.',
   },
   {
-    text: "I am open about what I don't know and ask for help when I need it.",
+    text: "I am open about what I don’t know and feel comfortable to ask for help when I need it.",
     guidanceText: 'Reflect on how open and honest you are. Think about how you share information accurately, use facts, and communicate clearly in tough situations.',
   },
   {
-    text: "I make everyday decisions with Sky's operational and financial context in mind.",
+    text: "I make practical decisions that balance operational needs and financial considerations.",
     guidanceText: 'Evaluate how you contribute to business success. Consider how you collaborate, avoid conflict, and identify risks and opportunities.',
   },
   {
-    text: 'I use the strength of my relationships to challenge ideas contructively, encouraging diverse perspectives while mantaining alignment and mutual respect.',
+    text: 'I maintain clear and constructive communication in challenging situations.',
     guidanceText: 'Think about how you engage in meaningful dialogue. Reflect on how you ask questions, adapt your communication, and negotiate effectively.',
   },
   {
-    text: 'I give my full attention to others - both face to face and/or virtual.',
+    text: 'I show I am paying attention when communicating with others.',
     guidanceText: 'Assess how well you pay attention and understand others. Consider how you actively listen, and recognise influence in conversations.',
   },
 ];

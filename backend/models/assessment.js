@@ -5,10 +5,10 @@ const Assessment = sequelize.define("Assessment", {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true, // ✅ Makes sure ID is auto-incremented properly
+        autoIncrement: true,
     },
     userId: {
-        type: DataTypes.STRING, // ✅ Change to STRING to match SQLite column type
+        type: DataTypes.STRING, 
         allowNull: false,
     },
     createdAt: {
