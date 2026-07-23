@@ -23,10 +23,11 @@
 .logo-title {
     font-family: arial;
     font-style: italic;
-    margin-top: -0.1rem; /* Minimal spacing between logo and title */
+    margin-top: -0.4rem; /* Minimal spacing between logo and title */
     font-size: 0.925rem; /* Adjust font size if needed */
     color: rgb(0, 0, 0); /* Color of the title */
     text-align: left; /* Center align the title */
+    letter-spacing: 0.75px;
 }
 
 .dropdown {

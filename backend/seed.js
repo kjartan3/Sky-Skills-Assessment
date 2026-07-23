@@ -429,7 +429,7 @@ const statementsData = [
     guidanceText: 'Reflect on how actively you explore and apply AI tools to streamline your daily work. Think about how you make informed choices about when and how to use AI.',
   },
   {
-    text: "I am constantly looking for opportunities to simplify my work'.",
+    text: "I am constantly looking for opportunities to simplify my work.",
     guidanceText: 'Assess how you seek and implement improvements. Consider how you generate ideas, challenge assumptions, and use feedback to evolve your work',
   },
   {
